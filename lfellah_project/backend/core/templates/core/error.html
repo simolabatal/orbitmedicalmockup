@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Fellah - Accès Refusé</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-xl p-8 sm:p-12 max-w-lg w-full text-center border border-red-100">
+        <div class="text-6xl mb-4">🚫</div>
+        <h1 class="text-2xl font-black text-red-700 mb-2">Accès Refusé</h1>
+        <p class="text-gray-600 mb-6">{{ message }}</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/" class="bg-green-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-700 transition-all">Retour au Marché</a>
+            <a href="/dashboard/" class="border-2 border-green-600 text-green-700 px-6 py-3 rounded-xl font-bold hover:bg-green-50 transition-all">Tableau de Bord</a>
+        </div>
+    </div>
+</body>
+</html>

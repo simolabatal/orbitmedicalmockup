@@ -1,0 +1,46 @@
+# ─── Python ──────────────────────────────────────
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+*.so
+
+# ─── Django ──────────────────────────────────────
+.env
+.env.local
+.env.*.local
+db.sqlite3
+db.sqlite3-journal
+/media/
+/staticfiles/
+/static/
+local_settings.py
+
+# ─── Virtualenvs ─────────────────────────────────
+venv/
+env/
+ENV/
+.venv/
+
+# ─── IDE / OS ────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# ─── Arduino / Firmware ──────────────────────────
+*.hex
+*.elf
+*.bin
+build/
+*.ino.*
+
+# ─── Logs / Temp ─────────────────────────────────
+*.log
+*.tmp
+tmp/
+temp/

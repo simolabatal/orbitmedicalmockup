@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Marketing — L'Fellah 2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{colors:{brand:{50:'#faf8f5',100:'#f0fdf4',800:'#1b4332',900:'#064e3b'},accent:{400:'#95d5b2',500:'#2d6a4f',600:'#40916c'}},fontFamily:{sans:['Inter','system-ui','sans-serif']},borderRadius:{'xl':'12px','2xl':'16px','3xl':'24px'}}}}</script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-stone-100 min-h-screen font-sans text-gray-800">
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-gradient-to-r from-green-100/90 via-white/95 to-green-50/90 backdrop-blur-xl border-b-2 border-green-200/50 shadow-lg" style="min-height:6rem">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between py-2">
+            <a href="/" class="flex items-center gap-2.5 no-underline"><img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah" class="h-20 w-auto object-contain" style="filter:contrast(1.4) drop-shadow(0 3px 8px rgba(0,0,0,0.45))"></a>
+            <a href="/" class="text-sm text-stone-400 hover:text-brand-900 font-semibold transition-colors">← Marché</a>
+        </div>
+    </header>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+        <h1 class="text-2xl font-black text-brand-900">Dashboard Marketing</h1>
+
+        <!-- KPI CARDS -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="kpi-grid">
+            <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm">
+                <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Utilisateurs</p>
+                <p class="text-2xl font-black text-brand-900 mt-1" id="kpi-users">—</p>
+                <p class="text-[10px] text-stone-400 mt-1"><span id="kpi-farmers" class="text-green-600">—</span> fellahs · <span id="kpi-buyers" class="text-blue-600">—</span> acheteurs</p>
+            </div>
+            <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm">
+                <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Commandes</p>
+                <p class="text-2xl font-black text-brand-900 mt-1" id="kpi-orders">—</p>
+                <p class="text-[10px] text-stone-400 mt-1"><span id="kpi-month-orders" class="text-blue-600">—</span> ce mois</p>
+            </div>
+            <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm">
+                <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Volume TTC</p>
+                <p class="text-2xl font-black text-brand-900 mt-1" id="kpi-sales">—</p>
+                <p class="text-[10px] text-stone-400 mt-1">MAD total</p>
+            </div>
+            <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm">
+                <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Nx inscrits/sem</p>
+                <p class="text-2xl font-black text-brand-900 mt-1" id="kpi-new-users">—</p>
+            </div>
+        </div>
+
+        <!-- PROMO CODES MANAGEMENT -->
+        <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-stone-100 flex items-center justify-between">
+                <h2 class="text-lg font-bold text-brand-900">Codes Promotionnels</h2>
+                <span class="text-[10px] font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-lg" id="promo-count">—</span>
+            </div>
+
+            <!-- FORMULAIRE CREATION -->
+            <div class="p-5 border-b border-stone-100 bg-stone-50/50">
+                <form id="promo-form" onsubmit="createPromo(event)" class="flex flex-wrap gap-3 items-end">
+                    {% csrf_token %}
+                    <div class="flex-1 min-w-[100px]">
+                        <label class="text-[10px] font-black text-stone-400 uppercase tracking-wider block mb-1">Code</label>
+                        <input type="text" name="code" id="promo-code-input" required minlength="3"
+                               class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2.5 text-sm font-bold uppercase focus:outline-none focus:border-purple-500 transition-all"
+                               placeholder="ex: RAMADAN2026">
+                    </div>
+                    <div class="w-20">
+                        <label class="text-[10px] font-black text-stone-400 uppercase tracking-wider block mb-1">Type</label>
+                        <select name="discount_type" class="w-full bg-white border border-stone-200 rounded-xl px-2 py-2.5 text-xs font-bold focus:outline-none focus:border-purple-500 transition-all">
+                            <option value="percentage">%</option>
+                            <option value="fixed">MAD</option>
+                        </select>
+                    </div>
+                    <div class="w-24">
+                        <label class="text-[10px] font-black text-stone-400 uppercase tracking-wider block mb-1">Valeur</label>
+                        <input type="number" name="discount_value" value="10" min="0.01" step="0.01"
+                               class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2.5 text-sm font-bold focus:outline-none focus:border-purple-500 transition-all">
+                    </div>
+                    <div class="w-24">
+                        <label class="text-[10px] font-black text-stone-400 uppercase tracking-wider block mb-1">Max utilisations</label>
+                        <input type="number" name="max_uses" value="100" min="1"
+                               class="w-full bg-white border border-stone-200 rounded-xl px-3 py-2.5 text-sm font-bold focus:outline-none focus:border-purple-500 transition-all">
+                    </div>
+                    <button type="submit" class="px-5 py-2.5 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 active:scale-[0.97] transition-all text-xs tracking-wide shadow shadow-purple-600/10">
+                        Créer
+                    </button>
+                </form>
+            </div>
+
+            <!-- TABLEAU DES CODES -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-stone-50 text-left">
+                        <tr>
+                            <th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">Code</th>
+                            <th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">Valeur</th>
+                            <th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">Utilisations</th>
+                            <th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">Statut</th>
+                            <th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase w-20">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="promo-table-body">
+                        <tr><td colspan="5" class="px-5 py-12 text-center text-stone-400 font-semibold">Chargement...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ORDERS TABLE -->
+        <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-stone-100"><h2 class="text-lg font-bold text-brand-900">Commandes Récentes</h2></div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-stone-50 text-left"><tr><th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">N°</th><th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">Acheteur</th><th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">Total TTC</th><th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">Statut</th><th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">Date</th></tr></thead>
+                    <tbody id="orders-table-body"><tr><td colspan="5" class="px-5 py-12 text-center text-stone-400 font-semibold">Chargement...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_DASH   = '/api/marketer/dashboard/';
+        const API_PROMOS = '/api/marketer/promos/';
+
+        const statusLabels = {
+            'pending':{label:'En attente',cl:'bg-yellow-100 text-yellow-700'},
+            'confirmed':{label:'Confirmée',cl:'bg-blue-100 text-blue-700'},
+            'preparing':{label:'Préparation',cl:'bg-indigo-100 text-indigo-700'},
+            'shipped':{label:'Expédiée',cl:'bg-purple-100 text-purple-700'},
+            'delivered':{label:'Livrée',cl:'bg-green-100 text-green-700'},
+            'cancelled':{label:'Annulée',cl:'bg-red-100 text-red-700'},
+        };
+
+        function getCSRF() {
+            const cookies = document.cookie.split(';');
+            for (let c of cookies) { c=c.trim(); if(c.startsWith('csrftoken=')) return decodeURIComponent(c.substring('csrftoken='.length)); }
+            return '';
+        }
+
+        async function loadAll() {
+            try {
+                const [dashRes, promoRes] = await Promise.all([
+                    fetch(API_DASH, {headers:{'Accept':'application/json'},credentials:'same-origin'}),
+                    fetch(API_PROMOS, {headers:{'Accept':'application/json'},credentials:'same-origin'}),
+                ]);
+                const dashData = await dashRes.json();
+                const promoData = await promoRes.json();
+
+                // KPIs
+                document.getElementById('kpi-users').textContent = dashData.kpi.total_utilisateurs||0;
+                document.getElementById('kpi-farmers').textContent = dashData.kpi.fermiers||0;
+                document.getElementById('kpi-buyers').textContent = dashData.kpi.acheteurs||0;
+                document.getElementById('kpi-orders').textContent = dashData.kpi.commandes_totales||0;
+                document.getElementById('kpi-month-orders').textContent = dashData.kpi.commandes_ce_mois||0;
+                document.getElementById('kpi-sales').textContent = (dashData.kpi.volume_ventes_ttc||'0')+' MAD';
+                document.getElementById('kpi-new-users').textContent = dashData.kpi.nouveaux_cette_semaine||0;
+
+                // Orders
+                const oBody = document.getElementById('orders-table-body');
+                const orders = dashData.commandes_recentes||[];
+                if (orders.length) {
+                    oBody.innerHTML = orders.map(o=>{
+                        const st = statusLabels[o.status]||{label:o.status,cl:'bg-gray-100 text-gray-600'};
+                        const d = o.created_at ? new Date(o.created_at).toLocaleDateString('fr-FR') : '—';
+                        return `<tr class="border-t border-stone-50"><td class="px-5 py-3 font-bold">#${o.id}</td><td class="px-5 py-3 text-stone-500">${o.buyer_email||'—'}</td><td class="px-5 py-3 font-bold">${parseFloat(o.total_final||0).toFixed(2)} MAD</td><td class="px-5 py-3"><span class="px-2 py-1 rounded-full text-[10px] font-bold ${st.cl}">${st.label}</span></td><td class="px-5 py-3 text-stone-400 text-xs">${d}</td></tr>`;
+                    }).join('');
+                } else { oBody.innerHTML = '<tr><td colspan="5" class="px-5 py-12 text-center text-stone-400">Aucune commande</td></tr>'; }
+
+                // Promo codes
+                renderPromos(promoData.promos||[]);
+
+            } catch (err) { console.error(err); }
+        }
+
+        function renderPromos(promos) {
+            const tbody = document.getElementById('promo-table-body');
+            document.getElementById('promo-count').textContent = promos.length + ' code(s)';
+            if (!promos.length) {
+                tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-12 text-center text-stone-400">Aucun code promo</td></tr>';
+                return;
+            }
+            tbody.innerHTML = promos.map(p => {
+                const validBadge = p.is_valid
+                    ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-700">Valide</span>'
+                    : '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700">Inactif</span>';
+                const valueStr = p.discount_type === 'percentage' ? p.discount_value + '%' : p.discount_value + ' MAD';
+                return `<tr class="border-t border-stone-50 hover:bg-stone-50/50">
+                    <td class="px-5 py-3 font-bold text-brand-900 font-mono">${p.code}</td>
+                    <td class="px-5 py-3">${valueStr}</td>
+                    <td class="px-5 py-3 text-stone-500">${p.used_count}/${p.max_uses}</td>
+                    <td class="px-5 py-3">${validBadge}</td>
+                    <td class="px-5 py-3">
+                        <button onclick="deletePromo(${p.id})" class="text-stone-300 hover:text-red-500 transition-colors" title="Supprimer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        async function createPromo(e) {
+            e.preventDefault();
+            const form = document.getElementById('promo-form');
+            const btn = form.querySelector('button[type=submit]');
+            const origHTML = btn.innerHTML;
+            btn.innerHTML = '...'; btn.disabled = true;
+
+            const formData = new FormData(form);
+            try {
+                const resp = await fetch(API_PROMOS + 'create/', {
+                    method: 'POST',
+                    headers: {'X-Requested-With':'XMLHttpRequest','X-CSRFToken':getCSRF()},
+                    body: formData,
+                    credentials:'same-origin'
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    document.getElementById('promo-code-input').value = '';
+                    loadAll();
+                } else {
+                    alert(data.message || 'Erreur');
+                }
+            } catch (err) { alert('Erreur reseau'); }
+            btn.innerHTML = origHTML; btn.disabled = false;
+        }
+
+        async function deletePromo(id) {
+            if (!confirm('Supprimer ce code promo ?')) return;
+            try {
+                const resp = await fetch(API_PROMOS + id + '/delete/', {
+                    method: 'POST',
+                    headers: {'X-Requested-With':'XMLHttpRequest','X-CSRFToken':getCSRF()},
+                    credentials:'same-origin'
+                });
+                const data = await resp.json();
+                if (data.success) loadAll();
+            } catch (err) { alert('Erreur reseau'); }
+        }
+
+        loadAll();
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><title>Devis L'Fellah N{{ order.id }}</title>
+<style>@page{size:A4;margin:0}*{margin:0;padding:0;box-sizing:border-box}body{font-family:Helvetica,Arial,sans-serif;color:#1b4332;font-size:9pt;line-height:1.4}
+.header{background:#1b4332;color:white;padding:16px 30px;display:flex;justify-content:space-between}
+.header h1{font-size:18pt;font-weight:900}.header .sub{font-size:6pt;color:#95d5b2}.header .legal{font-size:5.5pt;color:#95d5b2;text-align:right;line-height:1.5}
+.container{padding:14px 30px}.title{font-size:13pt;font-weight:900;color:#2d6a4f;margin-bottom:2mm;padding-bottom:2mm;border-bottom:2px solid #2d6a4f}
+.meta{font-size:7pt;color:#6b7280;margin-bottom:4mm}.meta span{display:block}
+table{width:100%;border-collapse:collapse;margin-bottom:4mm}
+th{background:#1b4332;color:white;font-size:6.5pt;font-weight:900;text-transform:uppercase;padding:5px 7px;text-align:left}
+th.right{text-align:right}td{padding:4px 7px;border-bottom:1px solid #d1fae5;font-size:7.5pt}
+td.right{text-align:right}tr:nth-child(even){background:#f0fdf4}
+.recap{margin-left:auto;width:48%}.recap td{padding:3px 0;border:none;font-size:8pt}
+.recap .label{color:#6b7280}.recap .value{text-align:right;font-weight:700}
+.recap .tva{color:#d97706}.recap .discount{color:#e53e3e}
+.recap .total td{font-size:10pt;font-weight:900;color:#1b4332;border-top:2px solid #1b4332;padding-top:4px}
+.footer{margin-top:8mm;padding-top:4px;border-top:1px solid #95d5b2;font-size:5.5pt;color:#6b7280;text-align:center;line-height:1.6}
+</style></head>
+<body>
+<div class="header">
+<div style="display:flex;align-items:center;gap:12px"><img src="logo.png" alt="L'Fellah" style="height:55px;width:auto"><div><h1>L'FELLAH 2.0 - DEVIS</h1><div class="sub">AGRICULTURE CONNECTÉE · MARCHÉ B2B</div></div></div>
+<div class="legal">{{ societe.raison_sociale|default:"L'FELLAH SARL" }}<br>ICE: {{ societe.ice|default:"N/A" }} · RC: {{ societe.rc|default:"N/A" }} · IF: {{ societe.if_|default:"N/A" }}<br>Patente: {{ societe.patente|default:"N/A" }} · CNSS: {{ societe.cnss|default:"N/A" }}</div>
+</div>
+<div class="container">
+<div class="title">DEVIS N° {{ order.id }}</div>
+<div class="meta"><span>Date: {{ date_emission|date:"d/m/Y à H:i" }} | Client: {{ order.buyer.email }} | Livraison: {{ order.shipping_address }}</span></div>
+<table>
+<thead><tr><th>Désignation</th><th class="right">Qté</th><th class="right">P.U. HT</th><th class="right">Total HT</th><th class="right">TVA {{ tva_rate_pct }}%</th></tr></thead>
+<tbody>{% for item in items %}
+<tr><td>{{ item.product.name }}</td><td class="right">{{ item.quantity }} {{ item.product.unit }}</td><td class="right">{{ item.unit_price_final|floatformat:2 }}</td><td class="right" style="font-weight:700">{{ item.total_final|floatformat:2 }}</td><td class="right tva">{{ item.total_tva|default:0|floatformat:2 }}</td></tr>{% endfor %}
+</tbody></table>
+<div class="recap"><table>
+<tr><td class="label">TOTAL HORS TAXES</td><td class="value">{{ total_ht|floatformat:2 }} MAD</td></tr>
+<tr><td class="label">TVA ({{ tva_rate_pct }}%)</td><td class="value tva">{{ total_tva|floatformat:2 }} MAD</td></tr>
+{% if order.discount_amount > 0 %}<tr><td class="label">REMISE ({{ order.promo_code.code }})</td><td class="value discount">-{{ order.discount_amount|floatformat:2 }} MAD</td></tr>{% endif %}
+<tr class="total"><td class="label">TOTAL TTC</td><td class="value">{{ total_ttc|floatformat:2 }} MAD</td></tr>
+</table></div>
+<div class="footer">
+{{ societe.raison_sociale|default:"L'FELLAH SARL" }} au capital de {{ societe.capital|default:"100 000 MAD" }}<br>
+ICE: {{ societe.ice|default:"N/A" }} · RC: {{ societe.rc|default:"N/A" }} · IF: {{ societe.if_|default:"N/A" }} · Patente: {{ societe.patente|default:"N/A" }} · CNSS: {{ societe.cnss|default:"N/A" }}<br>
+{{ societe.adresse|default:"" }} · {{ societe.telephone|default:"" }} · {{ societe.email|default:"contact@lfellah.ma" }}<br>
+Devis généré le {{ date_emission|date:"d/m/Y à H:i" }} — N° {{ order.id }}
+</div></div></body></html>

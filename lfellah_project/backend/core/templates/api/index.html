@@ -1,0 +1,2417 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Fellah 2.0 - Tableau de Bord Professionnel</title>
+    <!-- Tailwind CSS v4 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Outfit & Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Chart.js for Pro Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet.js for GPS Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#10b981">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="L'Fellah">
+    <link rel="apple-touch-icon" href="/static/api/icon-192.png">
+    <meta name="description" content="Système IoT de surveillance et diagnostic des cultures agricoles par intelligence artificielle.">
+
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-attachment: fixed;
+        }
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        html[dir="rtl"] body {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* Dynamic Theme Palette Rules (Custom Blue Palette) - Enhanced for Design Rules */
+        :root {
+            --bg-color: #f0f4f8; /* Soft light background for better contrast */
+            --bg-gradient-1: rgba(193, 232, 255, 0.35); /* #C1E8FF - increased opacity for better visual depth */
+            --bg-gradient-2: rgba(125, 160, 202, 0.25); /* #7DA0CA - increased for better balance */
+            --panel-bg: rgba(255, 255, 255, 0.85); /* Increased opacity for better contrast */
+            --panel-border: rgba(84, 131, 179, 0.3); /* #5483B3 - stronger border for hierarchy */
+            --card-bg: rgba(255, 255, 255, 0.65); /* Increased for better readability */
+            --card-border: rgba(125, 160, 202, 0.25); /* #7DA0CA - stronger for visual separation */
+            --text-main: #0a1929; /* Darker navy for better contrast ratio */
+            --text-muted: #4a6fa5; /* Darker muted text for improved readability */
+            --border-color: rgba(84, 131, 179, 0.25);
+            --shadow-color: rgba(125, 160, 202, 0.15); /* Stronger shadows for depth */
+            --divider-color: rgba(84, 131, 179, 0.15);
+            --accent-primary: #5483B3; /* Primary accent for dominance */
+            --accent-secondary: #7DA0CA; /* Secondary accent for rhythm */
+        }
+
+        .dark-theme {
+            --bg-color: #0a1628; /* Slightly lighter deep navy for better contrast */
+            --bg-gradient-1: rgba(5, 38, 89, 0.65); /* #052659 - increased for visual depth */
+            --bg-gradient-2: rgba(84, 131, 179, 0.25); /* #5483B3 - increased for balance */
+            --panel-bg: rgba(10, 30, 60, 0.45); /* Increased opacity for better contrast */
+            --panel-border: rgba(125, 160, 202, 0.25); /* #7DA0CA - stronger for hierarchy */
+            --card-bg: rgba(255, 255, 255, 0.03); /* Slightly increased for readability */
+            --card-border: rgba(84, 131, 179, 0.18); /* #5483B3 - stronger for separation */
+            --text-main: #e8f4fc; /* Lighter text for better contrast in dark mode */
+            --text-muted: #8bb4d8; /* Lighter muted text for improved readability */
+            --border-color: rgba(84, 131, 179, 0.25);
+            --shadow-color: rgba(0, 10, 30, 0.6); /* Stronger shadows for depth */
+            --divider-color: rgba(5, 38, 89, 0.5);
+            --accent-primary: #7DA0CA; /* Lighter primary for dark mode */
+            --accent-secondary: #C1E8FF; /* Lighter secondary for dark mode */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Glassmorphism System using CSS variables - Enhanced for Design Rules */
+        .glass-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1.5px solid var(--panel-border);
+            box-shadow: 0 12px 40px var(--shadow-color), 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
+            border-radius: 1.5rem;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid var(--card-border);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 1.25rem;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.75);
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 16px 32px var(--shadow-color), 0 8px 16px rgba(0, 0, 0, 0.08);
+            border-color: var(--accent-primary);
+        }
+
+        .dark-theme .glass-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--accent-primary);
+        }
+
+        .glass-card.active {
+            background: rgba(16, 185, 129, 0.08);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+        }
+
+        /* Glow Indicators - Enhanced for Dominance and Visual Interest */
+        .glow-emerald {
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.12), 0 0 80px rgba(16, 185, 129, 0.06);
+            border: 2px solid rgba(16, 185, 129, 0.25);
+        }
+        
+        .glow-amber {
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.12), 0 0 80px rgba(245, 158, 11, 0.06);
+            border: 2px solid rgba(245, 158, 11, 0.25);
+        }
+
+        .glow-red {
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.15), 0 0 80px rgba(239, 68, 68, 0.08);
+            border: 2px solid rgba(239, 68, 68, 0.25);
+        }
+
+        /* Gauge progress circle */
+        .gauge-circle {
+            transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        /* Lightbox modal blur */
+        .lightbox {
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(12px);
+        }
+
+        /* Scrollbars customization */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 99px;
+        }
+        .dark-theme ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.3);
+        }
+
+        /* Skeleton pulse */
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.15; }
+            50% { opacity: 0.3; }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Enhanced spacing system for better Rhythm and Proportion */
+        .space-y-8 > * + * {
+            margin-top: 2rem;
+        }
+        .space-y-6 > * + * {
+            margin-top: 1.5rem;
+        }
+        .space-y-4 > * + * {
+            margin-top: 1rem;
+        }
+
+        /* Improved typography hierarchy for better visual organization */
+        h1, h2, h3, h4 {
+            letter-spacing: -0.02em;
+        }
+
+        /* Enhanced button styles for better Dominance */
+        button, .btn {
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        button:hover, .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Improved navigation active state for better Hierarchy */
+        #nav-dashboard {
+            background: linear-gradient(135deg, rgba(84, 131, 179, 0.15), rgba(125, 160, 202, 0.1));
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        /* Enhanced stats cards for better Balance and Proportion */
+        .glass-card .text-lg {
+            font-size: 1.25rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        /* Improved section headers for better Unity */
+        h3.text-sm.font-bold {
+            position: relative;
+            padding-left: 0.75rem;
+        }
+
+        h3.text-sm.font-bold::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 1.25rem;
+            background: var(--accent-primary);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+    
+    <!-- Dynamic background blur spots using the custom palette -->
+    <div class="absolute top-[-300px] left-[-200px] w-[600px] h-[600px] rounded-full bg-[#C1E8FF]/20 dark:bg-[#052659]/35 blur-[150px] pointer-events-none transition-colors duration-500"></div>
+    <div class="absolute top-[25%] right-[-100px] w-[500px] h-[500px] rounded-full bg-[#7DA0CA]/15 dark:bg-[#5483B3]/10 blur-[120px] pointer-events-none transition-colors duration-500"></div>
+
+    <div class="flex min-h-screen">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="w-64 border-r border-[var(--border-color)] bg-white/20 dark:bg-gray-950/40 backdrop-blur-md hidden lg:flex flex-col justify-between p-6 flex-shrink-0 z-40 transition-colors duration-500">
+            <div class="space-y-8">
+                <!-- Brand identity -->
+                <div class="flex items-center space-x-3.5">
+                    <a href="/" class="block no-underline">
+                        <img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah" class="h-10 w-auto object-contain">
+                    </a>
+                </div>
+
+                <!-- Navigation List -->
+                <nav class="space-y-2">
+                    <a id="nav-dashboard" href="javascript:void(0)" onclick="switchTab('dashboard', this)" class="flex items-center space-x-3 px-4 py-3 rounded-xl bg-[#5483B3]/10 text-[#5483B3] dark:bg-[#C1E8FF]/5 dark:text-[#C1E8FF] border border-[#5483B3]/25 dark:border-[#C1E8FF]/20 font-semibold text-sm transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                        <span data-i18n="nav-dashboard">Tableau de Bord</span>
+                    </a>
+                    <a id="nav-history" href="javascript:void(0)" onclick="switchTab('history', this)" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-slate-100/50 dark:hover:bg-gray-900/40 border border-transparent hover:border-[var(--border-color)] font-semibold text-sm transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span data-i18n="nav-history">Analyses & Chrono</span>
+                    </a>
+                    <a id="nav-settings" href="javascript:void(0)" onclick="switchTab('settings', this)" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-slate-100/50 dark:hover:bg-gray-900/40 border border-transparent hover:border-[var(--border-color)] font-semibold text-sm transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <span data-i18n="nav-settings">Paramètres ESP32</span>
+                    </a>
+                    <!-- Map Tab -->
+                    <a id="nav-map" href="javascript:void(0)" onclick="switchTab('map', this)" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-slate-100/50 dark:hover:bg-gray-900/40 border border-transparent hover:border-[var(--border-color)] font-semibold text-sm transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                        <span data-i18n="nav-map">Carte GPS</span>
+                    </a>
+                    <!-- Reports Tab -->
+                    <a id="nav-reports" href="javascript:void(0)" onclick="switchTab('reports', this)" class="flex items-center space-x-3 px-4 py-3 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-slate-100/50 dark:hover:bg-gray-900/40 border border-transparent hover:border-[var(--border-color)] font-semibold text-sm transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        <span data-i18n="nav-reports">Rapports & Stats</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Footer Sidebar info -->
+            <div class="p-4 rounded-xl bg-slate-100/40 dark:bg-gray-900/20 border border-[var(--border-color)] text-xs text-[var(--text-muted)] space-y-1.5 font-semibold transition-colors">
+                <p>📍 <span data-i18n="sidebar-location">Secteur Marrakech</span></p>
+                <p>🌿 <span data-i18n="sidebar-status">Diagnostic IA Actif</span></p>
+            </div>
+        </aside>
+
+        <!-- MAIN LAYOUT CONTAINER -->
+        <div class="flex-1 flex flex-col min-w-0 pb-20 lg:pb-0">
+            
+            <!-- TOP BAR HEADER -->
+            <header class="glass-panel sticky top-0 z-30 px-3 sm:px-6 py-3 sm:py-4 flex justify-between items-center transition-all duration-500">
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="lg:hidden block no-underline flex-shrink-0">
+                        <img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah" class="h-8 w-auto object-contain">
+                    </a>
+                    <div>
+                        <h2 data-i18n="header-title" class="text-md font-bold text-[var(--text-main)] hidden sm:block">Exploitation Agricole Connectée</h2>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 sm:space-x-3.5">
+                    <!-- Dynamic Live status indicator -->
+                    <div class="flex items-center space-x-2 bg-slate-100/60 dark:bg-gray-950/80 px-3.5 py-1.5 rounded-full border border-[var(--border-color)] transition-colors">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span id="connection-indicator" class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span id="connection-text" data-i18n="connection-connected" class="hidden sm:block text-[11px] font-bold text-[var(--text-muted)]">ESP32 Connectée</span>
+                    </div>
+
+                    <div id="live-time" class="text-xs text-[var(--text-muted)] font-semibold hidden sm:block">Casablanca --:--</div>
+
+                    <!-- Language Selector Dropdown -->
+                    <div class="relative inline-block">
+                        <select id="lang-selector" onchange="changeLanguage(this.value)" class="flex items-center pl-2 sm:pl-3.5 pr-6 sm:pr-8 py-1.5 sm:py-2 rounded-xl border border-[var(--border-color)] bg-slate-100/40 dark:bg-gray-900/30 hover:bg-slate-200/50 dark:hover:bg-gray-800/40 text-[11px] font-bold text-[var(--text-main)] transition-all cursor-pointer outline-none appearance-none">
+                            <option value="fr" class="bg-white dark:bg-gray-950">🇫🇷 FR</option>
+                            <option value="en" class="bg-white dark:bg-gray-950">🇬🇧 EN</option>
+                            <option value="ar" class="bg-white dark:bg-gray-950">🇲🇦 AR</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[var(--text-muted)]">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </div>
+                    </div>
+
+                    <!-- 🔔 Alerts Bell -->
+                    <button onclick="toggleAlertsPanel()" id="btn-alerts" class="relative flex items-center justify-center w-8 sm:w-9 h-8 sm:h-9 rounded-xl border border-[var(--border-color)] bg-slate-100/40 dark:bg-gray-900/30 hover:bg-slate-200/50 dark:hover:bg-gray-800/40 transition-all cursor-pointer">
+                        <svg class="w-4 h-4 text-[var(--text-main)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        <span id="alert-badge" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center hidden">0</span>
+                    </button>
+
+
+                    <button onclick="toggleTheme()" class="flex items-center space-x-0 sm:space-x-2 p-2 sm:px-3.5 sm:py-2 rounded-xl border border-[var(--border-color)] bg-slate-100/40 dark:bg-gray-900/30 hover:bg-slate-200/50 dark:hover:bg-gray-800/40 text-xs font-bold transition-all cursor-pointer">
+                        <!-- Sun Icon (visible in dark mode) -->
+                        <svg id="theme-icon-sun" class="w-4 h-4 sm:w-3.5 sm:h-3.5 text-amber-500 hidden" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
+                        <!-- Moon Icon (visible in light mode) -->
+                        <svg id="theme-icon-moon" class="w-4 h-4 sm:w-3.5 sm:h-3.5 text-slate-700" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                        <span id="theme-text" data-i18n="theme-dark" class="hidden sm:inline-block text-[11px] text-[var(--text-main)] font-bold">Mode Sombre</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- MAIN DYNAMIC SECTION SWITCH -->
+            <div class="flex-1 overflow-y-auto px-4 md:px-6 lg:px-8 py-8 pb-24 lg:pb-8">
+                
+                <!-- VIEW 1: DASHBOARD (Active by default) -->
+                <div id="view-dashboard" class="space-y-8">
+                    
+                    <!-- Stats Strip - Enhanced for Balance and Hierarchy -->
+                    <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="glass-card rounded-2xl p-6 flex items-center justify-between border border-[var(--border-color)] hover:border-emerald-500/30 transition-all">
+                            <div class="space-y-2">
+                                <span data-i18n="stat-esp-status" class="text-[10px] text-[var(--text-muted)] font-black uppercase tracking-wider block">Statut ESP-CAM</span>
+                                <h3 id="stat-signal" class="text-xl font-black text-[var(--text-main)]">Excellent</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-600 border border-emerald-500/20">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            </div>
+                        </div>
+
+                        <div class="glass-card rounded-2xl p-6 flex items-center justify-between border border-[var(--border-color)] hover:border-teal-500/30 transition-all">
+                            <div class="space-y-2">
+                                <span data-i18n="stat-scans-title" class="text-[10px] text-[var(--text-muted)] font-black uppercase tracking-wider block">Diagnostics Total</span>
+                                <h3 id="stat-scans-count" class="text-xl font-black text-[var(--text-main)]">--</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-teal-500/15 flex items-center justify-center text-teal-600 border border-teal-500/20">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            </div>
+                        </div>
+
+                        <div class="glass-card rounded-2xl p-6 flex items-center justify-between border border-[var(--border-color)] hover:border-sky-500/30 transition-all">
+                            <div class="space-y-2">
+                                <span data-i18n="stat-health-title" class="text-[10px] text-[var(--text-muted)] font-black uppercase tracking-wider block">Feuilles Saines</span>
+                                <h3 id="stat-health-ratio" class="text-xl font-black text-[var(--text-main)]">-- %</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-sky-500/15 flex items-center justify-center text-sky-600 border border-sky-500/20">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            </div>
+                        </div>
+
+                        <div class="glass-card rounded-2xl p-6 flex items-center justify-between border border-[var(--border-color)] hover:border-purple-500/30 transition-all">
+                            <div class="space-y-2">
+                                <span data-i18n="stat-upload-title" class="text-[10px] text-[var(--text-muted)] font-black uppercase tracking-wider block">Dernier Upload</span>
+                                <h3 id="stat-elapsed" data-i18n="stat-just-now" class="text-xl font-black text-[var(--text-main)]">À l'instant</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-purple-500/15 flex items-center justify-center text-purple-600 border border-purple-500/20">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- CAPTEURS EN TEMPS REEL -->
+                    <section class="grid grid-cols-2 md:grid-cols-4 gap-4" id="sensor-strip">
+                        <div class="glass-card rounded-2xl p-4 border border-[var(--border-color)] cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all group"
+                             data-sensor="temp" onclick="fetchSensor('temp')" id="card-temp-iot">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] text-[var(--text-muted)] font-black uppercase tracking-wider">Température</span>
+                                <span id="badge-temp-iot" class="hidden text-[8px] font-bold px-1.5 py-0.5 rounded-md bg-red-500/10 text-red-500">!</span>
+                            </div>
+                            <p class="text-lg font-black" id="val-temp-iot">—<span class="text-[10px] text-[var(--text-muted)] ml-1">°C</span></p>
+                            <span class="text-[8px] text-[var(--text-muted)] opacity-0 group-hover:opacity-100 transition-opacity">Cliquer pour rafraîchir</span>
+                        </div>
+                        <div class="glass-card rounded-2xl p-4 border border-[var(--border-color)] cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all group"
+                             data-sensor="hum" onclick="fetchSensor('hum')" id="card-hum-iot">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] text-[var(--text-muted)] font-black uppercase tracking-wider">Humidité</span>
+                                <span id="badge-hum-iot" class="hidden text-[8px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-500">!</span>
+                            </div>
+                            <p class="text-lg font-black" id="val-hum-iot">—<span class="text-[10px] text-[var(--text-muted)] ml-1">%</span></p>
+                            <span class="text-[8px] text-[var(--text-muted)] opacity-0 group-hover:opacity-100 transition-opacity">Cliquer pour rafraîchir</span>
+                        </div>
+                        <div class="glass-card rounded-2xl p-4 border border-[var(--border-color)] cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all group"
+                             data-sensor="tds" onclick="fetchSensor('tds')" id="card-tds-iot">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] text-[var(--text-muted)] font-black uppercase tracking-wider">TDS</span>
+                                <span id="badge-tds-iot" class="hidden text-[8px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-500">!</span>
+                            </div>
+                            <p class="text-lg font-black" id="val-tds-iot">—<span class="text-[10px] text-[var(--text-muted)] ml-1">ppm</span></p>
+                            <span class="text-[8px] text-[var(--text-muted)] opacity-0 group-hover:opacity-100 transition-opacity">Cliquer pour rafraîchir</span>
+                        </div>
+                        <div class="glass-card rounded-2xl p-4 border border-[var(--border-color)] cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all group"
+                             data-sensor="ph" onclick="fetchSensor('ph')" id="card-ph-iot">
+                            <div class="flex items-center justify-between mb-1.5">
+                                <span class="text-[9px] text-[var(--text-muted)] font-black uppercase tracking-wider">pH</span>
+                                <span id="badge-ph-iot" class="hidden text-[8px] font-bold px-1.5 py-0.5 rounded-md bg-red-500/10 text-red-500">!</span>
+                            </div>
+                            <p class="text-lg font-black" id="val-ph-iot">—</p>
+                            <span class="text-[8px] text-[var(--text-muted)] opacity-0 group-hover:opacity-100 transition-opacity">Cliquer pour rafraîchir</span>
+                        </div>
+                    </section>
+
+                    <!-- Row: Main camera panel + sidebar -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        
+                        <!-- Left Panel: Monitor -->
+                        <div class="lg:col-span-8 space-y-6">
+                            
+                            <div class="flex flex-wrap items-center justify-between gap-4">
+                                <h3 class="text-sm font-bold text-[var(--text-muted)] uppercase tracking-wider flex items-center gap-2">
+                                    <span class="w-1 h-4 bg-[var(--accent-primary)] rounded-full"></span>
+                                    <span data-i18n="monitor-title">Moniteur en temps réel</span>
+                                </h3>
+
+                                <div class="flex items-center space-x-2.5">
+                                    <button id="btn-live" onclick="returnToLive()" class="hidden bg-[var(--accent-primary)]/10 hover:bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] dark:text-[var(--accent-secondary)] border border-[var(--accent-primary)]/20 rounded-xl px-4 py-2 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer hover:scale-105">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)] animate-pulse"></span>
+                                        <span data-i18n="btn-live">Repasser au Direct</span>
+                                    </button>
+
+                                    <!-- Local file upload input button -->
+                                    <label class="bg-[var(--accent-primary)]/10 hover:bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] dark:text-[var(--accent-secondary)] border border-[var(--accent-primary)]/25 dark:border-[var(--accent-secondary)]/20 rounded-xl px-4 py-2 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer hover:scale-105">
+                                        <svg class="w-3.5 h-3.5 text-[var(--accent-primary)] dark:text-[var(--accent-secondary)]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                        <span data-i18n="btn-upload">Analyser un fichier local</span>
+                                        <input type="file" id="local-upload-input" accept="image/*" class="hidden" onchange="uploadLocalFile(this)">
+                                    </label>
+                                </div>
+                             </div>
+ 
+                             <div id="main-panel" class="glass-panel rounded-3xl p-4 sm:p-6 glow-emerald transition-all duration-500 relative">
+                                 
+                                 <!-- No Data -->
+                                 <div id="no-data-view" class="hidden py-40 flex flex-col items-center justify-center text-center">
+                                     <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-gray-900 border border-[var(--border-color)] flex items-center justify-center mb-6">
+                                         <svg class="w-8 h-8 text-[var(--text-muted)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                     </div>
+                                     <h4 data-i18n="no-image-title" class="text-sm font-bold">Aucune image reçue</h4>
+                                     <p data-i18n="no-image-desc" class="text-xs text-[var(--text-muted)] max-w-xs mt-1">Connectez votre caméra ESP32-CAM pour lancer les analyses agricoles en direct.</p>
+                                 </div>
+ 
+                                 <!-- Data View -->
+                                 <div id="data-view" class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                                     <!-- Image frame -->
+                                     <div class="md:col-span-5 relative group">
+                                         <div class="relative rounded-2xl overflow-hidden aspect-square bg-slate-100 dark:bg-[#050914] flex items-center justify-center border border-[var(--border-color)]">
+                                             
+                                             <div id="image-skeleton" class="absolute inset-0 bg-slate-200/50 dark:bg-gray-900/60 animate-pulse-slow hidden flex items-center justify-center">
+                                                 <svg class="w-8 h-8 text-slate-400 animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89H18"/></svg>
+                                             </div>
+ 
+                                             <img id="scan-image" src="" alt="Diagnostic" class="w-full h-full object-cover fade-transition" onload="hideSkeleton()">
+                                             
+                                             <span id="badge-source" data-i18n="direct-badge" class="absolute top-4 left-4 bg-white/90 dark:bg-gray-950/95 backdrop-blur-md text-[9px] font-extrabold tracking-wider uppercase px-3 py-1.5 rounded-lg text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                                                 Direct
+                                             </span>
+ 
+                                             <button onclick="openLightbox()" class="absolute bottom-4 right-4 w-9 h-9 rounded-xl bg-white/95 dark:bg-gray-950/80 backdrop-blur-md border border-[var(--border-color)] flex items-center justify-center hover:scale-105 transition-all cursor-pointer">
+                                                 <svg class="w-4 h-4 text-[var(--text-main)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                             </button>
+                                         </div>
+                                     </div>
+ 
+                                     <!-- Detail stats -->
+                                     <div class="md:col-span-7 flex flex-col justify-between space-y-6">
+                                         <div>
+                                             <div class="flex justify-between items-center">
+                                                 <span id="scan-id" class="text-[9px] font-extrabold text-[var(--text-muted)] tracking-wider uppercase">ID SCAN: --</span>
+                                                 
+                                                 <div id="badge-severity" class="px-3 py-1 rounded-full text-[10px] font-black border flex items-center gap-1.5 tracking-wider uppercase">
+                                                     <span id="severity-dot" class="w-1.5 h-1.5 rounded-full"></span>
+                                                     <span id="severity-text">--</span>
+                                                 </div>
+                                             </div>
+ 
+                                             <div class="mt-4">
+                                                 <h3 id="disease-name" class="text-xl font-extrabold text-[var(--text-main)] leading-snug">--</h3>
+                                             </div>
+ 
+                                             <div class="mt-6 flex items-center space-x-4">
+                                                 <div class="relative flex items-center justify-center">
+                                                     <svg class="w-16 h-16">
+                                                         <circle class="text-slate-200 dark:text-gray-900" stroke-width="4.5" stroke="currentColor" fill="transparent" r="26" cx="32" cy="32"/>
+                                                         <circle id="gauge-progress" class="gauge-circle text-emerald-500" stroke-width="4.5" stroke-linecap="round" stroke="currentColor" fill="transparent" r="26" cx="32" cy="32" stroke-dasharray="163" stroke-dashoffset="163"/>
+                                                     </svg>
+                                                     <span id="confidence-val" class="absolute text-[11px] font-black">0%</span>
+                                                 </div>
+                                                 <div class="space-y-0.5">
+                                                     <span data-i18n="confidence-label" class="text-[9px] font-extrabold text-[var(--text-muted)] uppercase tracking-wider block">Indice de Confiance IA</span>
+                                                     <span id="confidence-desc" class="text-xs text-emerald-500 font-bold">--</span>
+                                                 </div>
+                                             </div>
+ 
+                                             <div id="advice-box" class="mt-6 bg-emerald-500/[0.04] border border-emerald-500/10 rounded-2xl p-4.5 relative overflow-hidden">
+                                                    <h4 data-i18n="treatment-title" class="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center gap-2 uppercase tracking-widest">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                                        Traitement & Protection
+                                                    </h4>
+                                                    <p id="watering-advice" class="text-[var(--text-main)] text-xs mt-3 leading-relaxed font-semibold">
+                                                        --
+                                                    </p>
+                                                </div>
+
+                                                <div class="mt-4 hidden" id="weather-box">
+                                                    <div class="bg-blue-500/[0.04] border border-blue-500/10 rounded-2xl p-4.5 flex gap-6 relative overflow-hidden">
+                                                        <div>
+                                                            <span class="text-[10px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-widest block mb-1">Météo Locale</span>
+                                                            <div class="text-sm font-bold text-[var(--text-main)] flex items-center gap-1.5">
+                                                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                                                <span id="weather-temp">--°C</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-[10px] font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-widest block mb-1">Humidité</span>
+                                                            <div class="text-sm font-bold text-[var(--text-main)] flex items-center gap-1.5">
+                                                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+                                                                <span id="weather-hum">--%</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                         </div>
+ 
+                                         <div class="pt-4 border-t border-[var(--border-color)] flex items-center justify-between text-xs text-[var(--text-muted)] font-bold transition-all">
+                                             <span id="scan-date">Analysé le : --</span>
+                                             <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> <span data-i18n="sync-status">Synch</span></span>
+                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Right: Quick List -->
+                        <div class="lg:col-span-4 space-y-6">
+                            <h3 class="text-sm font-bold text-[var(--text-muted)] uppercase tracking-wider flex items-center gap-2">
+                                <span class="w-1 h-4 bg-teal-500 rounded-full"></span>
+                                <span data-i18n="recent-analyses-title">Récentes Analyses</span>
+                            </h3>
+
+                            <div class="glass-panel rounded-3xl p-5 flex flex-col h-[300px] lg:h-[520px]">
+                                <div id="history-sidebar" class="flex-1 overflow-y-auto space-y-4 pr-2">
+                                    <!-- History rendered dynamically -->
+                                    {% if history or scan %}
+                                        {% if scan %}
+                                        <div onclick="loadScan({{ scan.id }})" class="glass-card rounded-xl p-4 flex items-center gap-3 cursor-pointer border-l-4 border-l-emerald-500 hover:scale-[1.02] transition-transform" id="sidebar-hist-{{ scan.id }}">
+                                            <div class="w-12 h-12 rounded-lg overflow-hidden bg-slate-100 dark:bg-gray-900 border border-[var(--border-color)] flex-shrink-0 shadow-sm">
+                                                <img src="{{ scan.image.url }}" alt="" class="w-full h-full object-cover">
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <h4 class="text-xs font-bold text-[var(--text-main)] truncate sidebar-title" data-i18n-disease="{{ scan.disease_name }}">{{ scan.disease_name }}</h4>
+                                                <div class="flex justify-between items-center mt-1.5 text-[9px] font-bold text-[var(--text-muted)]">
+                                                    <span class="text-emerald-500">{{ scan.confidence|floatformat:1 }}%</span>
+                                                    <span>{{ scan.scanned_at|date:"H:i" }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+
+                                        {% for item in history %}
+                                        <div onclick="loadScan({{ item.id }})" class="glass-card rounded-xl p-4 flex items-center gap-3 cursor-pointer border-l-4 {% if item.severity == 'critical' %}border-l-red-500{% elif item.severity == 'warning' %}border-l-amber-500{% else %}border-l-emerald-500{% endif %} hover:scale-[1.02] transition-transform" id="sidebar-hist-{{ item.id }}">
+                                            <div class="w-12 h-12 rounded-lg overflow-hidden bg-slate-100 dark:bg-gray-900 border border-[var(--border-color)] flex-shrink-0 shadow-sm">
+                                                <img src="{{ item.image.url }}" alt="" class="w-full h-full object-cover">
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <h4 class="text-xs font-bold text-[var(--text-main)] truncate sidebar-title" data-i18n-disease="{{ item.disease_name }}">{{ item.disease_name }}</h4>
+                                                <div class="flex justify-between items-center mt-1.5 text-[9px] font-bold text-[var(--text-muted)]">
+                                                    <span class="{% if item.severity == 'critical' %}text-red-500{% elif item.severity == 'warning' %}text-amber-500{% else %}text-emerald-500{% endif %}">{{ item.confidence|floatformat:1 }}%</span>
+                                                    <span>{{ item.scanned_at|date:"d/m H:i" }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div data-i18n="history-sidebar-empty" class="text-center py-20 text-[var(--text-muted)] italic text-xs font-medium">Aucun scan en BDD</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Row 2: Analytics chart block -->
+                    <div class="glass-panel rounded-3xl p-6">
+                        <h4 data-i18n="chart-title" class="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider mb-6">Proportion et Diagnostic de Santé Global</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                            <div class="md:col-span-4 h-[160px] flex items-center justify-center">
+                                <canvas id="healthChart"></canvas>
+                            </div>
+                            <div class="md:col-span-8 space-y-4 font-semibold text-xs text-[var(--text-muted)] leading-relaxed">
+                                <p data-i18n="chart-desc">Ce diagramme dynamique calcule en temps réel le ratio global de vos cultures saines par rapport aux cas de maladies détectées par l'IA.</p>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="w-2.5 h-2.5 rounded bg-emerald-500"></span>
+                                        <span id="lbl-healthy">Feuilles Saines: --</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="w-2.5 h-2.5 rounded bg-red-500"></span>
+                                        <span id="lbl-infected">Feuilles Infectées: --</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- VIEW 2: HISTORY TIMELINE (Hidden by default) -->
+                <div id="view-history" class="hidden space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                        <div>
+                            <h3 data-i18n="history-title" class="text-lg font-bold text-[var(--text-main)]">Historique Général des Scans</h3>
+                            <p data-i18n="history-desc" class="text-xs text-[var(--text-muted)] font-semibold mt-0.5">Consultez, recherchez et analysez l'ensemble des diagnostics.</p>
+                        </div>
+
+                        <!-- Filter Search -->
+                        <div class="w-full sm:w-64 relative">
+                            <span class="absolute inset-y-0 left-3 flex items-center text-[var(--text-muted)]">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            </span>
+                            <input type="text" id="history-search" data-i18n-placeholder="history-search-placeholder" placeholder="Filtrer par maladie..." class="w-full bg-slate-100/60 dark:bg-[#050914] text-xs py-2.5 pl-9 pr-4 rounded-xl border border-[var(--border-color)] text-[var(--text-main)] focus:outline-none focus:border-emerald-500 transition-all font-semibold" onkeyup="filterHistoryGrid()">
+                        </div>
+                    </div>
+
+                    <!-- Large Grid of Cards -->
+                    <div id="history-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {% if history or scan %}
+                            {% if scan %}
+                            <div onclick="inspectHistoryItem({{ scan.id }})" class="glass-card rounded-2xl p-4 cursor-pointer border border-[var(--border-color)] hover:scale-[1.02] flex flex-col justify-between" id="grid-hist-{{ scan.id }}">
+                                <div class="relative rounded-xl overflow-hidden aspect-video bg-slate-100 dark:bg-gray-950 border border-[var(--border-color)] mb-4">
+                                    <img src="{{ scan.image.url }}" alt="" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <span data-i18n-severity="{{ scan.severity }}" class="px-2 py-0.5 rounded text-[8px] font-black uppercase border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">Saine</span>
+                                    <h4 class="text-xs font-bold text-[var(--text-main)] mt-2.5 truncate grid-title" data-i18n-disease="{{ scan.disease_name }}">{{ scan.disease_name }}</h4>
+                                    <div class="flex justify-between items-center mt-3 text-[10px] font-semibold text-[var(--text-muted)]">
+                                        <span data-i18n-reliability="{{ scan.confidence|floatformat:1 }}">Fiabilité: {{ scan.confidence|floatformat:1 }}%</span>
+                                        <span data-i18n-date="{{ scan.scanned_at|date:'c' }}">{{ scan.scanned_at|date:"d M Y" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            {% for item in history %}
+                            <div onclick="inspectHistoryItem({{ item.id }})" class="glass-card rounded-2xl p-4 cursor-pointer border border-[var(--border-color)] hover:scale-[1.02] flex flex-col justify-between" id="grid-hist-{{ item.id }}">
+                                <div class="relative rounded-xl overflow-hidden aspect-video bg-slate-100 dark:bg-gray-950 border border-[var(--border-color)] mb-4">
+                                    <img src="{{ item.image.url }}" alt="" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <span data-i18n-severity="{{ item.severity }}" class="px-2 py-0.5 rounded text-[8px] font-black uppercase border 
+                                    {% if item.severity == 'critical' %}border-red-500/20 bg-red-500/10 text-red-500
+                                    {% elif item.severity == 'warning' %}border-amber-500/20 bg-amber-500/10 text-amber-500
+                                    {% else %}border-emerald-500/20 bg-emerald-500/10 text-emerald-500{% endif %}">
+                                        {% if item.severity == 'critical' %}Critique{% elif item.severity == 'warning' %}Attention{% else %}Saine{% endif %}
+                                    </span>
+                                    <h4 class="text-xs font-bold text-[var(--text-main)] mt-2.5 truncate grid-title" data-i18n-disease="{{ item.disease_name }}">{{ item.disease_name }}</h4>
+                                    <div class="flex justify-between items-center mt-3 text-[10px] font-semibold text-[var(--text-muted)]">
+                                        <span data-i18n-reliability="{{ item.confidence|floatformat:1 }}">Fiabilité: {{ item.confidence|floatformat:1 }}%</span>
+                                        <span data-i18n-date="{{ item.scanned_at|date:'c' }}">{{ item.scanned_at|date:"d M Y" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div data-i18n="history-empty" class="col-span-full py-32 text-center text-[var(--text-muted)] italic text-sm font-medium">Aucun historique disponible</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- VIEW 4: GPS MAP (Hidden by default) -->
+                <div id="view-map" class="hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 data-i18n="nav-map" class="text-lg font-bold text-[var(--text-main)]">Carte GPS des Cultures</h3>
+                            <p class="text-xs text-[var(--text-muted)] font-semibold mt-0.5">Visualisez la géolocalisation de chaque scan et les zones à risque.</p>
+                        </div>
+                        <button onclick="refreshMap()" class="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold hover:bg-emerald-500/20 transition-all">
+                            🔄 Actualiser
+                        </button>
+                    </div>
+                    <!-- Map Legend -->
+                    <div class="flex flex-wrap gap-3 text-[10px] font-bold">
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Sain</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> Attention</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span> Critique</span>
+                    </div>
+                    <!-- Leaflet Map Container -->
+                    <div class="glass-panel rounded-3xl overflow-hidden" style="height: 480px;">
+                        <div id="leaflet-map" style="width:100%; height:100%; border-radius: 1.5rem;"></div>
+                    </div>
+                    <p class="text-xs text-[var(--text-muted)] font-semibold text-center">
+                        💡 Les scans sans coordonnées GPS n'apparaissent pas sur la carte. Activez la géolocalisation lors de l'upload.
+                    </p>
+                </div>
+
+                <!-- VIEW 5: REPORTS & STATS (Hidden by default) -->
+                <div id="view-reports" class="hidden space-y-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-[var(--text-main)]">📊 Rapports & Statistiques</h3>
+                        <p class="text-xs text-[var(--text-muted)] font-semibold mt-0.5">Générez des rapports PDF hebdomadaires et exportez vos données.</p>
+                    </div>
+
+                    <!-- Action Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <!-- PDF Report -->
+                        <div class="glass-panel rounded-2xl p-5 flex flex-col gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-[var(--text-main)]">Rapport PDF Hebdomadaire</h4>
+                                <p class="text-xs text-[var(--text-muted)] font-semibold mt-1">Génère un rapport complet de la semaine passée avec statistiques et analyse.</p>
+                            </div>
+                            <button onclick="downloadReport()" id="btn-report" class="mt-auto px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-2 justify-center">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                Télécharger PDF
+                            </button>
+                        </div>
+                        <!-- CSV Export -->
+                        <div class="glass-panel rounded-2xl p-5 flex flex-col gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-[var(--text-main)]">Export CSV Complet</h4>
+                                <p class="text-xs text-[var(--text-muted)] font-semibold mt-1">Exportez tous vos scans avec météo, GPS, et résultats IA en format CSV.</p>
+                            </div>
+                            <a href="/api/scans/export/" class="mt-auto px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-2 justify-center">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                Exporter CSV
+                            </a>
+                        </div>
+                        <!-- Security Logs -->
+                        <div class="glass-panel rounded-2xl p-5 flex flex-col gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-[var(--text-main)]">Logs de Sécurité</h4>
+                                <p class="text-xs text-[var(--text-muted)] font-semibold mt-1">Consultez l'activité réseau et gérez les adresses IP suspectes.</p>
+                            </div>
+                            <a href="/admin/api/securitylog/" target="_blank" class="mt-auto px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-2 justify-center">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                Voir Logs
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Stats Summary -->
+                    <div id="stats-summary" class="glass-panel rounded-3xl p-6">
+                        <h4 class="text-sm font-bold text-[var(--text-main)] mb-4">📈 Résumé Global</h4>
+                        <div id="stats-loading" class="text-center py-8 text-[var(--text-muted)] text-sm font-semibold">Chargement des statistiques...</div>
+                        <div id="stats-content" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="text-center">
+                                <div id="stat-total" class="text-2xl font-black text-[var(--text-main)]">—</div>
+                                <div class="text-xs text-[var(--text-muted)] font-semibold mt-1">Total Scans</div>
+                            </div>
+                            <div class="text-center">
+                                <div id="stat-healthy-r" class="text-2xl font-black text-emerald-500">—</div>
+                                <div class="text-xs text-[var(--text-muted)] font-semibold mt-1">Sains</div>
+                            </div>
+                            <div class="text-center">
+                                <div id="stat-warning-r" class="text-2xl font-black text-amber-500">—</div>
+                                <div class="text-xs text-[var(--text-muted)] font-semibold mt-1">Alertes</div>
+                            </div>
+                            <div class="text-center">
+                                <div id="stat-critical-r" class="text-2xl font-black text-red-500">—</div>
+                                <div class="text-xs text-[var(--text-muted)] font-semibold mt-1">Critiques</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 3: SETTINGS FORM (Hidden by default) -->
+                <div id="view-settings" class="hidden max-w-2xl mx-auto space-y-6">
+                    <div>
+                        <h3 data-i18n="settings-title" class="text-lg font-bold text-[var(--text-main)]">Paramètres de la Caméra ESP32-CAM</h3>
+                        <p data-i18n="settings-desc" class="text-xs text-[var(--text-muted)] font-semibold mt-0.5">Gérez la connexion réseau et optimisez la consommation d'énergie de votre capteur.</p>
+                    </div>
+
+                    <!-- Config Card -->
+                    <div class="glass-panel rounded-3xl p-6 space-y-6">
+                        
+                        <!-- Success Alert notification (hidden by default) -->
+                        <div id="alert-settings-success" class="hidden bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 flex items-center space-x-3 text-emerald-700 dark:text-emerald-400 text-xs font-bold transition-all">
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            <span data-i18n="settings-success">Configuration enregistrée avec succès ! Les nouveaux paramètres seront envoyés à l'ESP32 au prochain cycle.</span>
+                        </div>
+
+                        <form id="settings-form" onsubmit="saveESP32Config(event)" class="space-y-5">
+                            
+                            <!-- Input SSID -->
+                            <div class="space-y-1.5">
+                                <label data-i18n="settings-ssid-label" class="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider block">Nom du Point d'accès Wi-Fi (SSID)</label>
+                                <input required type="text" id="cfg-ssid" class="w-full bg-slate-100/50 dark:bg-gray-950/80 border border-[var(--border-color)] px-4 py-3 rounded-xl text-xs text-[var(--text-main)] font-semibold focus:outline-none focus:border-emerald-500 transition-colors">
+                            </div>
+
+                            <!-- Input Password -->
+                            <div class="space-y-1.5">
+                                <label data-i18n="settings-pass-label" class="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider block">Mot de Passe du Wi-Fi</label>
+                                <input required type="password" id="cfg-password" class="w-full bg-slate-100/50 dark:bg-gray-950/80 border border-[var(--border-color)] px-4 py-3 rounded-xl text-xs text-[var(--text-main)] font-semibold focus:outline-none focus:border-emerald-500 transition-colors">
+                            </div>
+
+                            <!-- Capture mode select -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="space-y-1.5">
+                                    <label data-i18n="settings-mode-label" class="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider block">Mode d'énergie</label>
+                                    <select id="cfg-mode" class="w-full bg-slate-100/50 dark:bg-gray-950/80 border border-[var(--border-color)] px-3 py-3 rounded-xl text-xs text-[var(--text-main)] font-semibold focus:outline-none focus:border-emerald-500 transition-colors">
+                                        <option value="continuous" data-i18n="settings-mode-continuous">En continu (Toutes les 30s)</option>
+                                        <option value="sleep" data-i18n="settings-mode-sleep">Veille profonde (Économe batterie)</option>
+                                    </select>
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <label data-i18n="settings-interval-label" class="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-wider block">Intervalle de Veille</label>
+                                    <select id="cfg-sleep-duration" class="w-full bg-slate-100/50 dark:bg-gray-950/80 border border-[var(--border-color)] px-3 py-3 rounded-xl text-xs text-[var(--text-main)] font-semibold focus:outline-none focus:border-emerald-500 transition-colors">
+                                        <option value="60" data-i18n="settings-interval-1m">1 minute</option>
+                                        <option value="300" data-i18n="settings-interval-5m" selected>5 minutes</option>
+                                        <option value="900" data-i18n="settings-interval-15m">15 minutes</option>
+                                        <option value="1800" data-i18n="settings-interval-30m">30 minutes</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Enable LED Flash -->
+                            <div class="flex items-center space-x-3 pt-2">
+                                <input type="checkbox" id="cfg-flash" class="w-4.5 h-4.5 accent-emerald-500 cursor-pointer rounded border-[var(--border-color)]">
+                                <label for="cfg-flash" data-i18n="settings-flash-label" class="text-xs font-bold text-[var(--text-muted)] cursor-pointer select-none">Activer le flash LED puissant de la caméra lors de la capture</label>
+                            </div>
+
+                            <!-- Submit button -->
+                            <div class="pt-4">
+                                <button type="submit" data-i18n="settings-submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black uppercase tracking-wider py-3.5 rounded-xl transition-all shadow-md shadow-emerald-600/10 cursor-pointer">
+                                    Enregistrer la Configuration
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- BOTTOM NAVIGATION FOR MOBILE DEVICES -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/70 dark:bg-gray-950/80 backdrop-blur-lg border-t border-[var(--border-color)] px-6 py-2.5 flex justify-around items-center transition-colors">
+        <a id="mobile-nav-dashboard" href="javascript:void(0)" onclick="switchTab('dashboard', this)" class="flex flex-col items-center gap-1 text-[#5483B3] dark:text-[#C1E8FF] font-semibold text-[10px] transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            <span data-i18n="nav-mob-dashboard">Tableau de Bord</span>
+        </a>
+        <a id="mobile-nav-history" href="javascript:void(0)" onclick="switchTab('history', this)" class="flex flex-col items-center gap-1 text-[var(--text-muted)] hover:text-[var(--text-main)] font-semibold text-[10px] transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span data-i18n="nav-mob-history">Analyses</span>
+        </a>
+        <a id="mobile-nav-settings" href="javascript:void(0)" onclick="switchTab('settings', this)" class="flex flex-col items-center gap-1 text-[var(--text-muted)] hover:text-[var(--text-main)] font-semibold text-[10px] transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span data-i18n="nav-mob-settings">Paramètres</span>
+        </a>
+        <a id="mobile-nav-map" href="javascript:void(0)" onclick="switchTab('map', this)" class="flex flex-col items-center gap-1 text-[var(--text-muted)] hover:text-[var(--text-main)] font-semibold text-[10px] transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+            <span data-i18n="nav-mob-map">Carte</span>
+        </a>
+        <a id="mobile-nav-reports" href="javascript:void(0)" onclick="switchTab('reports', this)" class="flex flex-col items-center gap-1 text-[var(--text-muted)] hover:text-[var(--text-main)] font-semibold text-[10px] transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span data-i18n="nav-mob-reports">Stats</span>
+        </a>
+    </div>
+
+    <!-- LIGHTBOX IMAGE MODAL -->
+    <div id="lightbox-modal" class="lightbox fixed inset-0 bg-black/90 hidden items-center justify-center z-50 opacity-0" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 w-11 h-11 bg-gray-900 border border-gray-800 rounded-full flex items-center justify-center text-white text-lg hover:scale-105 transition-all cursor-pointer">&times;</button>
+        <img id="lightbox-img" src="" class="max-w-[90vw] max-h-[85vh] rounded-2xl border border-gray-800 object-contain shadow-2xl">
+    </div>
+
+    <!-- Interactive Scripting -->
+    <script>
+        let currentScanId = null;
+        let isShowingArchive = false;
+        let pollingInterval = null;
+        let healthChart = null;
+
+        // Translation Dictionary
+        const translations = {
+            fr: {
+                "nav-dashboard": "Dashboard",
+                "nav-history": "Historique",
+                "nav-settings": "Paramètres",
+                "nav-mob-dashboard": "Tableau de Bord",
+                "nav-mob-history": "Analyses",
+                "nav-mob-settings": "Paramètres",
+                "app-title": "l'fellah IA",
+                "app-subtitle": "Moniteur de Santé Végétale",
+                "esp-status-connected": "ESP32 Connectée",
+                "esp-status-disconnected": "ESP32 Déconnectée",
+                "btn-live": "Repasser au Direct",
+                "btn-upload": "Analyser un fichier local",
+                "no-image-title": "Aucune image reçue",
+                "no-image-desc": "Connectez votre caméra ESP32-CAM pour lancer les analyses agricoles en direct.",
+                "direct-badge": "Direct",
+                "archive-badge": "Archive",
+                "confidence-label": "Indice de Confiance IA",
+                "treatment-title": "Traitement & Protection",
+                "recent-analyses-title": "Récentes Analyses",
+                "history-sidebar-empty": "Aucun scan en BDD",
+                "chart-title": "Proportion et Diagnostic de Santé Global",
+                "chart-desc": "Ce diagramme dynamique calcule en temps réel le ratio global de vos cultures saines par rapport aux cas de maladies détectées par l'IA.",
+                "history-title": "Historique Général des Scans",
+                "history-desc": "Consultez, recherchez et analysez l'ensemble des diagnostics.",
+                "history-search-placeholder": "Filtrer par maladie...",
+                "history-empty": "Aucun historique disponible",
+                "settings-title": "Paramètres de la Caméra ESP32-CAM",
+                "settings-desc": "Gérez la connexion réseau et optimisez la consommation d'énergie de votre capteur.",
+                "settings-success": "Configuration enregistrée avec succès ! Les nouveaux paramètres seront envoyés à l'ESP32 au prochain cycle.",
+                "settings-ssid-label": "Nom du Point d'accès Wi-Fi (SSID)",
+                "settings-pass-label": "Mot de Passe du Wi-Fi",
+                "settings-mode-label": "Mode d'énergie",
+                "settings-mode-continuous": "En continu (Toutes les 30s)",
+                "settings-mode-sleep": "Veille profonde (Économe batterie)",
+                "settings-interval-label": "Intervalle de Veille",
+                "settings-interval-1m": "1 minute",
+                "settings-interval-5m": "5 minutes",
+                "settings-interval-15m": "15 minutes",
+                "settings-interval-30m": "30 minutes",
+                "settings-flash-label": "Activer le flash LED puissant de la caméra lors de la capture",
+                "settings-submit": "Enregistrer la Configuration",
+                "lbl-healthy": "Feuilles Saines",
+                "lbl-infected": "Feuilles Infectées",
+                "theme-light": "Mode Matin",
+                "theme-dark": "Mode Sombre",
+                "precision-high": "Précision Élevée",
+                "precision-mid": "Précision Moyenne",
+                "precision-low": "Analyse Faible",
+                "status-healthy": "Saine",
+                "status-warning": "Attention",
+                "status-critical": "Critique",
+                "analyzed-at": "Analysé le",
+                "signal-label": "Signal ESP32",
+                "signal-excellent": "Excellent",
+                "signal-none": "Aucun",
+                "scans-total-label": "Scans Totaux",
+                "health-ratio-label": "Ratio de Santé",
+                "timezone-label": "Casablanca",
+                "upload-suffix": "(Upload)",
+                "alert-upload-error": "Erreur d'analyse",
+                "alert-conn-error": "Impossible de communiquer avec le serveur d'analyse.",
+                "monitor-title": "Moniteur en temps réel",
+                "sync-status": "Synch",
+                "sidebar-location": "Secteur Marrakech",
+                "sidebar-status": "Diagnostic IA Actif",
+                "stat-just-now": "À l'instant",
+                "reliability": "Fiabilité",
+                "header-title": "Exploitation Agricole Connectée",
+                "stat-esp-status": "Statut ESP-CAM",
+                "stat-scans-title": "Diagnostics Total",
+                "stat-health-title": "Feuilles Saines",
+                "stat-upload-title": "Dernier Upload"
+            },
+            en: {
+                "nav-dashboard": "Dashboard",
+                "nav-history": "History",
+                "nav-settings": "Settings",
+                "nav-mob-dashboard": "Dashboard",
+                "nav-mob-history": "Analyses",
+                "nav-mob-settings": "Settings",
+                "app-title": "l'fellah AI",
+                "app-subtitle": "Plant Health Monitor",
+                "esp-status-connected": "ESP32 Connected",
+                "esp-status-disconnected": "ESP32 Disconnected",
+                "btn-live": "Switch to Live",
+                "btn-upload": "Analyze local file",
+                "no-image-title": "No image received",
+                "no-image-desc": "Connect your ESP32-CAM camera to start live agricultural analyses.",
+                "direct-badge": "Live",
+                "archive-badge": "Archive",
+                "confidence-label": "AI Confidence Index",
+                "treatment-title": "Treatment & Protection",
+                "recent-analyses-title": "Recent Analyses",
+                "history-sidebar-empty": "No scans in database",
+                "chart-title": "Proportion and Global Health Diagnosis",
+                "chart-desc": "This dynamic chart calculates in real time the overall ratio of your healthy crops compared to disease cases detected by the AI.",
+                "history-title": "General Scan History",
+                "history-desc": "Consult, search and analyze all diagnostics.",
+                "history-search-placeholder": "Filter by disease...",
+                "history-empty": "No history available",
+                "settings-title": "ESP32-CAM Camera Settings",
+                "settings-desc": "Manage the network connection and optimize the energy consumption of your sensor.",
+                "settings-success": "Configuration saved successfully! The new settings will be sent to the ESP32 in the next cycle.",
+                "settings-ssid-label": "Wi-Fi Access Point Name (SSID)",
+                "settings-pass-label": "Wi-Fi Password",
+                "settings-mode-label": "Power Mode",
+                "settings-mode-continuous": "Continuous (Every 30s)",
+                "settings-mode-sleep": "Deep Sleep (Saves battery)",
+                "settings-interval-label": "Sleep Interval",
+                "settings-interval-1m": "1 minute",
+                "settings-interval-5m": "5 minutes",
+                "settings-interval-15m": "15 minutes",
+                "settings-interval-30m": "30 minutes",
+                "settings-flash-label": "Enable powerful camera LED flash during capture",
+                "settings-submit": "Save Configuration",
+                "lbl-healthy": "Healthy Leaves",
+                "lbl-infected": "Infected Leaves",
+                "theme-light": "Morning Mode",
+                "theme-dark": "Dark Mode",
+                "precision-high": "High Precision",
+                "precision-mid": "Medium Precision",
+                "precision-low": "Low Analysis",
+                "status-healthy": "Healthy",
+                "status-warning": "Warning",
+                "status-critical": "Critical",
+                "analyzed-at": "Analyzed on",
+                "signal-label": "ESP32 Signal",
+                "signal-excellent": "Excellent",
+                "signal-none": "None",
+                "scans-total-label": "Total Scans",
+                "health-ratio-label": "Health Ratio",
+                "timezone-label": "Casablanca",
+                "upload-suffix": "(Upload)",
+                "alert-upload-error": "Analysis Error",
+                "alert-conn-error": "Unable to communicate with the analysis server.",
+                "monitor-title": "Real-time Monitor",
+                "sync-status": "Synced",
+                "sidebar-location": "Marrakech Sector",
+                "sidebar-status": "AI Diagnosis Active",
+                "stat-just-now": "Just now",
+                "reliability": "Reliability",
+                "header-title": "Connected Agricultural Farm",
+                "stat-esp-status": "ESP-CAM Status",
+                "stat-scans-title": "Total Diagnostics",
+                "stat-health-title": "Healthy Leaves",
+                "stat-upload-title": "Last Upload"
+            },
+            ar: {
+                "nav-dashboard": "لوحة التحكم",
+                "nav-history": "الأرشيف",
+                "nav-settings": "الإعدادات",
+                "nav-mob-dashboard": "لوحة التحكم",
+                "nav-mob-history": "التحليلات",
+                "nav-mob-settings": "الإعدادات",
+                "app-title": "الفلاح الذكي",
+                "app-subtitle": "مراقب صحة النباتات",
+                "esp-status-connected": "ESP32 متصل",
+                "esp-status-disconnected": "ESP32 غير متصل",
+                "btn-live": "الرجوع للبث المباشر",
+                "btn-upload": "تحليل ملف محلي",
+                "no-image-title": "لم يتم استلام أي صورة",
+                "no-image-desc": "قم بتوصيل كاميرا ESP32-CAM لبدء تحليلات زراعية مباشرة.",
+                "direct-badge": "مباشر",
+                "archive-badge": "أرشيف",
+                "confidence-label": "مؤشر ثقة الذكاء الاصطناعي",
+                "treatment-title": "العلاج والوقاية",
+                "recent-analyses-title": "التحليلات الأخيرة",
+                "history-sidebar-empty": "لا توجد فحوصات في قاعدة البيانات",
+                "chart-title": "النسبة والتشخيص الصحي العام",
+                "chart-desc": "يقوم هذا المخطط الديناميكي بحساب النسبة الإجمالية لمحاصيلك السليمة مقارنة بحالات الأمراض المكتشفة بواسطة الذكاء الاصطناعي في الوقت الفعلي.",
+                "history-title": "سجل الفحص العام",
+                "history-desc": "تصفح وابحث وحلل جميع التشخيصات.",
+                "history-search-placeholder": "تصفية حسب المرض...",
+                "history-empty": "لا يوجد سجل متاح",
+                "settings-title": "إعدادات كاميرا ESP32-CAM",
+                "settings-desc": "إدارة اتصال الشبكة وتحسين استهلاك الطاقة للمستشعر الخاص بك.",
+                "settings-success": "تم حفظ الإعدادات بنجاح! سيتم إرسال المعلمات الجديدة إلى ESP32 في الدورة القادمة.",
+                "settings-ssid-label": "اسم نقطة وصول الواي فاي (SSID)",
+                "settings-pass-label": "كلمة مرور الواي فاي",
+                "settings-mode-label": "وضع الطاقة",
+                "settings-mode-continuous": "مستمر (كل 30 ثانية)",
+                "settings-mode-sleep": "سبات عميق (حفظ البطارية)",
+                "settings-interval-label": "فترة السبات",
+                "settings-interval-1m": "دقيقة واحدة",
+                "settings-interval-5m": "5 دقائق",
+                "settings-interval-15m": "15 دقيقة",
+                "settings-interval-30m": "30 دقيقة",
+                "settings-flash-label": "تفعيل فلاش LED القوي للكاميرا أثناء الالتقاط",
+                "settings-submit": "حفظ الإعدادات",
+                "lbl-healthy": "أوراق سليمة",
+                "lbl-infected": "أوراق مصابة",
+                "theme-light": "الوضع الصباحي",
+                "theme-dark": "الوضع الداكن",
+                "precision-high": "دقة عالية",
+                "precision-mid": "دقة متوسطة",
+                "precision-low": "تحليل ضعيف",
+                "status-healthy": "سليمة",
+                "status-warning": "تحذير",
+                "status-critical": "حرجة",
+                "analyzed-at": "تم التحليل في",
+                "signal-label": "إشارة ESP32",
+                "signal-excellent": "ممتاز",
+                "signal-none": "بدون إشارة",
+                "scans-total-label": "إجمالي الفحوصات",
+                "health-ratio-label": "نسبة الصحة",
+                "timezone-label": "الدار البيضاء",
+                "upload-suffix": "(تحميل)",
+                "alert-upload-error": "خطأ في التحليل",
+                "alert-conn-error": "يتعذر الاتصال بخادم التحليل.",
+                "monitor-title": "المراقبة في الوقت الفعلي",
+                "sync-status": "متزامن",
+                "sidebar-location": "قطاع مراكش",
+                "sidebar-status": "تشخيص الذكاء الاصطناعي نشط",
+                "stat-just-now": "الآن",
+                "reliability": "الموثوقية",
+                "header-title": "المزرعة الزراعية المتصلة",
+                "stat-esp-status": "حالة ESP-CAM",
+                "stat-scans-title": "إجمالي التشخيصات",
+                "stat-health-title": "الأوراق السليمة",
+                "stat-upload-title": "آخر تحديث"
+            }
+        };
+
+        let currentLanguage = localStorage.getItem('lang') || 'fr';
+
+        // Auto language by browser locale if not set
+        if (!localStorage.getItem('lang')) {
+            const browserLang = navigator.language || navigator.userLanguage;
+            if (browserLang.startsWith('ar')) {
+                currentLanguage = 'ar';
+            } else if (browserLang.startsWith('en')) {
+                currentLanguage = 'en';
+            } else {
+                currentLanguage = 'fr';
+            }
+            localStorage.setItem('lang', currentLanguage);
+        }
+
+        const diseaseTranslations = {
+            "Apple Scab": { fr: "Tavelure du pommier", en: "Apple Scab", ar: "جرب التفاح" },
+            "Apple Black Rot": { fr: "Pourriture noire du pommier", en: "Apple Black Rot", ar: "العفن الأسود للتفاح" },
+            "Apple Cedar Rust": { fr: "Rouille du pommier", en: "Apple Cedar Rust", ar: "صدأ التفاح" },
+            "Apple Healthy": { fr: "Pommier sain", en: "Apple Healthy", ar: "تفاح سليم" },
+            "Blueberry Healthy": { fr: "Myrtillier sain", en: "Blueberry Healthy", ar: "myrtille سليمة" },
+            "Cherry Powdery Mildew": { fr: "Oïdium du cerisier", en: "Cherry Powdery Mildew", ar: "بياض دقيقي للكرز" },
+            "Cherry Healthy": { fr: "Cerisier sain", en: "Cherry Healthy", ar: "كرز سليم" },
+            "Corn Gray Leaf Spot": { fr: "Taches grises du maïs", en: "Corn Gray Leaf Spot", ar: "بقع الأوراق الرمادية للذرة" },
+            "Corn Common Rust": { fr: "Rouille commune du maïs", en: "Corn Common Rust", ar: "صدأ الذرة الشائع" },
+            "Corn Northern Leaf Blight": { fr: "Helminthosporiose du maïs", en: "Corn Northern Leaf Blight", ar: "لفحة أوراق الذرة الشمالية" },
+            "Corn Healthy": { fr: "Maïs sain", en: "Corn Healthy", ar: "ذرة سليمة" },
+            "Grape Black Rot": { fr: "Pourriture noire de la vigne", en: "Grape Black Rot", ar: "العفن الأسود للعنب" },
+            "Grape Esca": { fr: "Esca de la vigne", en: "Grape Esca", ar: "إسكا العنب" },
+            "Grape Leaf Blight": { fr: "Brûlure des feuilles de la vigne", en: "Grape Leaf Blight", ar: "لفحة أوراق العنب" },
+            "Grape Healthy": { fr: "Vigne saine", en: "Grape Healthy", ar: "كرمة سليمة" },
+            "Orange Haunglongbing": { fr: "Citrus Greening (Maladie du Dragon Jaune)", en: "Citrus Greening", ar: "اخضرار الحمضيات" },
+            "Peach Bacterial Spot": { fr: "Taches bactériennes du pêcher", en: "Peach Bacterial Spot", ar: "تبقع بكتيري للخوخ" },
+            "Peach Healthy": { fr: "Pêcher sain", en: "Peach Healthy", ar: "خوخ سليم" },
+            "Pepper Bell Bacterial Spot": { fr: "Taches bactériennes du poivron", en: "Pepper Bell Bacterial Spot", ar: "تبقع بكتيري للفلفل الحلو" },
+            "Pepper Bell Healthy": { fr: "Poivron sain", en: "Pepper Bell Healthy", ar: "فلفل حلو سليم" },
+            "Potato Early Blight": { fr: "Mildiou précoce de la pomme de terre", en: "Potato Early Blight", ar: "لفحة مبكرة للبطاطس" },
+            "Potato Late Blight": { fr: "Mildiou tardif de la pomme de terre", en: "Potato Late Blight", ar: "لفحة متأخرة للبطاطس" },
+            "Potato Healthy": { fr: "Pomme de terre saine", en: "Potato Healthy", ar: "بطاطس سليمة" },
+            "Raspberry Healthy": { fr: "Framboisier sain", en: "Raspberry Healthy", ar: "framboise سليمة" },
+            "Soybean Healthy": { fr: "Soja sain", en: "Soybean Healthy", ar: "صويا سليمة" },
+            "Squash Powdery Mildew": { fr: "Oïdium de la courge", en: "Squash Powdery Mildew", ar: "بياض دقيقي للكوسا" },
+            "Strawberry Leaf Scorch": { fr: "Brûlure des feuilles du fraisier", en: "Strawberry Leaf Scorch", ar: "لفحة أوراق الفراولة" },
+            "Strawberry Healthy": { fr: "Fraisier sain", en: "Strawberry Healthy", ar: "فراولة سليمة" },
+            "Tomato Bacterial Spot": { fr: "Taches bactériennes de la tomate", en: "Tomato Bacterial Spot", ar: "تبقع بكتيري للطماطم" },
+            "Tomato Early Blight": { fr: "Mildiou précoce de la tomate", en: "Tomato Early Blight", ar: "لفحة مبكرة للطماطم" },
+            "Tomato Late Blight": { fr: "Mildiou tardif de la tomate", en: "Tomato Late Blight", ar: "لفحة metأخرة للطماطم" },
+            "Tomato Leaf Mold": { fr: "Moisissure feuillue de la tomate", en: "Tomato Leaf Mold", ar: "عفن أوراق الطماطم" },
+            "Tomato Septoria Leaf Spot": { fr: "Septoriose de la tomate", en: "Tomato Septoria Leaf Spot", ar: "تبقع أوراق السبتوريا للطماطم" },
+            "Tomato Spider Mites": { fr: "Araignées rouges de la tomate", en: "Tomato Spider Mites", ar: "العنكبوت الأحمر للطماطم" },
+            "Tomato Target Spot": { fr: "Taches cibles de la tomate", en: "Tomato Target Spot", ar: "تبقع مستهدف للطماطم" },
+            "Tomato Yellow Leaf Curl Virus": { fr: "Virus de l'enroulement jaune des feuilles de la tomate", en: "Tomato Yellow Leaf Curl Virus", ar: "فيروس تجعد أوراق الطماطم الصفراء" },
+            "Tomato Mosaic Virus": { fr: "Virus de la mosaïque de la tomate", en: "Tomato Mosaic Virus", ar: "فيروس موزاييك الطماطم" },
+            "Tomato Healthy": { fr: "Tomate saine", en: "Tomato Healthy", ar: "طماطم سليمة" }
+        };
+
+        const adviceTranslations = [
+            { fr: "Éviter l'humidité prolongée", en: "Avoid prolonged humidity", ar: "تجنب الرطوبة الزائدة" },
+            { fr: "Éliminer feuilles et fruits infectés", en: "Remove infected leaves and fruits", ar: "إزالة الأوراق والثمار المصابة" },
+            { fr: "Traiter avec fongicide spécifique", en: "Treat with specific fungicide", ar: "العلاج بمبيد فطري مناسب" },
+            { fr: "Champignon favorisé par l'humidité. Évitez l'arrosage foliaire. Ramassez et détruisez les feuilles mortes au sol. Appliquez un fongicide naturel à base de cuivre.", en: "Fungus favored by humidity. Avoid overhead watering. Collect and destroy fallen leaves. Apply a copper-based fungicide.", ar: "فطر ينمو في الرطوبة. تجنب الري العلوي. اجمع الأوراق الساقطة وتخلص منها. ضع مبيدًا فطريًا طبيعيًا." },
+            { fr: "Infection fongique grave. Retirez immédiatement les fruits momifiés et pourris. Taillez les branches chancreuses et désinfectez vos outils.", en: "Severe fungal infection. Immediately remove rotted fruit. Prune cankered branches and disinfect tools.", ar: "عدوى فطرية خطيرة. تخلص فورًا من الثمار المتعفنة. قلم الأغصان المصابة وعقم الأدوات." },
+            { fr: "Éliminez les genévriers sauvages à proximité (hôtes de la rouille). Pulvérisez un traitement préventif au soufre en début de saison.", en: "Remove nearby wild junipers (rust hosts). Spray preventive sulfur treatment early in the season.", ar: "تخلص من أشجار العرعر البرية القريبة. رش علاجًا وقائيًا بالكبريت في بداية الموسم." },
+            { fr: "Le pommier est en excellente santé. Maintenez l'arrosage habituel au pied en fonction des températures.", en: "The apple tree is in excellent health. Maintain usual watering at the base depending on temperature.", ar: "شجرة التفاح بصحة ممتازة. حافظ على الري المعتاد عند القاعدة حسب الحرارة." },
+            { fr: "Feuillage blanc poudreux. Améliorez la circulation de l'air en élaguant. Arrosez uniquement au sol et traitez avec une solution de soufre.", en: "Powdery white leaves. Improve air circulation by pruning. Water only at soil level and treat with sulfur.", ar: "أوراق مغطاة بمسحوق أبيض. حسن تهوية الهواء بالتقليم. اسق التربة فقط وعالج بمحلول الكبريت." },
+            { fr: "Cerisier sain. Irrigation modérée, arrosez généreusement uniquement en cas de sécheresse prolongée.", en: "Healthy cherry tree. Moderate irrigation, water deeply only during prolonged dry spells.", ar: "شجرة كرز سليمة. ري معتدل، اسق بغزارة فقط في حالات الجفاف الطويل." },
+            { fr: "Plante saine. Veillez à maintenir un sol acide (pH 4.5-5.5) et paillez avec des écorces de pin pour retenir l'humidité.", en: "Healthy plant. Maintain acidic soil (pH 4.5-5.5) and mulch with pine bark to retain moisture.", ar: "نبات سليم. حافظ على تربة حمضية (pH 4.5-5.5) وضع لحاء الصنوبر للاحتفاظ بالرطوبة." },
+            { fr: "Favorisé par l'humidité stagnante. Améliorez le drainage du sol. Évitez l'arrosage en fin de journée pour que le feuillage sèche.", en: "Favored by standing water. Improve soil drainage. Avoid watering late in the day to allow leaves to dry.", ar: "يفضل المياه الراكدة. حسن تصريف التربة. تجنب الري في وقت متأخر من اليوم لتجف الأوراق." },
+            { fr: "Présence de pustules orangées. Utilisez des variétés de semences résistantes. Irrigation au goutte-à-goutte recommandée.", en: "Orange pustules present. Use resistant seed varieties. Drip irrigation is highly recommended.", ar: "وجود بثرات برتقالية. استخدم بذورًا مقاومة للأمراض. يوصى بشدة بالري بالتنقيط." },
+            { fr: "Infection fongique majeure. Éliminez les débris de culture. Suspendez l'irrigation par aspersion et passez au goutte-à-goutte.", en: "Major fungal infection. Clear crop debris. Stop sprinkler irrigation and switch to drip irrigation.", ar: "عدوى فطرية كبرى. تخلص من مخلفات المحاصيل. أوقف الري بالرش وانتقل للري بالتنقيط." },
+            { fr: "Le maïs pousse vigoureusement. Maintenez un sol humide, particulièrement durant la période de floraison.", en: "Corn growing vigorously. Keep soil moist, especially during the flowering period.", ar: "الذرة تنمو بقوة. حافظ على رطوبة التربة، خاصة خلال فترة الإزهار." },
+            { fr: "Retirez et brûlez toutes les grappes et feuilles momifiées. Appliquez un fongicide cuprique préventif dès le printemps.", en: "Remove and burn all mummified grapes and leaves. Apply a preventive copper fungicide in spring.", ar: "أزل واحرق جميع عناقيد العنب والأوراق الجافة. ضع مبيدًا فطريًا نحاسيًا وقائيًا في الربيع." },
+            { fr: "Maladie du bois incurable. Isolez les ceps atteints. Désinfectez soigneusement le sécateur après chaque coupe.", en: "Incurable wood disease. Isolate infected vines. Thoroughly disinfect pruning shears after every cut.", ar: "مرض خشب مستعصٍ. اعزل الكروم المصابة. عقم مقص التقليم بعناية بعد كل عملية قطع." },
+            { fr: "Retirez le feuillage malade. Favorisez un ensoleillement maximal des grappes par un effeuillage raisonné.", en: "Remove diseased foliage. Encourage maximum sunlight on grape clusters by selective defoliation.", ar: "أزل الأوراق المصابة. حسن تعرض العناقيد للشمس عبر إزالة مدروسة لبعض الأوراق." },
+            { fr: "La vigne est saine. Évitez les excès d'eau au pied qui favorisent l'asphyxie racinaire.", en: "The vine is healthy. Avoid excess water at the base, which can cause root suffocation.", ar: "العريشة سليمة. تجنب زيادة المياه عند القاعدة لمنع خنق الجذور." },
+            { fr: "Bactériose dévastatrice transmise par le psylle. Éliminez l'arbre infecté pour protéger le verger. Traitez contre les insectes vecteurs.", en: "Devastating bacterial disease spread by psyllids. Remove infected trees to protect the orchard.", ar: "مرض بكتيري مدمر ينقله البسيل. تخلص من الشجرة المصابة لحماية البستان." },
+            { fr: "Pulvérisez un traitement au cuivre à la chute des feuilles. Évitez les engrais trop azotés qui rendent les tissus fragiles.", en: "Spray copper treatment at leaf drop. Avoid excessive nitrogen fertilizers which weaken plant tissues.", ar: "رش النحاس عند تساقط الأوراق. تجنب الأسمدة النيتروجينية الزائدة التي تضعف الأنسجة." },
+            { fr: "Pêcher sain. Irrigation régulière sans excès, appliquez un paillage organique pour garder le sol frais.", en: "Healthy peach tree. Regular watering without excess, apply organic mulch to keep soil cool.", ar: "شجرة خوخ سليمة. ري منتظم بدون إفراط، ضع نشارة عضوية للحفاظ على برودة التربة." },
+            { fr: "Taches humides sur feuilles et fruits. Arrosage au goutte-à-goutte indispensable. Appliquez un traitement cuprique dès l'apparition des symptômes.", en: "Wet spots on leaves and fruit. Drip irrigation is essential. Apply copper treatment at first sign.", ar: "بقع رطبة على الأوراق والثمار. الري بالتنقيط ضروري. ضع علاجًا نحاسيًا عند ظهور الأعراض." },
+            { fr: "Le poivron est sain et vigoureux. Maintenez une bonne exposition solaire et évitez de mouiller le feuillage.", en: "The pepper plant is healthy and vigorous. Ensure good sun exposure and avoid wetting leaves.", ar: "الفلفل سليم وقوي. حافظ على تعرض جيد للشمس وتجنب ترطيب الأوراق." },
+            { fr: "Taches sombres concentriques. Favorisez la rotation des cultures. Supprimez les premières feuilles basses touchées.", en: "Concentric dark spots. Practice crop rotation. Remove the lowest infected leaves.", ar: "بقع داكنة متداخلة. اتبع دورة زراعية. تخلص من الأوراق السفلية الأولى المصابة." },
+            { fr: "Infection redoutable par temps humide. Traitez préventivement avec de la bouillie bordelaise. Éliminez les tubercules atteints.", en: "Dreaded infection in humid weather. Treat preventively with Bordeaux mixture. Remove infected tubers.", ar: "عدوى مخيفة في الطقس الرطب. عالج وقائيًا بخليط بوردو وتخلص من الدرنات المصابة." },
+            { fr: "Pomme de terre saine. Butter régulièrement les pieds pour protéger les tubercules de la lumière.", en: "Healthy potato plant. Regularly hill the soil around the base to protect tubers from light.", ar: "نبات بطاطس سليم. كوم التربة بانتظام حول القاعدة لحماية الدرنات من الضوء." },
+            { fr: "Feutrage blanc sur les feuilles. Évitez de serrer les plants. Supprimez les feuilles atteintes et pulvérisez du lait dilué.", en: "White coating on leaves. Avoid crowding plants. Remove infected leaves and spray diluted milk.", ar: "مسحوق أبيض على الأوراق. تجنب ازدحام النباتات. أزل الأوراق المصابة ورش الحليب المخفف." },
+            { fr: "Taches pourpres à centre blanc. Évitez les excès d'azote. Arrosez impérativement le sol sans toucher les feuilles.", en: "Purple spots with white centers. Avoid excess nitrogen. Water the soil directly without wetting leaves.", ar: "بقع أرجوانية ذات مركز أبيض. تجنب زيادة النيتروجين. اسق التربة مباشرة دون ترطيب الأوراق." },
+            { fr: "Le fraisier est en bonne santé. Paillez le sol pour garder les fruits propres et limiter l'évaporation.", en: "The strawberry plant is healthy. Mulch the soil to keep fruit clean and limit water evaporation.", ar: "نبات الفراولة سليم. ضع قشًا للحفاظ على نظافة الثمار وتقليل تبخر المياه." },
+            { fr: "Petites taches noires entourées d'un halo jaune. Arrosage au pied obligatoire. Traitez avec un fongicide à base de cuivre.", en: "Small black spots with yellow halos. Water base only. Treat with copper-based fungicide.", ar: "بقع سوداء صغيرة محاطة بهالة صفراء. الري عند القاعدة إلزامي. عالج بمبيد نحاسي." },
+            { fr: "Brûlures brunes débutant sur les feuilles basses. Taillez les feuilles du bas pour aérer le plant et appliquez un fongicide.", en: "Brown spots starting on lower leaves. Prune lower leaves to aerate the plant and apply fungicide.", ar: "بقع بنية تبدأ على الأوراق السفلية. قلم الأوراق السفلية لتهوية النبات وضع مبيدًا فطريًا." },
+            { fr: "Dessèchement rapide des feuilles et pourriture brune des fruits. Traitez d'urgence et détruisez les plants trop atteints.", en: "Rapid drying of leaves and brown rot on fruit. Treat urgently and destroy heavily infected plants.", ar: "جفاف سريع للأوراق وتعفن بني للثمار. عالج بشكل عاجل وتخلص من النباتات شديدة الإصابة." },
+            { fr: "Feutrage brun-violet sous les feuilles. Réduisez l'humidité sous serre. Supprimez les feuilles malades.", en: "Brownish-violet mold under leaves. Reduce greenhouse humidity. Remove diseased leaves.", ar: "عفن بنفسجي بني تحت الأوراق. قلل الرطوبة في الدفيئة وتخلص من الأوراق المصابة." },
+            { fr: "Nombreuses petites taches circulaires avec un centre gris. Ramassez tous les débris végétaux en fin de saison.", en: "Many small circular spots with gray centers. Clean up all plant debris at the end of the season.", ar: "بقع دائرية صغيرة متعددة بمركز رمادي. اجمع كل بقايا النباتات في نهاية الموسم." },
+            { fr: "Feuillage collant et décoloré, présence de minuscules acariens. Douchez le feuillage à l'eau claire et introduisez des prédateurs naturels.", en: "Sticky, discolored foliage with tiny mites. Spray leaves with water and introduce natural predators.", ar: "أوراق لاصقة وباهتة اللون مع وجود عث صغير. اغسل الأوراق بالماء النظيف واستعن بأعداء طبيعيين." },
+            { fr: "Taches brunes sur les fruits côté fleur. Régularisez les arrosages pour éviter les stress hydriques et le manque de calcium.", en: "Blossom end rot. Regulate watering to avoid water stress and calcium deficiency.", ar: "عفن الطرف الزهري للثمار. نظم الري لتجنب إجهاد العطش ونقص الكالسيوم." },
+            { fr: "Feuilles enroulées et jaunies, croissance stoppée. Protégez les plants contre l'aleurode (mouche blanche) sous filet.", en: "Rolled and yellowed leaves, stunted growth. Protect plants from whiteflies using netting.", ar: "أوراق ملتفة وصفراء، توقف النمو. احمِ النباتات من الذباب الأبيض باستخدام شبكة واقية." },
+            { fr: "Mosaïque vert clair/foncé sur le feuillage. Maladie virale incurable. Lavez-vous soigneusement les mains après manipulation.", en: "Light/dark green mosaic on foliage. Incurable viral disease. Wash hands thoroughly after handling.", ar: "موزاييك أخضر فاتح/داكن على الأوراق. مرض فيروسي مستعصٍ. اغسل يديك جيدًا بعد لمس النبات." },
+            { fr: "La tomate est vigoureuse et saine. Attachez régulièrement les tiges et supprimez les gourmands pour optimiser la récolte.", en: "The tomato plant is vigorous and healthy. Stake stems regularly and prune suckers.", ar: "نبات الطماطم قوي وسليم. اربط السيقان بانتظام وقلم النموات الجانبية لتحسين الإنتاج." }
+        ];
+
+        function translateDiseaseName(name, targetLang) {
+            if (!name) return name;
+            const cleanName = name.trim().toLowerCase();
+            for (const key in diseaseTranslations) {
+                const item = diseaseTranslations[key];
+                if (
+                    item.fr.toLowerCase() === cleanName ||
+                    item.en.toLowerCase() === cleanName ||
+                    item.ar.toLowerCase() === cleanName ||
+                    key.toLowerCase() === cleanName
+                ) {
+                    return item[targetLang] || item.fr;
+                }
+            }
+            return name;
+        }
+
+        function translateAdvice(adviceText, targetLang) {
+            if (!adviceText) return adviceText;
+            
+            const cleanText = adviceText.trim();
+            for (const item of adviceTranslations) {
+                if (
+                    item.fr.trim() === cleanText ||
+                    item.en.trim() === cleanText ||
+                    item.ar.trim() === cleanText
+                ) {
+                    return item[targetLang] || item.fr;
+                }
+            }
+            
+            let sentences = adviceText.split(/([.\-\n])/);
+            let result = "";
+            
+            for (let part of sentences) {
+                const trimmedPart = part.trim().replace(/^[-•\s\.]+/g, '').trim();
+                if (!trimmedPart || trimmedPart.length < 3) {
+                    result += part;
+                    continue;
+                }
+                
+                let translatedPart = trimmedPart;
+                let found = false;
+                for (const item of adviceTranslations) {
+                    if (
+                        item.fr.trim().toLowerCase() === trimmedPart.toLowerCase() ||
+                        item.en.trim().toLowerCase() === trimmedPart.toLowerCase() ||
+                        item.ar.trim().toLowerCase() === trimmedPart.toLowerCase()
+                    ) {
+                        translatedPart = item[targetLang] || item.fr;
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (!found) {
+                    let temp = trimmedPart;
+                    for (const item of adviceTranslations) {
+                        if (item.fr.length > 5 && temp.includes(item.fr)) {
+                            temp = temp.replace(new RegExp(item.fr, 'gi'), item[targetLang]);
+                        } else if (item.en.length > 5 && temp.includes(item.en)) {
+                            temp = temp.replace(new RegExp(item.en, 'gi'), item[targetLang]);
+                        }
+                    }
+                    translatedPart = temp;
+                }
+                
+                result += part.replace(trimmedPart, translatedPart);
+            }
+            
+            return result;
+        }
+
+        function getTranslation(key) {
+            return (translations[currentLanguage] && translations[currentLanguage][key]) || translations['fr'][key] || key;
+        }
+
+        function translateDynamicContent() {
+            const lang = currentLanguage;
+            // Translate static elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+
+            // Translate placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            // Translate dynamic severity badges
+            document.querySelectorAll('[data-i18n-severity]').forEach(el => {
+                const severity = el.getAttribute('data-i18n-severity');
+                if (severity) {
+                    el.innerText = getTranslation('status-' + severity);
+                }
+            });
+
+            // Translate dynamic reliability scores
+            document.querySelectorAll('[data-i18n-reliability]').forEach(el => {
+                const val = el.getAttribute('data-i18n-reliability');
+                if (val) {
+                    el.innerText = getTranslation('reliability') + ": " + val + "%";
+                }
+            });
+
+            // Translate dynamic dates
+            document.querySelectorAll('[data-i18n-date]').forEach(el => {
+                const isoStr = el.getAttribute('data-i18n-date');
+                if (isoStr) {
+                    const date = new Date(isoStr);
+                    if (!isNaN(date.getTime())) {
+                        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+                        el.innerText = date.toLocaleDateString(lang === 'ar' ? 'ar-MA' : (lang === 'en' ? 'en-US' : 'fr-FR'), options);
+                    }
+                }
+            });
+
+            // Translate dynamic disease names in lists/grids
+            document.querySelectorAll('[data-i18n-disease]').forEach(el => {
+                const rawName = el.getAttribute('data-i18n-disease');
+                if (rawName) {
+                    el.innerText = translateDiseaseName(rawName, lang);
+                }
+            });
+        }
+
+        async function changeLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('lang', lang);
+            const selector = document.getElementById('lang-selector');
+            if (selector) selector.value = lang;
+            
+            // RTL handling
+            if (lang === 'ar') {
+                document.documentElement.dir = 'rtl';
+                document.documentElement.lang = 'ar';
+                document.body.style.fontFamily = "'Cairo', 'Outfit', sans-serif";
+            } else {
+                document.documentElement.dir = 'ltr';
+                document.documentElement.lang = lang;
+                document.body.style.fontFamily = "'Outfit', sans-serif";
+            }
+
+            // Translate all elements
+            translateDynamicContent();
+
+            // Update dynamically generated/updated texts
+            updateTime();
+            updateChartData();
+            
+            // If theme text needs translation
+            const isDark = document.body.classList.contains('dark-theme');
+            document.getElementById('theme-text').innerText = getTranslation(isDark ? 'theme-light' : 'theme-dark');
+
+            // Force update current scan view if loaded
+            if (window.lastScanData && window.lastScanData.id) {
+                try {
+                    const response = await fetch(`/api/scan/${window.lastScanData.id}/?lang=${lang}&_t=${Date.now()}`);
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
+                    const ct = response.headers.get('content-type') || '';
+                    if (!ct.includes('application/json')) throw new Error('Non-JSON');
+                    const data = await response.json();
+                    if (data && (data.status === 'success' || data.disease_name)) {
+                        showDataView(data, isShowingArchive);
+                    } else {
+                        showDataView(window.lastScanData, isShowingArchive);
+                    }
+                } catch (err) {
+                    showDataView(window.lastScanData, isShowingArchive);
+                }
+            } else if (window.lastScanData) {
+                showDataView(window.lastScanData, isShowingArchive);
+            }
+
+            // Persist preference to the backend configuration file (silently ignore errors)
+            try {
+                const response = await fetch('/api/esp32-config/?_t=' + Date.now());
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const ct = response.headers.get('content-type') || '';
+                if (!ct.includes('application/json')) throw new Error('Non-JSON');
+                const config = await response.json();
+                config.lang = lang;
+                await fetch('/api/esp32-config/?_t=' + Date.now(), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config)
+                });
+            } catch (err) {
+                console.warn("Failed to persist language choice to backend config:", err.message || err);
+            }
+        }
+
+        // Auto theme preference loader
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+            document.getElementById('theme-icon-sun').classList.remove('hidden');
+            document.getElementById('theme-icon-moon').classList.add('hidden');
+        }
+
+        // Initialize state variables from Django context
+        {% if scan %}
+            currentScanId = {{ scan.id }};
+            const initialData = {
+                id: {{ scan.id }},
+                disease_name: "{{ scan.disease_name|escapejs }}",
+                confidence: parseFloat("{{ scan.confidence }}".replace(',', '.')) || 0,
+                watering_advice: "{{ scan.watering_advice|escapejs }}",
+                severity: "{{ scan.severity|escapejs }}",
+                image_url: "{{ scan.image.url|escapejs }}",
+                scanned_at: "{{ scan.scanned_at|date:'c' }}"
+            };
+            showDataView(initialData, false);
+        {% else %}
+            showNoDataView();
+        {% endif %}
+
+        // Start tasks
+        changeLanguage(currentLanguage); // apply language early
+        startPolling();
+        updateTime();
+        setInterval(updateTime, 60000);
+        initializeChart();
+        loadSettingsToForm();
+
+        function toggleTheme() {
+            const body = document.body;
+            const sun = document.getElementById('theme-icon-sun');
+            const moon = document.getElementById('theme-icon-moon');
+            const txt = document.getElementById('theme-text');
+            
+            if (body.classList.contains('dark-theme')) {
+                body.classList.remove('dark-theme');
+                sun.classList.add('hidden');
+                moon.classList.remove('hidden');
+                txt.innerText = "Mode Sombre";
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.add('dark-theme');
+                sun.classList.remove('hidden');
+                moon.classList.add('hidden');
+                txt.innerText = "Mode Matin";
+                localStorage.setItem('theme', 'dark');
+            }
+            // Retrigger chart update to reload colors nicely if needed
+            updateChartData();
+        }
+
+        function switchTab(viewId, element) {
+            // Hide all tab screens
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-history').classList.add('hidden');
+            document.getElementById('view-settings').classList.add('hidden');
+            document.getElementById('view-map').classList.add('hidden');
+            document.getElementById('view-reports').classList.add('hidden');
+            
+            // Show requested screen
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            
+            // Init map if map tab
+            if (viewId === 'map') {
+                setTimeout(initMap, 100);
+            }
+            
+            // Clear and assign classes for desktop sidebar links
+            document.querySelectorAll('aside nav a').forEach(link => {
+                link.className = "flex items-center space-x-3 px-4 py-3 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-slate-100/50 dark:hover:bg-gray-900/40 border border-transparent hover:border-[var(--border-color)] font-semibold text-sm transition-all";
+            });
+            const deskLink = document.getElementById(`nav-${viewId}`);
+            if (deskLink) {
+                deskLink.className = "flex items-center space-x-3 px-4 py-3 rounded-xl bg-[#5483B3]/10 text-[#5483B3] dark:bg-[#C1E8FF]/5 dark:text-[#C1E8FF] border border-[#5483B3]/25 dark:border-[#C1E8FF]/20 font-semibold text-sm transition-all";
+            }
+
+            // Clear and assign classes for mobile bottom navigation links
+            document.querySelectorAll('.lg\\:hidden.fixed.bottom-0 a').forEach(link => {
+                link.className = "flex flex-col items-center gap-1 text-[var(--text-muted)] hover:text-[var(--text-main)] font-semibold text-[10px] transition-all";
+            });
+            const mobLink = document.getElementById(`mobile-nav-${viewId}`);
+            if (mobLink) {
+                mobLink.className = "flex flex-col items-center gap-1 text-[#5483B3] dark:text-[#C1E8FF] font-semibold text-[10px] transition-all";
+            }
+        }
+
+        function startPolling() {
+            if (pollingInterval) clearInterval(pollingInterval);
+            pollingInterval = setInterval(pollLatestScan, 5000);
+        }
+
+        async function pollLatestScan() {
+            if (isShowingArchive) return;
+            try {
+                const response = await fetch(`/api/latest-scan/?lang=${currentLanguage}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    if (currentScanId === null || data.id !== currentScanId) {
+                        currentScanId = data.id;
+                        document.getElementById('image-skeleton').classList.remove('hidden');
+                        showDataView(data, false);
+                        await refreshHistoryPanel();
+                        updateChartData();
+                    }
+                    updateConnectionIndicator(true);
+                } else {
+                    showNoDataView();
+                }
+            } catch (error) {
+                console.error("Erreur de connexion Django:", error);
+                updateConnectionIndicator(false);
+            }
+        }
+
+        async function loadScan(scanId) {
+            try {
+                document.getElementById('image-skeleton').classList.remove('hidden');
+                const response = await fetch(`/api/scan/${scanId}/?lang=${currentLanguage}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    isShowingArchive = true;
+                    document.getElementById('btn-live').classList.remove('hidden');
+                    
+                    document.querySelectorAll('#history-sidebar > div').forEach(card => {
+                        card.classList.remove('active');
+                    });
+                    const selectedCard = document.getElementById(`sidebar-hist-${scanId}`);
+                    if (selectedCard) {
+                        selectedCard.classList.add('active');
+                    }
+
+                    showDataView(data, true);
+
+                    // Auto-scroll to detail container on mobile devices
+                    if (window.innerWidth < 1024) {
+                        setTimeout(() => {
+                            document.getElementById('scan-detail-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                    }
+                }
+            } catch (err) {
+                console.error("Erreur de chargement du scan:", err);
+            }
+        }
+
+        function inspectHistoryItem(scanId) {
+            // Switches to dashboard tab and loads the selected scan
+            const navDashboard = document.getElementById('nav-dashboard');
+            switchTab('dashboard', navDashboard);
+            loadScan(scanId);
+        }
+
+        function returnToLive() {
+            isShowingArchive = false;
+            document.getElementById('btn-live').classList.add('hidden');
+            document.querySelectorAll('#history-sidebar > div').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.getElementById('image-skeleton').classList.remove('hidden');
+            pollLatestScan();
+        }
+
+        function showDataView(data, isArchive) {
+            window.lastScanData = data;
+            document.getElementById('no-data-view').classList.add('hidden');
+            document.getElementById('data-view').classList.remove('hidden');
+            
+            document.getElementById('scan-id').innerText = `ID SCAN: #${data.id}`;
+            document.getElementById('disease-name').innerText = translateDiseaseName(data.disease_name, currentLanguage);
+            document.getElementById('watering-advice').innerText = translateAdvice(data.watering_advice, currentLanguage);
+            
+            let dateStr = '--';
+            if (data.scanned_at) {
+                const dateObj = new Date(data.scanned_at);
+                if (!isNaN(dateObj.getTime())) {
+                    const locale = currentLanguage === 'ar' ? 'ar-MA' : (currentLanguage === 'en' ? 'en-US' : 'fr-FR');
+                    const formattedDate = dateObj.toLocaleDateString(locale, { day: '2-digit', month: 'long', year: 'numeric' });
+                    const formattedTime = dateObj.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+                    
+                    if (currentLanguage === 'ar') {
+                        dateStr = `${formattedDate} في ${formattedTime}`;
+                    } else if (currentLanguage === 'en') {
+                        dateStr = `${formattedDate} at ${formattedTime}`;
+                    } else {
+                        dateStr = `${formattedDate} à ${formattedTime}`;
+                    }
+                } else {
+                    dateStr = data.scanned_at.replace(' (Upload)', '').replace(' (تحميل)', '');
+                }
+            }
+            const suffix = isArchive ? ` ${getTranslation('upload-suffix')}` : '';
+            document.getElementById('scan-date').innerText = `${getTranslation('analyzed-at')} : ${dateStr}${suffix}`;
+            
+            // Weather
+            const weatherBox = document.getElementById('weather-box');
+            const temp = data.temperature !== undefined ? data.temperature : (data.weather ? data.weather.temperature_c : null);
+            const hum = data.humidity !== undefined ? data.humidity : (data.weather ? data.weather.humidity_pct : null);
+
+            if (temp !== null && temp !== undefined) {
+                document.getElementById('weather-temp').innerText = `${temp}°C`;
+                document.getElementById('weather-hum').innerText = `${hum}%`;
+                weatherBox.classList.remove('hidden');
+            } else {
+                weatherBox.classList.add('hidden');
+            }
+
+            document.getElementById('scan-image').src = data.image_url;
+            document.getElementById('confidence-val').innerText = `${data.confidence}%`;
+            
+            // Dynamic circle math
+            const circumference = 163;
+            const offset = circumference - (data.confidence / 100) * circumference;
+            document.getElementById('gauge-progress').style.strokeDashoffset = offset;
+
+            // Set badge source
+            const badgeSource = document.getElementById('badge-source');
+            if (isArchive) {
+                badgeSource.innerText = getTranslation('archive-badge');
+                badgeSource.className = "absolute top-4 left-4 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md text-[9px] font-extrabold tracking-widest uppercase px-3 py-1.5 rounded-lg text-amber-600 dark:text-amber-400 border border-amber-500/25";
+            } else {
+                badgeSource.innerText = getTranslation('direct-badge');
+                badgeSource.className = "absolute top-4 left-4 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md text-[9px] font-extrabold tracking-widest uppercase px-3 py-1.5 rounded-lg text-emerald-600 dark:text-emerald-400 border border-emerald-500/25";
+            }
+
+            // Description of confidence
+            const desc = document.getElementById('confidence-desc');
+            if (data.confidence >= 80) {
+                desc.innerText = getTranslation('precision-high');
+                desc.className = "text-xs text-emerald-500 font-bold";
+            } else if (data.confidence >= 50) {
+                desc.innerText = getTranslation('precision-mid');
+                desc.className = "text-xs text-amber-500 font-bold";
+            } else {
+                desc.innerText = getTranslation('precision-low');
+                desc.className = "text-xs text-red-500 font-bold";
+            }
+
+            // Color status styles
+            const badgeSeverity = document.getElementById('badge-severity');
+            const severityDot = document.getElementById('severity-dot');
+            const severityText = document.getElementById('severity-text');
+            const mainPanel = document.getElementById('main-panel');
+            const adviceBox = document.getElementById('advice-box');
+            
+            mainPanel.className = "glass-panel rounded-3xl p-4 sm:p-6 transition-all duration-500 relative";
+            
+            if (data.severity === 'critical') {
+                badgeSeverity.className = "px-3 py-1 rounded-full text-[10px] font-black border border-red-500/20 bg-red-500/10 text-red-500 tracking-wider uppercase";
+                severityDot.className = "w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse";
+                severityText.innerText = getTranslation('status-critical');
+                mainPanel.classList.add('glow-red');
+                document.getElementById('gauge-progress').className = "gauge-circle text-red-500";
+                adviceBox.className = "bg-red-500/5 border border-red-500/10 rounded-2xl p-4.5 relative overflow-hidden";
+            } else if (data.severity === 'warning') {
+                badgeSeverity.className = "px-3 py-1 rounded-full text-[10px] font-black border border-amber-500/20 bg-amber-500/10 text-amber-500 tracking-wider uppercase";
+                severityDot.className = "w-1.5 h-1.5 rounded-full bg-amber-500";
+                severityText.innerText = getTranslation('status-warning');
+                mainPanel.classList.add('glow-amber');
+                document.getElementById('gauge-progress').className = "gauge-circle text-amber-500";
+                adviceBox.className = "bg-amber-500/5 border border-amber-500/10 rounded-2xl p-4.5 relative overflow-hidden";
+            } else {
+                badgeSeverity.className = "px-3 py-1 rounded-full text-[10px] font-black border border-emerald-500/20 bg-emerald-500/10 text-emerald-500 tracking-wider uppercase";
+                severityDot.className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
+                severityText.innerText = getTranslation('status-healthy');
+                mainPanel.classList.add('glow-emerald');
+                document.getElementById('gauge-progress').className = "gauge-circle text-emerald-500";
+                adviceBox.className = "bg-emerald-500/5 border border-emerald-500/10 rounded-2xl p-4.5 relative overflow-hidden";
+            }
+        }
+
+        function showNoDataView() {
+            document.getElementById('no-data-view').classList.remove('hidden');
+            document.getElementById('data-view').classList.add('hidden');
+        }
+
+        // Auto transition skeletons
+        function hideSkeleton() {
+            document.getElementById('image-skeleton').classList.add('hidden');
+        }
+
+        function updateConnectionIndicator(isConnected) {
+            const dot = document.getElementById('connection-indicator');
+            const text = document.getElementById('connection-text');
+            if (isConnected) {
+                dot.className = "relative inline-flex rounded-full h-2 w-2 bg-emerald-500";
+                text.innerText = getTranslation('esp-status-connected');
+                text.className = "text-[11px] font-bold text-[var(--text-muted)]";
+                document.getElementById('stat-signal').innerText = getTranslation('signal-excellent');
+            } else {
+                dot.className = "relative inline-flex rounded-full h-2 w-2 bg-red-500";
+                text.innerText = getTranslation('esp-status-disconnected');
+                text.className = "text-[11px] font-bold text-red-500";
+                document.getElementById('stat-signal').innerText = getTranslation('signal-none');
+            }
+        }
+
+        async function refreshHistoryPanel() {
+            try {
+                const response = await fetch('/');
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // Refresh sidebar timeline
+                const sidebarEl = doc.getElementById('history-sidebar');
+                if (sidebarEl) {
+                    document.getElementById('history-sidebar').innerHTML = sidebarEl.innerHTML;
+                }
+                
+                // Refresh grid timeline if loaded
+                const gridEl = doc.getElementById('history-grid');
+                if (gridEl) {
+                    document.getElementById('history-grid').innerHTML = gridEl.innerHTML;
+                }
+                
+                // Translate the newly fetched server-side content
+                translateDynamicContent();
+            } catch (err) {
+                console.error("Erreur de rafraîchissement d'historique :", err);
+            }
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('live-time').innerText = `${getTranslation('timezone-label')} ${timeString}`;
+        }
+
+        // Lightbox modals
+        function openLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            const img = document.getElementById('lightbox-img');
+            const mainImg = document.getElementById('scan-image');
+            
+            img.src = mainImg.src;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Live grid search filter
+        function filterHistoryGrid() {
+            const val = document.getElementById('history-search').value.toLowerCase();
+            const cards = document.querySelectorAll('#history-grid > div');
+            
+            cards.forEach(card => {
+                const titleEl = card.querySelector('.grid-title');
+                if (!titleEl) return; // Safeguard
+                const text = titleEl.innerText.toLowerCase();
+                if(text.includes(val)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Chart.js initialization
+        function initializeChart() {
+            const canvas = document.getElementById('healthChart');
+            if (!canvas) return;
+            if (typeof Chart === 'undefined') {
+                console.warn("Chart.js library is not loaded. Skipping chart initialization.");
+                return;
+            }
+            const ctx = canvas.getContext('2d');
+            healthChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [getTranslation('lbl-healthy'), getTranslation('lbl-infected')],
+                    datasets: [{
+                        data: [0, 0],
+                        backgroundColor: ['#10b981', '#ef4444'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    cutout: '75%'
+                }
+            });
+            updateChartData();
+        }
+
+        function updateChartData() {
+            const cards = document.querySelectorAll('#history-sidebar > div');
+            let healthy = 0;
+            let infected = 0;
+
+            cards.forEach(card => {
+                const titleEl = card.querySelector('.sidebar-title');
+                if (!titleEl) return; // Safeguard against "no scans in DB" placeholder card
+                const text = titleEl.innerText.toLowerCase();
+                const isHealthy = text.includes('sain') || text.includes('saine') || text.includes('healthy') || text.includes('سليمة');
+                if (isHealthy) {
+                    healthy++;
+                } else {
+                    infected++;
+                }
+            });
+
+            const total = healthy + infected;
+            document.getElementById('stat-scans-count').innerText = total;
+
+            const ratio = total > 0 ? Math.round((healthy / total) * 100) : 0;
+            document.getElementById('stat-health-ratio').innerText = `${ratio} %`;
+            document.getElementById('lbl-healthy').innerText = `${getTranslation('lbl-healthy')}: ${healthy}`;
+            document.getElementById('lbl-infected').innerText = `${getTranslation('lbl-infected')}: ${infected}`;
+
+            if (healthChart) {
+                // Adjust colors dynamically based on light/dark theme
+                const isDark = document.body.classList.contains('dark-theme');
+                healthChart.data.labels = [getTranslation('lbl-healthy'), getTranslation('lbl-infected')];
+                healthChart.data.datasets[0].backgroundColor = isDark ? ['#10b981', '#ef4444'] : ['#10b981', '#f87171'];
+                healthChart.data.datasets[0].data = [healthy, infected];
+                healthChart.update();
+            }
+        }
+
+        // ESP32 JSON Config fetch/save actions
+        async function loadSettingsToForm() {
+            try {
+                const response = await fetch('/api/esp32-config/?_t=' + Date.now());
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const ct = response.headers.get('content-type') || '';
+                if (!ct.includes('application/json')) throw new Error('Non-JSON');
+                const config = await response.json();
+
+                const elSsid = document.getElementById('cfg-ssid');
+                const elPass = document.getElementById('cfg-password');
+                const elMode = document.getElementById('cfg-mode');
+                const elSleep = document.getElementById('cfg-sleep-duration');
+                const elFlash = document.getElementById('cfg-flash');
+                if (elSsid) elSsid.value = config.ssid || 'home dahhou';
+                if (elPass) elPass.value = config.password || 'dahhou2005';
+                if (elMode) elMode.value = config.use_deep_sleep ? 'sleep' : 'continuous';
+                if (elSleep) elSleep.value = config.sleep_duration || 300;
+                if (elFlash) elFlash.checked = !!config.use_flash;
+            } catch (err) {
+                console.error("Impossible de récupérer la config ESP32:", err.message || err);
+            }
+        }
+
+        async function saveESP32Config(event) {
+            event.preventDefault();
+            
+            const payload = {
+                ssid: document.getElementById('cfg-ssid').value,
+                password: document.getElementById('cfg-password').value,
+                use_deep_sleep: document.getElementById('cfg-mode').value === 'sleep',
+                sleep_duration: parseInt(document.getElementById('cfg-sleep-duration').value),
+                use_flash: document.getElementById('cfg-flash').checked,
+                lang: currentLanguage
+            };
+
+            try {
+                const response = await fetch('/api/esp32-config/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const res = await response.json();
+                if(res.status === 'success') {
+                    // Show confirmation notification banner
+                    const alertBanner = document.getElementById('alert-settings-success');
+                    alertBanner.classList.remove('hidden');
+                    setTimeout(() => {
+                        alertBanner.classList.add('hidden');
+                    }, 6000);
+                }
+            } catch (err) {
+                console.error("Échec de l'enregistrement de la config:", err);
+            }
+        }
+
+        async function uploadLocalFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Show loading skeleton
+            document.getElementById('image-skeleton').classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('lang', currentLanguage);
+            formData.append('latitude', '31.6295'); // Marrakech par défaut
+            formData.append('longitude', '-7.9811');
+
+            try {
+                const response = await fetch('/api/upload/', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                if (data.status === 'success') {
+                    // Lock auto polling and show Direct switch
+                    isShowingArchive = true;
+                    document.getElementById('btn-live').classList.remove('hidden');
+
+                    const now = new Date();
+
+                    showDataView({
+                        id: data.id,
+                        disease_name: data.disease_name,
+                        confidence: data.confidence,
+                        watering_advice: data.watering_advice,
+                        severity: data.severity,
+                        image_url: data.image_url,
+                        scanned_at: now.toISOString(),
+                        temperature: data.weather ? data.weather.temperature_c : null,
+                        humidity: data.weather ? data.weather.humidity_pct : null
+                    }, true);
+
+                    await refreshHistoryPanel();
+                    updateChartData();
+                } else {
+                    let errMsg = "Fichier invalide";
+                    if (data.error) {
+                        errMsg = data.error;
+                    } else if (data.image) {
+                        errMsg = Array.isArray(data.image) ? data.image.join(" ") : data.image;
+                    } else if (typeof data === 'object') {
+                        errMsg = JSON.stringify(data);
+                    }
+                    alert(`${getTranslation('alert-upload-error')} : ${errMsg}`);
+                    document.getElementById('image-skeleton').classList.add('hidden');
+                }
+            } catch (err) {
+                console.error("Upload local échoué:", err);
+                alert(getTranslation('alert-conn-error'));
+                document.getElementById('image-skeleton').classList.add('hidden');
+            } finally {
+                input.value = "";
+            }
+        }
+
+        /* -------------------------------------------------------------------------
+         * PWA SERVICE WORKER REGISTRATION
+         * ------------------------------------------------------------------------- */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker enregistré', reg.scope))
+                    .catch(err => console.error('Echec Service Worker', err));
+            });
+        }
+
+        /* -------------------------------------------------------------------------
+         * ALERTS & NOTIFICATIONS
+         * ------------------------------------------------------------------------- */
+        function toggleAlertsPanel() {
+            const panel = document.getElementById('alerts-panel');
+            panel.classList.toggle('translate-x-full');
+            panel.classList.toggle('opacity-0');
+            panel.classList.toggle('pointer-events-none');
+            
+            if (!panel.classList.contains('translate-x-full')) {
+                fetchAlerts();
+            }
+        }
+
+        async function fetchAlerts() {
+            try {
+                const res = await fetch('/api/alerts/?_t=' + Date.now());
+                if (!res.ok) { console.warn('[Alerts] HTTP', res.status); return; }
+                const ct = res.headers.get('content-type') || '';
+                if (!ct.includes('application/json')) { console.warn('[Alerts] Non-JSON'); return; }
+                const data = await res.json();
+                if (!data) { console.warn('[Alerts] data null'); return; }
+
+                const badge = document.getElementById('alert-badge');
+                if (badge && typeof data.unread_count === 'number' && data.unread_count > 0) {
+                    badge.textContent = data.unread_count;
+                    badge.classList.remove('hidden');
+                } else if (badge) {
+                    badge.classList.add('hidden');
+                }
+
+                const list = document.getElementById('alerts-list');
+                if (!list) return;
+                list.innerHTML = '';
+
+                const alerts = (data && Array.isArray(data.alerts)) ? data.alerts : [];
+                if (alerts.length === 0) {
+                    list.innerHTML = `<div class="text-center p-4 text-xs text-[var(--text-muted)]">Aucune alerte.</div>`;
+                    return;
+                }
+
+                alerts.forEach(alert => {
+                    if (!alert) return;
+                    const bgColors = {
+                        'CRITICAL': 'bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400',
+                        'WARNING': 'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400',
+                        'INFO': 'bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400'
+                    };
+                    const colorClass = bgColors[alert.alert_type] || bgColors['INFO'];
+                    const createdAt = alert.created_at ? new Date(alert.created_at).toLocaleString('fr-FR') : '';
+                    list.innerHTML += `
+                        <div class="p-3 rounded-xl border ${colorClass} text-xs font-semibold mb-2">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="font-bold">${alert.alert_type || 'INFO'}</span>
+                                <span class="text-[9px] opacity-70">${createdAt}</span>
+                            </div>
+                            <p>${alert.message || ''}</p>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                console.error('Erreur alertes:', err);
+            }
+        }
+
+        /* -------------------------------------------------------------------------
+         * MAP (LEAFLET)
+         * ------------------------------------------------------------------------- */
+        let mapInstance = null;
+
+        function initMap() {
+            if (mapInstance) return;
+            mapInstance = L.map('leaflet-map').setView([31.7917, -7.0926], 6); // Default Morocco center
+            
+            // CartoDB Positron theme for cleaner look
+            const lightTiles = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+            const darkTiles = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            L.tileLayer(isDark ? darkTiles : lightTiles, {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(mapInstance);
+
+            loadMapData();
+        }
+
+        async function loadMapData() {
+            try {
+                const res = await fetch('/api/map-data/');
+                const data = await res.json();
+                
+                if (mapInstance) {
+                    data.scans.forEach(scan => {
+                        const color = scan.severity === 'CRITICAL' ? 'red' : (scan.severity === 'WARNING' ? 'orange' : 'green');
+                        
+                        const circle = L.circleMarker([scan.latitude, scan.longitude], {
+                            radius: 8,
+                            fillColor: color,
+                            color: "#fff",
+                            weight: 2,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        }).addTo(mapInstance);
+
+                        circle.bindPopup(`
+                            <div class="text-xs font-sans">
+                                <div class="font-bold text-sm mb-1">${scan.disease_name}</div>
+                                <div class="mb-1 text-gray-500">${new Date(scan.scanned_at).toLocaleString()}</div>
+                                ${scan.temperature ? `<div>🌡️ ${scan.temperature}°C 💧 ${scan.humidity}%</div>` : ''}
+                            </div>
+                        `);
+                    });
+                }
+                
+                // Fetch stats too
+                document.getElementById('stat-total').textContent = data.stats.total;
+                document.getElementById('stat-healthy-r').textContent = data.stats.healthy;
+                document.getElementById('stat-warning-r').textContent = data.stats.warning;
+                document.getElementById('stat-critical-r').textContent = data.stats.critical;
+                
+                document.getElementById('stats-loading').classList.add('hidden');
+                document.getElementById('stats-content').classList.remove('hidden');
+                
+            } catch (err) {
+                console.error("Map data error:", err);
+            }
+        }
+
+        function refreshMap() {
+            if (mapInstance) {
+                mapInstance.eachLayer((layer) => {
+                    if (layer instanceof L.CircleMarker) {
+                        mapInstance.removeLayer(layer);
+                    }
+                });
+                loadMapData();
+            }
+        }
+
+        /* -------------------------------------------------------------------------
+         * CHATBOT IA GEMINI
+         * ------------------------------------------------------------------------- */
+        function toggleChatbot() {
+            const bot = document.getElementById('chatbot-ui');
+            bot.classList.toggle('translate-y-[150%]');
+            bot.classList.toggle('opacity-0');
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+            
+            const chatBox = document.getElementById('chat-messages');
+            
+            // Add user message to UI
+            chatBox.innerHTML += `
+                <div class="flex justify-end mb-3">
+                    <div class="bg-emerald-500 text-white rounded-2xl rounded-tr-sm px-4 py-2 max-w-[85%] text-xs shadow-sm">
+                        ${msg}
+                    </div>
+                </div>
+            `;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // Show typing indicator
+            const typingId = 'typing-' + Date.now();
+            chatBox.innerHTML += `
+                <div id="${typingId}" class="flex justify-start mb-3">
+                    <div class="bg-white dark:bg-gray-800 border border-[var(--border-color)] text-[var(--text-main)] rounded-2xl rounded-tl-sm px-4 py-2 max-w-[85%] text-xs shadow-sm flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style="animation-delay: 0.1s"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style="animation-delay: 0.2s"></span>
+                    </div>
+                </div>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                const lang = document.getElementById('lang-selector').value;
+                const res = await fetch('/api/chatbot/', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ message: msg, language: lang })
+                });
+                const data = await res.json();
+                
+                // Remove typing indicator
+                document.getElementById(typingId).remove();
+                
+                // Add bot message
+                chatBox.innerHTML += `
+                    <div class="flex justify-start mb-3">
+                        <div class="bg-white dark:bg-gray-800 border border-[var(--border-color)] text-[var(--text-main)] rounded-2xl rounded-tl-sm px-4 py-2 max-w-[85%] text-xs shadow-sm">
+                            ${data.response.replace(/\n/g, '<br>')}
+                        </div>
+                    </div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            } catch (err) {
+                document.getElementById(typingId).remove();
+                chatBox.innerHTML += `
+                    <div class="flex justify-start mb-3 text-red-500 text-[10px] font-bold">Erreur de connexion IA.</div>
+                `;
+            }
+        }
+        
+        document.getElementById('chat-input')?.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+
+        function downloadReport() {
+            window.open('/api/reports/generate/', '_blank');
+        }
+
+        // Initialize things on load
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchAlerts();
+            setInterval(fetchAlerts, 60000); // Check alerts every minute
+        });
+    </script>
+
+    <!-- ─────────────────────────────────────────────────────────────────────────────
+         FLOATING ACTION BUTTONS & PANELS (CHATBOT & ALERTS)
+         ───────────────────────────────────────────────────────────────────────────── -->
+    
+    <!-- Floating Chat Button -->
+    <button onclick="toggleChatbot()" class="fixed bottom-24 right-6 lg:bottom-6 z-40 w-14 h-14 bg-gradient-to-tr from-emerald-600 to-emerald-400 text-white rounded-full shadow-lg hover:shadow-emerald-500/30 flex items-center justify-center transition-all hover:scale-105 active:scale-95 border border-emerald-300/30">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+    </button>
+
+    <!-- Chatbot Window -->
+    <div id="chatbot-ui" class="fixed bottom-24 right-6 lg:bottom-24 lg:right-6 z-50 w-[90vw] sm:w-[350px] h-[500px] max-h-[70vh] bg-[#f8fafc]/95 dark:bg-[#0f172a]/95 backdrop-blur-xl border border-[var(--border-color)] shadow-2xl rounded-3xl flex flex-col translate-y-[150%] opacity-0 transition-all duration-500 ease-out overflow-hidden">
+        <!-- Header -->
+        <div class="px-5 py-4 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">🤖</div>
+                <div>
+                    <h4 class="font-bold text-sm">L'Fellah IA Assistant</h4>
+                    <p class="text-[9px] opacity-80">Posez vos questions agricoles</p>
+                </div>
+            </div>
+            <button onclick="toggleChatbot()" class="p-1.5 hover:bg-white/20 rounded-lg transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        
+        <!-- Messages Area -->
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4 text-sm flex flex-col">
+            <!-- Default greeting -->
+            <div class="flex justify-start mb-3">
+                <div class="bg-white dark:bg-gray-800 border border-[var(--border-color)] text-[var(--text-main)] rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%] text-xs shadow-sm">
+                    👋 Bonjour ! Je suis l'assistant IA de L'Fellah. Je peux vous conseiller sur les traitements, l'irrigation ou analyser les conditions météo actuelles. Comment puis-je vous aider ?
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-4 bg-white/50 dark:bg-gray-900/50 border-t border-[var(--border-color)] shrink-0">
+            <div class="relative flex items-center">
+                <input type="text" id="chat-input" placeholder="Écrivez votre message..." class="w-full bg-slate-100 dark:bg-gray-800 border border-[var(--border-color)] text-[var(--text-main)] text-xs rounded-full pl-4 pr-12 py-3 outline-none focus:border-emerald-500 transition-colors">
+                <button onclick="sendChatMessage()" class="absolute right-1.5 w-8 h-8 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full flex items-center justify-center transition-all">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerts Sidebar Panel -->
+    <div id="alerts-panel" class="fixed top-0 right-0 z-50 w-full sm:w-80 h-screen bg-[#f8fafc]/95 dark:bg-[#0f172a]/95 backdrop-blur-2xl border-l border-[var(--border-color)] shadow-2xl flex flex-col translate-x-full opacity-0 pointer-events-none transition-all duration-300">
+        <div class="px-5 py-4 border-b border-[var(--border-color)] flex justify-between items-center">
+            <h3 class="font-bold text-[var(--text-main)] text-sm flex items-center gap-2">
+                <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                Centre d'Alertes
+            </h3>
+            <button onclick="toggleAlertsPanel()" class="p-1.5 text-[var(--text-muted)] hover:bg-slate-200/50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div id="alerts-list" class="flex-1 overflow-y-auto p-4">
+            <div class="text-center p-4 text-xs text-[var(--text-muted)]">Chargement...</div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 w-full bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl border-t border-[var(--border-color)] z-40 flex justify-around items-center p-3 pb-safe shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.1)]">
+        <a href="javascript:void(0)" onclick="switchTab('dashboard', this); updateMobileNav(this);" class="mobile-nav-link active flex flex-col items-center gap-1 text-[#5483B3] dark:text-[#C1E8FF]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            <span class="text-[9px] font-bold">Menu</span>
+        </a>
+        <a href="javascript:void(0)" onclick="switchTab('history', this); updateMobileNav(this);" class="mobile-nav-link flex flex-col items-center gap-1 text-[var(--text-muted)] hover:text-[#5483B3]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="text-[9px] font-bold">Histo</span>
+        </a>
+        <a href="javascript:void(0)" onclick="switchTab('map', this); updateMobileNav(this);" class="mobile-nav-link flex flex-col items-center gap-1 text-[var(--text-muted)] hover:text-[#5483B3]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+            <span class="text-[9px] font-bold">Carte</span>
+        </a>
+        <a href="javascript:void(0)" onclick="switchTab('settings', this); updateMobileNav(this);" class="mobile-nav-link flex flex-col items-center gap-1 text-[var(--text-muted)] hover:text-[#5483B3]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span class="text-[9px] font-bold">Réglages</span>
+        </a>
+    </nav>
+    <script>
+        function updateMobileNav(element) {
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.classList.remove('text-[#5483B3]', 'dark:text-[#C1E8FF]');
+                link.classList.add('text-[var(--text-muted)]');
+            });
+            element.classList.remove('text-[var(--text-muted)]');
+            element.classList.add('text-[#5483B3]', 'dark:text-[#C1E8FF]');
+        }
+
+// ─── CAPTEURS TEMPS REEL ──────────────────────────────
+        const SENSOR_THRESHOLDS = { temp:{max:40}, hum:{min:30}, tds:{max:1000}, ph:{min:5.5,max:7.5} };
+        const SENSOR_UNITS = { temp:'°C', hum:'%', tds:'ppm', ph:'' };
+        const SENSOR_IDS = {
+            temp:{card:'card-temp-iot',value:'val-temp-iot',badge:'badge-temp-iot'},
+            hum:{card:'card-hum-iot',value:'val-hum-iot',badge:'badge-hum-iot'},
+            tds:{card:'card-tds-iot',value:'val-tds-iot',badge:'badge-tds-iot'},
+            ph:{card:'card-ph-iot',value:'val-ph-iot',badge:'badge-ph-iot'}
+        };
+        let lastSensorTimestamp = 0;
+
+        function el(id) { return document.getElementById(id); }
+
+        function updateSensorUI(data) {
+            if (!data || !data.has_data) return;
+            lastSensorTimestamp = Date.now();
+
+            try {
+                const ct = el('connection-text'), ci = el('connection-indicator'), ss = el('stat-signal');
+                if (ct) ct.textContent = 'Capteurs Actifs';
+                if (ci) { ci.classList.remove('bg-emerald-500'); ci.classList.add('bg-green-500'); }
+                if (ss) { ss.textContent = data.device_name || 'Capteur'; ss.style.color = ''; }
+            } catch(e){}
+
+            updateCard('temp', data.temperature);
+            updateCard('hum', data.humidity);
+            updateCard('tds', data.tds);
+            updateCard('ph', data.ph);
+            updateAlerts(data);
+        }
+
+        function updateCard(s, v) {
+            const ids = SENSOR_IDS[s]; if (!ids) return;
+            const ve = el(ids.value), be = el(ids.badge);
+            if (!ve) { console.error('ID absent:', ids.value); return; }
+            const u = SENSOR_UNITS[s], d = (s==='tds')?0:1, t = SENSOR_THRESHOLDS[s];
+
+            if (v == null || isNaN(v)) { ve.innerHTML = '—'; if (be) be.classList.add('hidden'); return; }
+
+            ve.innerHTML = v.toFixed(d) + (u ? `<span class="text-[10px] text-[var(--text-muted)] ml-1">${u}</span>` : '');
+            if (!be) return;
+            const crit = (t.max && v > t.max) || (t.min && v < t.min);
+            ve.style.color = crit ? '#ef4444' : '';
+            crit ? be.classList.remove('hidden') : be.classList.add('hidden');
+        }
+
+        function updateAlerts(data) {
+            if (!data.alerts || !data.alerts.length) return;
+            try { const b = el('alert-badge'); if (b) { b.textContent = data.alerts.length; b.classList.remove('hidden'); if (data.status==='critical') b.classList.add('bg-red-500'); } } catch(e){}
+        }
+
+        function checkStale() {
+            if (!lastSensorTimestamp) return;
+            const age = (Date.now() - lastSensorTimestamp) / 1000;
+            if (age > 10) {
+                const ct = el('connection-text');
+                if (ct) ct.textContent = age > 30 ? 'Hors ligne' : 'Connexion instable';
+                const ci = el('connection-indicator');
+                if (ci) { ci.classList.add('bg-red-500'); ci.classList.remove('bg-green-500','bg-emerald-500'); }
+            }
+        }
+
+        async function loadSensorData() {
+            try {
+                const resp = await fetch('/api/iot/sensor-data/latest/?t='+Date.now(), {
+                    headers:{'Accept':'application/json','Cache-Control':'no-cache'},
+                    credentials:'same-origin', cache:'no-store'
+                });
+                const data = await resp.json();
+                console.log('Capteurs:', data);
+                updateSensorUI(data);
+                checkStale();
+            } catch(e) { console.log('API indisponible'); checkStale(); }
+        }
+
+        async function fetchSensor(sensor) {
+            const ids = SENSOR_IDS[sensor]; if (!ids) return;
+            const ve = el(ids.value), ce = el(ids.card);
+            if (!ve || !ce) return;
+            ve.innerHTML = '<span class="opacity-50 text-sm">...</span>';
+            try {
+                const resp = await fetch('/api/iot/sensor-data/latest/?t='+Date.now(), {
+                    headers:{'Accept':'application/json','Cache-Control':'no-cache'},
+                    credentials:'same-origin', cache:'no-store'
+                });
+                updateSensorUI(await resp.json());
+            } catch(e) { ve.innerHTML = '<span class="text-xs text-red-400">Err</span>'; }
+        }
+
+        loadSensorData();
+        setInterval(loadSensorData, 30000);
+        setInterval(checkStale, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier {{ product.name }} — L'Fellah 2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { lf: { dark:'#1b4332', green:'#2d6a4f', light:'#40916c', accent:'#95d5b2', bg:'#f0fdf4' } }, fontFamily: { sans: ['Inter','system-ui','sans-serif'] }, borderRadius: { 'xl':'12px', '2xl':'16px' } } }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-lf-bg min-h-screen font-sans flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-lg">
+        <div class="bg-white rounded-3xl shadow-xl border border-lf-accent/20 overflow-hidden">
+            <div class="bg-gradient-to-br from-lf-dark to-lf-green text-white px-6 py-5">
+                <div class="flex items-center gap-2.5 mb-1">
+                    <img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah" class="h-8 w-auto object-contain">
+                </div>
+                <h1 class="text-lg font-black">Modifier le produit</h1>
+            </div>
+            {% if error %}<div class="mx-5 mt-4 bg-red-50 border border-red-200 text-red-700 rounded-xl p-3 text-xs font-semibold">{{ error }}</div>{% endif %}
+            <form method="POST" enctype="multipart/form-data" class="p-5 space-y-3.5">
+                {% csrf_token %}
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-wider block mb-1">Nom du produit *</label>
+                    <input type="text" name="name" value="{{ product.name }}" required
+                           class="w-full bg-lf-bg border border-lf-accent/30 rounded-xl px-4 py-3 text-sm font-semibold text-gray-900 focus:outline-none focus:border-lf-green transition-all">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-wider block mb-1">Description</label>
+                    <textarea name="description" rows="2" class="w-full bg-lf-bg border border-lf-accent/30 rounded-xl px-4 py-3 text-sm font-semibold text-gray-900 focus:outline-none focus:border-lf-green transition-all resize-none">{{ product.description }}</textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-wider block mb-1">Catégorie</label>
+                        <select name="category" class="w-full bg-lf-bg border border-lf-accent/30 rounded-xl px-4 py-3 text-sm font-semibold text-gray-900 focus:outline-none focus:border-lf-green transition-all">
+                            <option value="">—</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if product.category_id == cat.id %}selected{% endif %}>{{ cat.name_fr }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-wider block mb-1">Unité</label>
+                        <select name="unit" class="w-full bg-lf-bg border border-lf-accent/30 rounded-xl px-4 py-3 text-sm font-semibold text-gray-900 focus:outline-none focus:border-lf-green transition-all">
+                            {% for val, label in product.UNIT_CHOICES %}
+                            <option value="{{ val }}" {% if product.unit == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-wider block mb-1">Prix HT (MAD) *</label>
+                        <input type="number" name="price" value="{{ product.price_base }}" step="0.01" min="0.01" required
+                               class="w-full bg-lf-bg border border-lf-accent/30 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 focus:outline-none focus:border-lf-green transition-all">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-wider block mb-1">Stock *</label>
+                        <input type="number" name="stock" value="{{ product.stock_quantity }}" step="0.1" min="0" required
+                               class="w-full bg-lf-bg border border-lf-accent/30 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 focus:outline-none focus:border-lf-green transition-all">
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" name="organic" id="cb-organic" {% if product.is_organic %}checked{% endif %}
+                           class="w-4 h-4 accent-lf-green rounded">
+                    <label for="cb-organic" class="text-xs font-bold text-gray-500 cursor-pointer select-none">Produit Bio / Agriculture Biologique</label>
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-wider block mb-1">Photo du produit</label>
+                    {% if product.image %}<p class="text-xs text-gray-400 mb-1">Image actuelle : {{ product.image.name }}</p>{% endif %}
+                    <input type="file" name="image" accept="image/*"
+                           class="w-full text-sm text-gray-500 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-lf-bg file:text-lf-green hover:file:bg-lf-accent/30 transition-all">
+                </div>
+                <div class="pt-2 flex gap-3">
+                    <a href="/vendeur/produits/" class="flex-1 text-center px-4 py-3 rounded-xl border border-lf-accent text-lf-green text-sm font-bold hover:bg-lf-bg transition-all">Annuler</a>
+                    <button type="submit" class="flex-1 bg-lf-green text-white font-black py-3 rounded-xl hover:bg-lf-dark active:scale-[0.98] transition-all shadow-lg shadow-lf-green/20 text-sm tracking-wide">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

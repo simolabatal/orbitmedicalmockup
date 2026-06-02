@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gérer les Produits — L'Fellah 2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lf: { dark:'#1b4332', green:'#2d6a4f', light:'#40916c', accent:'#95d5b2', bg:'#f0fdf4' }
+                    },
+                    fontFamily: { sans: ['Inter','system-ui','sans-serif'] },
+                    borderRadius: { 'xl':'12px', '2xl':'16px', '3xl':'24px' }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-stone-100 min-h-screen font-sans text-gray-800">
+    <!-- NAVBAR -->
+    <nav class="sticky top-0 z-50 bg-gradient-to-r from-green-100/90 via-white/95 to-green-50/90 backdrop-blur-xl border-b-2 border-green-200/50 shadow-lg" style="min-height:6rem">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between py-2">
+            <a href="/" class="flex items-center gap-3 no-underline">
+                <img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah" class="h-20 w-auto object-contain" style="filter:contrast(1.4) drop-shadow(0 3px 8px rgba(0,0,0,0.45))">
+            </a>
+            <div class="flex items-center gap-4 text-sm font-semibold">
+                <a href="/vendeur/dashboard/" class="text-gray-500 hover:text-lf-green transition-colors">Dashboard</a>
+                <a href="/vendeur/produits/ajouter/" class="text-lf-green font-bold hover:text-lf-dark transition-colors">+ Ajouter</a>
+                <a href="/accounts/logout/" class="text-gray-400 hover:text-red-500 transition-colors">Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-6 py-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+                <p class="text-xs font-bold text-lf-green uppercase tracking-widest">Gestion</p>
+                <h1 class="text-3xl font-black text-lf-dark mt-1">Mes Produits</h1>
+            </div>
+            <a href="/vendeur/produits/ajouter/" class="px-5 py-3 rounded-xl bg-lf-green text-white text-sm font-bold shadow-lg shadow-lf-green/20 hover:bg-lf-dark transition-all flex items-center gap-1.5 w-fit">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                Nouveau produit
+            </a>
+        </div>
+
+        <!-- NOTIFICATION -->
+        <div id="notification" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+
+        <!-- PRODUCT TABLE -->
+        <div class="bg-white rounded-2xl border border-lf-accent/20 shadow-sm overflow-hidden">
+            <div id="loading-row" class="p-12 text-center text-gray-400 font-semibold">Chargement des produits...</div>
+            <div id="empty-row" class="hidden p-16 text-center">
+                <div class="text-4xl mb-3">📦</div>
+                <h3 class="text-lg font-bold text-lf-dark mb-1">Aucun produit</h3>
+                <p class="text-gray-400 text-sm mb-4">Ajoutez votre premier produit agricole.</p>
+                <a href="/vendeur/produits/ajouter/" class="inline-block px-5 py-2.5 rounded-xl bg-lf-green text-white text-sm font-bold hover:bg-lf-dark transition-all">+ Nouveau produit</a>
+            </div>
+            <div class="overflow-x-auto hidden" id="table-wrapper">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 text-left">
+                        <tr>
+                            <th class="px-5 py-3 text-[11px] font-bold text-gray-400 uppercase">Produit</th>
+                            <th class="px-5 py-3 text-[11px] font-bold text-gray-400 uppercase">Catégorie</th>
+                            <th class="px-5 py-3 text-[11px] font-bold text-gray-400 uppercase">Prix HT</th>
+                            <th class="px-5 py-3 text-[11px] font-bold text-gray-400 uppercase">Prix TTC</th>
+                            <th class="px-5 py-3 text-[11px] font-bold text-gray-400 uppercase">Stock</th>
+                            <th class="px-5 py-3 text-[11px] font-bold text-gray-400 uppercase">Unité</th>
+                            <th class="px-5 py-3 text-[11px] font-bold text-gray-400 uppercase">Bio</th>
+                            <th class="px-5 py-3 text-[11px] font-bold text-gray-400 uppercase w-28">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/marketplace/products/';
+
+        // ─── GET CSRF TOKEN ──────────────────────────────────────────
+        function getCSRF() {
+            const name = 'csrftoken';
+            const cookies = document.cookie.split(';');
+            for (let c of cookies) {
+                c = c.trim();
+                if (c.startsWith(name + '=')) return decodeURIComponent(c.substring(name.length + 1));
+            }
+            return '';
+        }
+
+        // ─── NOTIFICATION ────────────────────────────────────────────
+        function notify(msg, type) {
+            const el = document.getElementById('notification');
+            el.textContent = msg;
+            el.className = 'rounded-xl p-3 text-sm font-bold ' + (
+                type === 'success' ? 'bg-green-100 text-green-700 border border-green-200' :
+                type === 'error'   ? 'bg-red-100 text-red-700 border border-red-200' :
+                                     'bg-blue-100 text-blue-700 border border-blue-200'
+            );
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 4000);
+        }
+
+        // ─── LOAD PRODUCTS ──────────────────────────────────────────
+        async function loadProducts() {
+            try {
+                const resp = await fetch(API_BASE, {
+                    headers: { 'Accept': 'application/json' },
+                    credentials: 'same-origin'
+                });
+                const data = await resp.json();
+                const products = data.results || [];
+
+                document.getElementById('loading-row').classList.add('hidden');
+
+                if (!products.length) {
+                    document.getElementById('empty-row').classList.remove('hidden');
+                    document.getElementById('table-wrapper').classList.add('hidden');
+                    return;
+                }
+
+                document.getElementById('empty-row').classList.add('hidden');
+                document.getElementById('table-wrapper').classList.remove('hidden');
+
+                document.getElementById('products-table-body').innerHTML = products.map(p => `
+                    <tr class="border-t border-gray-50 hover:bg-lf-bg/50 transition-colors">
+                        <td class="px-5 py-3 font-bold text-lf-dark">${p.name}</td>
+                        <td class="px-5 py-3 text-gray-500 text-xs">${p.category_name||'—'}</td>
+                        <td class="px-5 py-3 text-gray-700 font-semibold">${parseFloat(p.price_base||0).toFixed(2)} MAD</td>
+                        <td class="px-5 py-3 text-lf-green font-bold">${parseFloat(p.price_final_display||0).toFixed(2)} MAD</td>
+                        <td class="px-5 py-3">${p.stock_quantity||0}</td>
+                        <td class="px-5 py-3 text-gray-500 text-xs">${p.unit||'—'}</td>
+                        <td class="px-5 py-3">${p.is_organic ? '<span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">Bio</span>' : '—'}</td>
+                        <td class="px-2 py-3">
+                            <div class="flex gap-1.5">
+                                <a href="/vendeur/produits/${p.id}/modifier/" class="px-3 py-1.5 rounded-lg bg-lf-bg text-lf-green text-[11px] font-bold hover:bg-lf-accent/30 transition-colors">Modifier</a>
+                                <button onclick="deleteProduct(${p.id})" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 text-[11px] font-bold hover:bg-red-100 transition-colors">Supprimer</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loading-row').innerHTML = '<span class="text-red-500">Erreur de chargement.</span>';
+            }
+        }
+
+        // ─── DELETE PRODUCT ─────────────────────────────────────────
+        async function deleteProduct(id) {
+            if (!confirm('Confirmer la suppression de ce produit ? Cette action est irréversible.')) return;
+
+            try {
+                const resp = await fetch(API_BASE + id + '/', {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRFToken': getCSRF(),
+                    },
+                    credentials: 'same-origin'
+                });
+
+                if (resp.status === 204 || resp.ok) {
+                    notify('Produit supprimé avec succès.', 'success');
+                    loadProducts();
+                } else {
+                    const errData = await resp.json().catch(() => ({}));
+                    notify('Erreur : ' + (errData.detail || 'Suppression échouée.'), 'error');
+                }
+            } catch (err) {
+                notify('Erreur réseau.', 'error');
+            }
+        }
+
+        loadProducts();
+    </script>
+</body>
+</html>

@@ -1,0 +1,547 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}L'Fellah — Dashboard{% endblock %}
+
+{% block extra_head %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        forest: {
+                            50:'#f0fdf4', 100:'#dcfce7', 200:'#bbf7d0', 300:'#86efac',
+                            400:'#34d399', 500:'#10b981', 600:'#059669', 700:'#047857',
+                            800:'#065f46', 900:'#064e3b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter','ui-sans-serif','system-ui','sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Le dashboard IoT a sa propre sidebar — pas besoin du header global */
+        aside { z-index: 60 !important; }
+    </style>
+{% endblock %}
+
+{% block global_header %}{% endblock %}
+
+{% block main_class %}{% endblock %}
+
+{% block content %}
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- ▓▓▓  SIDEBAR — Desktop uniquement  ▓▓▓ -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <aside class="fixed left-0 top-0 z-40 h-full w-64 bg-white border-r border-stone-100 hidden lg:flex flex-col">
+        <div class="px-6 py-6">
+            <a href="/" class="block no-underline">
+                <img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah — Smart Agriculture" class="site-logo-sm">
+            </a>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-0.5">
+            <button onclick="switchTab('sensors')" data-nav="sensors"
+                class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-forest-700 bg-forest-50">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                Tableau de bord
+            </button>
+            <button onclick="switchTab('plants')" data-nav="plants"
+                class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-stone-500 hover:text-stone-900 hover:bg-stone-50">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                </svg>
+                Analyse Plantes
+            </button>
+            <button onclick="switchTab('espcam')" data-nav="espcam"
+                class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-stone-500 hover:text-stone-900 hover:bg-stone-50">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                ESP32-CAM
+            </button>
+            <button onclick="switchTab('export')" data-nav="export"
+                class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-stone-500 hover:text-stone-900 hover:bg-stone-50">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Export
+            </button>
+        </nav>
+
+        <div class="px-4 pb-6 space-y-0.5">
+            <a href="/" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-stone-400 hover:text-stone-600 hover:bg-stone-50 rounded-xl transition-all no-underline">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                Marche
+            </a>
+            <a href="/accounts/logout/" class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all no-underline">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Deconnexion
+            </a>
+        </div>
+    </aside>
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- ▓▓▓  MOBILE TOGGLE + OVERLAY  ▓▓▓ -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <button id="menu-btn" class="fixed top-4 left-4 z-50 lg:hidden w-10 h-10 bg-white rounded-xl shadow-sm border border-stone-100 flex items-center justify-center active:scale-95 transition-transform" aria-label="Menu">
+        <svg id="menu-open" class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="menu-close" class="w-5 h-5 text-stone-600 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M6 18L18 6"/></svg>
+    </button>
+
+    <div id="menu-overlay" class="hidden fixed inset-0 z-40 bg-white flex flex-col items-center justify-center gap-1 p-8">
+        <div class="mb-8 text-center">
+            <img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah" class="site-logo-sm mx-auto">
+        </div>
+        <button onclick="switchTab('sensors');closeMenu()" class="w-full max-w-xs py-3.5 text-base font-semibold text-stone-600 hover:text-forest-700 hover:bg-forest-50 rounded-2xl transition-all">Tableau de bord</button>
+        <button onclick="switchTab('plants');closeMenu()" class="w-full max-w-xs py-3.5 text-base font-semibold text-stone-600 hover:text-forest-700 hover:bg-forest-50 rounded-2xl transition-all">Analyse Plantes</button>
+        <button onclick="switchTab('espcam');closeMenu()" class="w-full max-w-xs py-3.5 text-base font-semibold text-stone-600 hover:text-forest-700 hover:bg-forest-50 rounded-2xl transition-all">ESP32-CAM</button>
+        <button onclick="switchTab('export');closeMenu()" class="w-full max-w-xs py-3.5 text-base font-semibold text-stone-600 hover:text-forest-700 hover:bg-forest-50 rounded-2xl transition-all">Export</button>
+        <hr class="w-full max-w-xs border-stone-100 my-6">
+        <a href="/" class="w-full max-w-xs py-3.5 text-base font-semibold text-stone-500 hover:text-stone-900 hover:bg-stone-50 rounded-2xl transition-all text-center no-underline">Marche</a>
+        <a href="/accounts/logout/" class="w-full max-w-xs py-3.5 text-base font-semibold text-red-500 hover:bg-red-50 rounded-2xl transition-all text-center no-underline">Deconnexion</a>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- ▓▓▓  MAIN CONTENT  ▓▓▓ -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <main class="lg:ml-64 min-h-screen">
+        <div class="max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 py-6 lg:py-10 space-y-10">
+
+            <!-- ════════════════════════════════════════════════════ -->
+            <!-- PANEL: TABLEAU DE BORD (Home)                       -->
+            <!-- ════════════════════════════════════════════════════ -->
+            <div id="panel-sensors" class="tab-panel space-y-10">
+
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-10 lg:pt-0">
+                    <div>
+                        <h1 class="text-[32px] font-extrabold text-stone-900 tracking-tight leading-none">Tableau de bord</h1>
+                        <p class="text-sm text-stone-400 mt-2 font-normal">Vue d'ensemble de vos capteurs en temps reel</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span id="live-status" class="inline-flex items-center gap-2 text-xs font-semibold text-stone-400 px-3 py-2 bg-white border border-stone-100 rounded-full shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-stone-300 inline-block"></span>
+                            En attente...
+                        </span>
+                        <button onclick="refreshSensorData()"
+                            class="inline-flex items-center gap-2 px-3 py-2 text-xs font-semibold text-forest-700 bg-white border border-stone-100 rounded-full hover:bg-stone-50 transition-all shadow-sm">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            Actualiser
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Alerts -->
+                <div id="alerts-container" class="space-y-2"></div>
+
+                <!-- Sensor Cards -->
+                <section>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+
+                        <!-- Temperature -->
+                        <div class="bg-white rounded-2xl p-6 border border-stone-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/>
+                                    </svg>
+                                </div>
+                                <span class="text-[10px] font-bold text-stone-300 uppercase tracking-wider">°C</span>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-2">Temperature</p>
+                                <p class="text-4xl font-extrabold text-stone-800 tracking-tight leading-none" id="val-temp">--</p>
+                            </div>
+                        </div>
+
+                        <!-- Humidity -->
+                        <div class="bg-white rounded-2xl p-6 border border-stone-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-5 h-5 text-sky-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" d="M12 3c-4.97 4.97-8 8.56-8 12.06a8 8 0 0016 0C20 11.56 16.97 7.97 12 3z"/>
+                                    </svg>
+                                </div>
+                                <span class="text-[10px] font-bold text-stone-300 uppercase tracking-wider">%</span>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-2">Humidite</p>
+                                <p class="text-4xl font-extrabold text-stone-800 tracking-tight leading-none" id="val-hum">--</p>
+                            </div>
+                        </div>
+
+                        <!-- Soil Moisture -->
+                        <div class="bg-white rounded-2xl p-6 border border-stone-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" d="M12 3c-4.97 4.97-8 8.56-8 12.06a8 8 0 0016 0C20 11.56 16.97 7.97 12 3z"/>
+                                    </svg>
+                                </div>
+                                <span class="text-[10px] font-bold text-stone-300 uppercase tracking-wider">%</span>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-2">Humidite du Sol</p>
+                                <p class="text-4xl font-extrabold text-stone-800 tracking-tight leading-none" id="val-soil">--</p>
+                            </div>
+                            <div class="mt-5">
+                                <div class="flex justify-between items-center mb-1.5">
+                                    <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Saturation</span>
+                                    <span class="text-xs font-bold text-stone-600" id="text-soil-bar">--</span>
+                                </div>
+                                <div class="h-1.5 w-full bg-stone-100 rounded-full overflow-hidden">
+                                    <div id="bar-soil" class="h-full rounded-full bg-amber-500 transition-all duration-700 ease-out" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TDS -->
+                        <div class="bg-white rounded-2xl p-6 border border-stone-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                                    </svg>
+                                </div>
+                                <span class="text-[10px] font-bold text-stone-300 uppercase tracking-wider">ppm</span>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-2">TDS</p>
+                                <p class="text-4xl font-extrabold text-stone-800 tracking-tight leading-none" id="val-tds">--</p>
+                            </div>
+                        </div>
+
+                        <!-- pH -->
+                        <div class="bg-white rounded-2xl p-6 border border-stone-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                                    </svg>
+                                </div>
+                                <span class="text-[10px] font-bold text-stone-300 uppercase tracking-wider">pH</span>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider mb-2">pH</p>
+                                <p class="text-4xl font-extrabold text-stone-800 tracking-tight leading-none" id="val-ph">--</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Historique Section -->
+                <section>
+                    <div class="flex items-center justify-between mb-5">
+                        <div>
+                            <h2 class="text-lg font-bold text-stone-800">Historique</h2>
+                            <p class="text-xs text-stone-400 mt-0.5">Courbes et logs des 30 dernieres mesures</p>
+                        </div>
+                        <button onclick="downloadTableCsv()" class="text-xs font-semibold text-forest-600 hover:text-forest-700 transition-colors px-3 py-1.5 rounded-lg hover:bg-forest-50">
+                            Telecharger CSV
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+                        <div class="bg-white rounded-2xl p-5 border border-stone-100 shadow-sm">
+                            <p class="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-4">Temperature & Humidite</p>
+                            <div class="relative" style="height:240px">
+                                <canvas id="chartTempHum"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-5 border border-stone-100 shadow-sm">
+                            <p class="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-4">TDS & pH</p>
+                            <div class="relative" style="height:240px">
+                                <canvas id="chartTdsPh"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="bg-stone-50/80 border-b border-stone-100">
+                                        <th class="px-6 py-3.5 text-left text-[10px] font-bold text-stone-400 uppercase tracking-wider">Date</th>
+                                        <th class="px-6 py-3.5 text-left text-[10px] font-bold text-stone-400 uppercase tracking-wider">Temperature</th>
+                                        <th class="px-6 py-3.5 text-left text-[10px] font-bold text-stone-400 uppercase tracking-wider">Humidite</th>
+                                        <th class="px-6 py-3.5 text-left text-[10px] font-bold text-stone-400 uppercase tracking-wider">TDS</th>
+                                        <th class="px-6 py-3.5 text-left text-[10px] font-bold text-stone-400 uppercase tracking-wider">pH</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body" class="divide-y divide-stone-50"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ════════════════════════════════════════════════════ -->
+            <!-- PANEL: ANALYSE PLANTES                              -->
+            <!-- ════════════════════════════════════════════════════ -->
+            <div id="panel-plants" class="tab-panel hidden space-y-8">
+                <button onclick="switchTab('sensors')" class="flex items-center gap-2 text-sm font-semibold text-stone-500 hover:text-stone-900 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 19l-7-7 7-7"/></svg>
+                    Retour au tableau de bord
+                </button>
+
+                <div>
+                    <h1 class="text-[28px] font-extrabold text-stone-900 tracking-tight leading-none">Analyse de Plantes</h1>
+                    <p class="text-sm text-stone-400 mt-2">Diagnostic IA des maladies vegetales</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-100 shadow-sm">
+                    <div id="plant-drop-zone"
+                        class="w-full border-2 border-dashed border-stone-200 rounded-2xl p-10 sm:p-14 cursor-pointer hover:border-forest-400 hover:bg-forest-50/20 transition-all text-center">
+                        <div class="w-14 h-14 mx-auto mb-5 rounded-2xl bg-forest-100 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-forest-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <p class="text-stone-500 font-semibold text-sm" id="plant-drop-text">Cliquez ou glissez une image ici</p>
+                        <p class="text-xs text-stone-300 mt-1.5">PNG, JPEG · Max 10 Mo</p>
+                        <input type="file" id="plant-image-input" accept="image/*" class="hidden">
+                    </div>
+
+                    <img id="plant-preview" class="hidden w-full h-56 object-cover rounded-2xl mt-5" alt="Apercu">
+
+                    <div id="plant-progress" class="hidden mt-5 text-center">
+                        <div class="w-8 h-8 border-2 border-forest-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                        <p class="text-sm text-stone-400 mt-3 font-medium">Analyse en cours avec l'IA...</p>
+                    </div>
+
+                    <button onclick="submitPlantImage()" id="plant-analyze-btn"
+                        class="hidden w-full mt-5 py-3 bg-forest-600 text-white rounded-xl font-semibold text-sm hover:bg-forest-700 transition-colors disabled:opacity-50 shadow-sm" disabled>
+                        Analyser la plante
+                    </button>
+
+                    <div id="plant-result-empty" class="text-center py-10 text-stone-300 font-medium text-sm mt-4">Aucun diagnostic pour le moment</div>
+
+                    <div id="plant-result-content" class="hidden mt-6">
+                        <div class="bg-stone-50 rounded-2xl p-6 space-y-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1">Maladie detectee</p>
+                                    <p class="text-xl font-bold text-stone-900" id="plant-disease-name">—</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1">Confiance</p>
+                                    <p class="text-xl font-bold text-stone-900" id="plant-confidence">—</p>
+                                </div>
+                            </div>
+                            <div>
+                                <span id="plant-severity-badge" class="inline-block px-3 py-1 rounded-lg text-xs font-bold">—</span>
+                            </div>
+                            <div class="border-t border-stone-200 pt-4">
+                                <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1">Conseil d'arrosage</p>
+                                <p class="text-sm text-stone-600 leading-relaxed" id="plant-advice">—</p>
+                            </div>
+                        </div>
+                        <div id="plant-alert-critical" class="hidden mt-4 p-4 bg-red-50 border border-red-100 rounded-xl text-sm font-bold text-red-700 flex items-center gap-2.5">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                            </svg>
+                            Alerte critique — isolez la plante immediatement.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-stone-50">
+                        <h3 class="text-sm font-bold text-stone-800">Historique des analyses</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="bg-stone-50/80 border-b border-stone-100">
+                                    <th class="px-6 py-3.5 text-left text-[10px] font-bold text-stone-400 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3.5 text-left text-[10px] font-bold text-stone-400 uppercase tracking-wider">Maladie</th>
+                                    <th class="px-6 py-3.5 text-left text-[10px] font-bold text-stone-400 uppercase tracking-wider">Confiance</th>
+                                    <th class="px-6 py-3.5 text-left text-[10px] font-bold text-stone-400 uppercase tracking-wider">Severite</th>
+                                </tr>
+                            </thead>
+                            <tbody id="plant-history-body" class="divide-y divide-stone-50"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ════════════════════════════════════════════════════ -->
+            <!-- PANEL: ESP32-CAM                                    -->
+            <!-- ════════════════════════════════════════════════════ -->
+            <div id="panel-espcam" class="tab-panel hidden space-y-8">
+                <button onclick="switchTab('sensors')" class="flex items-center gap-2 text-sm font-semibold text-stone-500 hover:text-stone-900 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 19l-7-7 7-7"/></svg>
+                    Retour au tableau de bord
+                </button>
+
+                <div>
+                    <h1 class="text-[28px] font-extrabold text-stone-900 tracking-tight leading-none">ESP32-CAM</h1>
+                    <p class="text-sm text-stone-400 mt-2">Surveillance visuelle en temps reel</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <div class="bg-white rounded-2xl p-6 border border-stone-100 shadow-sm">
+                        <p class="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-4">Derniere capture</p>
+                        <div class="relative rounded-2xl overflow-hidden bg-stone-100 aspect-video flex items-center justify-center border border-stone-100">
+                            <img id="espcam-image" src="" alt="Capture" class="w-full h-full object-cover hidden">
+                            <div id="espcam-placeholder" class="flex flex-col items-center gap-2 text-stone-300">
+                                <svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                                <span class="text-sm font-medium">Aucune capture</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center gap-2 mt-4 text-sm">
+                            <span id="espcam-dot" class="w-2.5 h-2.5 rounded-full bg-stone-300 inline-block"></span>
+                            <span id="espcam-status" class="font-semibold text-stone-400">En attente...</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 border border-stone-100 shadow-sm">
+                        <p class="text-[11px] font-bold text-stone-400 uppercase tracking-wider mb-4">Flux camera direct</p>
+                        <div class="relative rounded-2xl overflow-hidden bg-stone-100 aspect-video flex items-center justify-center border border-stone-100">
+                            <img id="camera-proxy-image" src="/api/iot/camera-proxy/" alt="Flux" class="w-full h-full object-contain"
+                                onerror="this.style.display='none';document.getElementById('camera-proxy-error').classList.remove('hidden')"
+                                onload="this.style.display='block';document.getElementById('camera-proxy-error').classList.add('hidden')">
+                            <div id="camera-proxy-error" class="hidden flex flex-col items-center gap-2 text-stone-300">
+                                <svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" d="M18.364 5.636a9 9 0 010 12.728M21 12a9 9 0 01-9 9M5.636 18.364a9 9 0 010-12.728M3 12a9 9 0 019-9"/>
+                                </svg>
+                                <span class="text-sm font-medium">Camera inaccessible</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 border border-stone-100 shadow-sm">
+                    <h3 class="text-sm font-bold text-stone-800 mb-4">Resultat d'analyse IA</h3>
+                    <div id="espcam-result-empty" class="text-center py-8 text-stone-300 font-medium text-sm">En attente d'une capture...</div>
+                    <div id="espcam-result-content" class="hidden">
+                        <div class="bg-stone-50 rounded-2xl p-6 space-y-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1">Maladie</p>
+                                    <p class="text-lg font-bold text-stone-900" id="espcam-disease">—</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1">Confiance</p>
+                                    <p class="text-lg font-bold text-stone-900" id="espcam-confidence">—</p>
+                                </div>
+                            </div>
+                            <div>
+                                <span id="espcam-severity-badge" class="inline-block px-3 py-1 rounded-lg text-xs font-bold">—</span>
+                            </div>
+                            <div class="border-t border-stone-200 pt-4">
+                                <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-1">Conseil</p>
+                                <p class="text-sm text-stone-600 leading-relaxed" id="espcam-advice">—</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hidden">
+                    <span id="espcam-last-capture"></span>
+                    <span id="espcam-refresh-info"></span>
+                </div>
+            </div>
+
+            <!-- ════════════════════════════════════════════════════ -->
+            <!-- PANEL: EXPORT                                       -->
+            <!-- ════════════════════════════════════════════════════ -->
+            <div id="panel-export" class="tab-panel hidden space-y-8">
+                <button onclick="switchTab('sensors')" class="flex items-center gap-2 text-sm font-semibold text-stone-500 hover:text-stone-900 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M15 19l-7-7 7-7"/></svg>
+                    Retour au tableau de bord
+                </button>
+
+                <div>
+                    <h1 class="text-[28px] font-extrabold text-stone-900 tracking-tight leading-none">Export Donnees</h1>
+                    <p class="text-sm text-stone-400 mt-2">Telecharger l'historique au format CSV</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-100 shadow-sm max-w-lg">
+                    <div class="space-y-4 mb-8">
+                        <div>
+                            <label class="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-2 block">Date debut</label>
+                            <input type="date" id="export-from" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm font-medium text-stone-700 focus:outline-none focus:border-forest-400 focus:ring-2 focus:ring-forest-100 transition-all">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-2 block">Date fin</label>
+                            <input type="date" id="export-to" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm font-medium text-stone-700 focus:outline-none focus:border-forest-400 focus:ring-2 focus:ring-forest-100 transition-all">
+                        </div>
+                    </div>
+                    <button onclick="downloadSensorCsv()"
+                        class="w-full py-3.5 bg-forest-600 text-white rounded-xl font-semibold text-sm hover:bg-forest-700 transition-colors shadow-sm flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Telecharger CSV Capteurs
+                    </button>
+                    <button onclick="downloadPlantsCsv()"
+                        class="w-full py-3.5 mt-3 bg-stone-100 text-stone-700 rounded-xl font-semibold text-sm hover:bg-stone-200 transition-colors flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        Telecharger CSV Plantes
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+    /* ── Mobile menu ── */
+    var btn = document.getElementById('menu-btn'),
+        ov = document.getElementById('menu-overlay'),
+        o = document.getElementById('menu-open'),
+        c = document.getElementById('menu-close');
+    btn.addEventListener('click', function() {
+        ov.classList.toggle('hidden');
+        o.classList.toggle('hidden');
+        c.classList.toggle('hidden');
+    });
+    function closeMenu() {
+        ov.classList.add('hidden');
+        o.classList.remove('hidden');
+        c.classList.add('hidden');
+    }
+
+    /* ── Soil moisture progress bar (MutationObserver) ── */
+    (function() {
+        var soilVal = document.getElementById('val-soil');
+        var soilBar = document.getElementById('bar-soil');
+        var soilText = document.getElementById('text-soil-bar');
+        if (!soilVal || !soilBar) return;
+
+        function updateSoilBar() {
+            var txt = soilVal.textContent.trim();
+            var v = parseFloat(txt);
+            if (!isNaN(v)) {
+                var pct = Math.min(100, Math.max(0, v));
+                soilBar.style.width = pct + '%';
+                if (soilText) soilText.textContent = pct.toFixed(0) + '%';
+                soilBar.className = 'h-full rounded-full transition-all duration-700 ease-out ' +
+                    (v < 30 ? 'bg-red-400' : v > 70 ? 'bg-blue-400' : 'bg-amber-500');
+            }
+        }
+
+        var observer = new MutationObserver(updateSoilBar);
+        observer.observe(soilVal, { childList: true, subtree: true, characterData: true });
+    })();
+    </script>
+
+    <script src="{% static 'core/js/dashboard-actions.js' %}?v=5&t={% now 'U' %}" defer></script>
+{% endblock %}

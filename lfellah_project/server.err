@@ -1,0 +1,975 @@
+Watching for file changes with StatReloader
+2026-06-01 22:46:47.373916: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-01 22:46:49.489945: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-01 22:46:50.216531: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+C:\Users\Admin\Desktop\lfellah_project\backend\core\security_middleware.py changed, reloading.
+Watching for file changes with StatReloader
+2026-06-01 22:51:09.946045: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-01 22:51:12.750393: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-01 22:51:13.623563: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+C:\Users\Admin\Desktop\lfellah_project\backend\core\views_finance.py changed, reloading.
+Watching for file changes with StatReloader
+2026-06-01 23:10:04.701314: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-01 23:10:07.654614: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-01 23:10:08.420173: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+C:\Users\Admin\Desktop\lfellah_project\backend\core\views_sensors.py changed, reloading.
+Watching for file changes with StatReloader
+2026-06-01 23:18:34.832737: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-01 23:18:38.068198: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-01 23:18:39.151453: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+C:\Users\Admin\Desktop\lfellah_project\backend\core\views_sensors.py changed, reloading.
+Watching for file changes with StatReloader
+2026-06-01 23:27:44.769008: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-01 23:27:47.373406: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-01 23:27:48.019441: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+[01/Jun/2026 23:40:38] "GET /api/iot/latest-capture/?t=1780353638443 HTTP/1.1" 200 317
+[01/Jun/2026 23:40:38] "GET /api/iot/sensor-chart/?limit=30&t=1780353638443 HTTP/1.1" 200 910
+[01/Jun/2026 23:40:38] "GET /api/iot/sensor-latest/?t=1780353638442 HTTP/1.1" 200 384
+[01/Jun/2026 23:40:43] "GET /api/iot/sensor-chart/?limit=30&t=1780353643444 HTTP/1.1" 200 910
+[01/Jun/2026 23:40:43] "GET /api/iot/sensor-latest/?t=1780353643444 HTTP/1.1" 200 384
+[01/Jun/2026 23:40:45] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226052
+[01/Jun/2026 23:40:45] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[01/Jun/2026 23:40:45] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_TCdDzWY.jpg HTTP/1.1" 200 15683
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_lspM1o1.jpg HTTP/1.1" 200 11366
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___RurNWwx.jpg HTTP/1.1" 200 39915
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___uLzyrkf.jpg HTTP/1.1" 200 39915
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___iXeKLXA.jpg HTTP/1.1" 200 39915
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_C3GdbTu.jpg HTTP/1.1" 200 7245
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___Iy1i7t0.jpg HTTP/1.1" 200 39915
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_T0RraIq.jpg HTTP/1.1" 200 9372
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_snfBjXl.jpg HTTP/1.1" 200 12877
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_iQWElNq.jpg HTTP/1.1" 200 7055
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_h0C0C6e.jpg HTTP/1.1" 200 13184
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_w0yrpKH.jpg HTTP/1.1" 200 17099
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_2ANNdEt.jpg HTTP/1.1" 200 12881
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_MZ8Gexk.jpg HTTP/1.1" 200 10696
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_fOY7gHq.jpg HTTP/1.1" 200 12126
+[01/Jun/2026 23:40:46] "GET /media/plant_scans/scan_GTtXDhm.jpg HTTP/1.1" 200 12159
+Not Found: /api/scan/78/
+[01/Jun/2026 23:40:46] "GET /api/scan/78/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:40:46] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:40:46] "GET /manifest.json HTTP/1.1" 200 1067
+[01/Jun/2026 23:40:46] "GET /api/iot/sensor-data/latest/?t=1780353646332 HTTP/1.1" 200 384
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:40:46] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:40:46] "GET /api/alerts/ HTTP/1.1" 200 2205
+[01/Jun/2026 23:40:51] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:40:53] "GET /api/iot/sensor-data/latest/?t=1780353653487 HTTP/1.1" 200 384
+[01/Jun/2026 23:40:55] "GET /api/alerts/ HTTP/1.1" 200 2205
+[01/Jun/2026 23:40:56] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:41:01] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+Not Found: /api/scan/78/
+[01/Jun/2026 23:41:02] "GET /api/scan/78/?lang=ar HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:41:02] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:41:06] "GET /api/latest-scan/?lang=ar HTTP/1.1" 200 456
+Not Found: /api/scan/78/
+[01/Jun/2026 23:41:09] "GET /api/scan/78/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:41:09] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:41:11] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:41:16] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:41:16] "GET /api/iot/sensor-data/latest/?t=1780353676344 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:21] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:41:26] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:41:30] "GET /api/iot/sensor-data/latest/?t=1780353690399 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:30] "GET /api/iot/sensor-data/latest/?t=1780353690943 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:31] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:41:31] "GET /api/iot/sensor-data/latest/?t=1780353691327 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:32] "GET /api/iot/sensor-data/latest/?t=1780353691976 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:32] "GET /api/iot/sensor-data/latest/?t=1780353692423 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:32] "GET /api/iot/sensor-data/latest/?t=1780353692847 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:33] "GET /api/iot/sensor-data/latest/?t=1780353693767 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:34] "GET /api/iot/sensor-data/latest/?t=1780353694152 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:34] "GET /api/iot/sensor-data/latest/?t=1780353694503 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:34] "GET /api/iot/sensor-data/latest/?t=1780353694848 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:35] "GET /api/iot/sensor-data/latest/?t=1780353695095 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:35] "GET /api/iot/sensor-data/latest/?t=1780353695335 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:36] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:41:38] "GET /api/iot/sensor-data/latest/?t=1780353698672 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:38] "GET /api/iot/sensor-data/latest/?t=1780353698895 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:39] "GET /api/iot/sensor-data/latest/?t=1780353699161 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:39] "GET /api/iot/sensor-data/latest/?t=1780353699536 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:40] "GET /api/iot/sensor-data/latest/?t=1780353699999 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:41] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:41:46] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:41:46] "GET /api/iot/sensor-data/latest/?t=1780353706341 HTTP/1.1" 200 384
+[01/Jun/2026 23:41:46] "GET /api/alerts/ HTTP/1.1" 200 2205
+Forbidden: /api/chatbot/
+[01/Jun/2026 23:41:47] "POST /api/chatbot/ HTTP/1.1" 403 45
+[01/Jun/2026 23:41:51] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:41:56] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:01] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:06] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:11] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:16] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:16] "GET /api/iot/sensor-data/latest/?t=1780353736334 HTTP/1.1" 200 384
+[01/Jun/2026 23:42:21] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:26] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:31] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:36] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:41] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:46] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:46] "GET /api/iot/sensor-data/latest/?t=1780353766358 HTTP/1.1" 200 384
+[01/Jun/2026 23:42:47] "GET /api/alerts/ HTTP/1.1" 200 2205
+[01/Jun/2026 23:42:51] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:42:56] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:43:01] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:43:06] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:43:11] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:43:16] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:43:16] "GET /api/iot/sensor-data/latest/?t=1780353796371 HTTP/1.1" 200 384
+[01/Jun/2026 23:43:46] "GET /api/iot/sensor-data/latest/?t=1780353826356 HTTP/1.1" 200 384
+[01/Jun/2026 23:43:47] "GET /api/alerts/ HTTP/1.1" 200 2205
+[01/Jun/2026 23:44:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:44:47] "GET /api/alerts/ HTTP/1.1" 200 2205
+[01/Jun/2026 23:45:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:45:15] "GET /api/iot/sensor-data/latest/?t=1780353915372 HTTP/1.1" 200 384
+[01/Jun/2026 23:45:47] "GET /api/alerts/ HTTP/1.1" 200 2205
+[01/Jun/2026 23:45:54] "GET /api/iot/sensor-chart/?limit=30&t=1780353953875 HTTP/1.1" 200 910
+[01/Jun/2026 23:45:54] "GET /api/iot/latest-capture/?t=1780353953874 HTTP/1.1" 200 315
+[01/Jun/2026 23:45:54] "GET /api/iot/sensor-chart/?limit=30&t=1780353953874 HTTP/1.1" 200 910
+[01/Jun/2026 23:45:54] "GET /api/iot/sensor-latest/?t=1780353953873 HTTP/1.1" 200 384
+[01/Jun/2026 23:45:58] "GET /api/iot/sensor-chart/?limit=30&t=1780353958879 HTTP/1.1" 200 910
+[01/Jun/2026 23:45:58] "GET /api/iot/sensor-latest/?t=1780353958876 HTTP/1.1" 200 384
+[01/Jun/2026 23:46:03] "GET /api/iot/sensor-chart/?limit=30&t=1780353963881 HTTP/1.1" 200 910
+[01/Jun/2026 23:46:03] "GET /api/iot/sensor-latest/?t=1780353963880 HTTP/1.1" 200 384
+[01/Jun/2026 23:46:03] "GET /api/iot/latest-capture/?t=1780353963874 HTTP/1.1" 200 315
+[01/Jun/2026 23:46:08] "GET /api/iot/sensor-chart/?limit=30&t=1780353968885 HTTP/1.1" 200 910
+[01/Jun/2026 23:46:08] "GET /api/iot/sensor-latest/?t=1780353968885 HTTP/1.1" 200 384
+[01/Jun/2026 23:46:13] "GET /api/iot/latest-capture/?t=1780353973877 HTTP/1.1" 200 315
+[01/Jun/2026 23:46:13] "GET /api/iot/sensor-chart/?limit=30&t=1780353973891 HTTP/1.1" 200 910
+[01/Jun/2026 23:46:13] "GET /api/iot/sensor-latest/?t=1780353973889 HTTP/1.1" 200 384
+[01/Jun/2026 23:46:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 456
+[01/Jun/2026 23:46:15] "GET /api/iot/sensor-data/latest/?t=1780353975369 HTTP/1.1" 200 384
+[01/Jun/2026 23:46:18] "GET /api/iot/sensor-chart/?limit=30&t=1780353978897 HTTP/1.1" 200 910
+[01/Jun/2026 23:46:18] "GET /api/iot/sensor-latest/?t=1780353978893 HTTP/1.1" 200 384
+[01/Jun/2026 23:46:23] "GET /api/iot/sensor-chart/?limit=30&t=1780353983899 HTTP/1.1" 200 910
+[01/Jun/2026 23:46:23] "GET /api/iot/sensor-latest/?t=1780353983897 HTTP/1.1" 200 384
+[01/Jun/2026 23:46:23] "GET /api/iot/latest-capture/?t=1780353983881 HTTP/1.1" 200 232
+[01/Jun/2026 23:46:28] "GET /api/iot/sensor-chart/?limit=30&t=1780353988906 HTTP/1.1" 200 910
+[01/Jun/2026 23:46:28] "GET /api/iot/sensor-latest/?t=1780353988902 HTTP/1.1" 200 384
+[01/Jun/2026 23:46:29] "POST /api/upload/ HTTP/1.1" 201 357
+[01/Jun/2026 23:46:29] "GET /api/scans/?limit=10&t=1780353990144 HTTP/1.1" 200 4585
+[01/Jun/2026 23:46:41] "GET /api/scans/?limit=10&t=1780353990144 HTTP/1.1" 200 4585
+[01/Jun/2026 23:46:41] "GET /api/iot/latest-capture/?t=1780354002032 HTTP/1.1" 200 399
+[01/Jun/2026 23:46:41] "GET /api/iot/sensor-chart/?limit=30&t=1780354002033 HTTP/1.1" 200 910
+[01/Jun/2026 23:46:41] "GET /api/iot/sensor-latest/?t=1780354002033 HTTP/1.1" 200 384
+[01/Jun/2026 23:46:46] "GET /api/iot/sensor-latest/?t=1780354007034 HTTP/1.1" 200 384
+[01/Jun/2026 23:46:46] "GET /api/iot/sensor-chart/?limit=30&t=1780354007038 HTTP/1.1" 200 910
+[01/Jun/2026 23:46:47] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:46:51] "GET /api/iot/latest-capture/?t=1780354012034 HTTP/1.1" 200 399
+[01/Jun/2026 23:46:51] "GET /api/iot/sensor-latest/?t=1780354012037 HTTP/1.1" 200 384
+[01/Jun/2026 23:46:51] "GET /api/iot/sensor-chart/?limit=30&t=1780354012038 HTTP/1.1" 200 910
+[01/Jun/2026 23:46:53] "GET /api/iot/sensor-chart/?limit=30&t=1780354013875 HTTP/1.1" 200 910
+[01/Jun/2026 23:47:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:47:15] "GET /api/iot/sensor-data/latest/?t=1780354035368 HTTP/1.1" 200 384
+Not Found: /dashboard-iot/undefined
+[01/Jun/2026 23:47:15] "GET /dashboard-iot/undefined HTTP/1.1" 404 15907
+[01/Jun/2026 23:47:15] "GET / HTTP/1.1" 200 24638
+[01/Jun/2026 23:47:36] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:47:41] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:47:46] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:47:46] "GET /api/iot/sensor-data/latest/?t=1780354066364 HTTP/1.1" 200 384
+[01/Jun/2026 23:47:47] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:47:51] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:47:56] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:48:01] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:48:06] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:48:11] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:48:16] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:48:16] "GET /api/iot/sensor-data/latest/?t=1780354096358 HTTP/1.1" 200 384
+[01/Jun/2026 23:48:21] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:48:26] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:48:31] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:48:36] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:49:15] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:49:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:49:15] "GET /api/iot/sensor-data/latest/?t=1780354155363 HTTP/1.1" 200 384
+[01/Jun/2026 23:50:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:50:15] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:50:15] "GET /api/iot/sensor-data/latest/?t=1780354215379 HTTP/1.1" 200 384
+[01/Jun/2026 23:51:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:51:15] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:51:15] "GET /api/iot/sensor-data/latest/?t=1780354275370 HTTP/1.1" 200 384
+[01/Jun/2026 23:51:32] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:51:36] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:51:36] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[01/Jun/2026 23:51:36] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[01/Jun/2026 23:51:36] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[01/Jun/2026 23:51:36] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[01/Jun/2026 23:51:36] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[01/Jun/2026 23:51:36] "GET /media/plant_scans/scan_TCdDzWY.jpg HTTP/1.1" 200 15683
+[01/Jun/2026 23:51:36] "GET /media/plant_scans/scan_lspM1o1.jpg HTTP/1.1" 200 11366
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___RurNWwx.jpg HTTP/1.1" 200 39915
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___uLzyrkf.jpg HTTP/1.1" 200 39915
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___iXeKLXA.jpg HTTP/1.1" 200 39915
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/scan_C3GdbTu.jpg HTTP/1.1" 200 7245
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___Iy1i7t0.jpg HTTP/1.1" 200 39915
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/scan_T0RraIq.jpg HTTP/1.1" 200 9372
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/scan_snfBjXl.jpg HTTP/1.1" 200 12877
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/scan_iQWElNq.jpg HTTP/1.1" 200 7055
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/scan_h0C0C6e.jpg HTTP/1.1" 200 13184
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/scan_w0yrpKH.jpg HTTP/1.1" 200 17099
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/scan_2ANNdEt.jpg HTTP/1.1" 200 12881
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/scan_MZ8Gexk.jpg HTTP/1.1" 200 10696
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/scan_fOY7gHq.jpg HTTP/1.1" 200 12126
+[01/Jun/2026 23:51:37] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+Not Found: /api/scan/79/
+[01/Jun/2026 23:51:37] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:51:37] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:51:37] "GET /manifest.json HTTP/1.1" 200 1067
+[01/Jun/2026 23:51:37] "GET /api/iot/sensor-data/latest/?t=1780354297358 HTTP/1.1" 200 384
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:51:37] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:51:37] "GET /api/alerts/ HTTP/1.1" 200 2415
+Not Found: /favicon.ico
+[01/Jun/2026 23:51:37] "GET /favicon.ico HTTP/1.1" 404 15871
+[01/Jun/2026 23:51:41] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+Not Found: /api/scan/79/
+[01/Jun/2026 23:51:41] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:51:41] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:51:41] "GET /manifest.json HTTP/1.1" 200 1067
+[01/Jun/2026 23:51:41] "GET /api/iot/sensor-data/latest/?t=1780354301941 HTTP/1.1" 200 384
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:51:41] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:51:42] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:51:42] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+Not Found: /api/scan/79/
+[01/Jun/2026 23:51:43] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:51:43] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:51:43] "GET /manifest.json HTTP/1.1" 200 1067
+[01/Jun/2026 23:51:43] "GET /api/iot/sensor-data/latest/?t=1780354303100 HTTP/1.1" 200 384
+[01/Jun/2026 23:51:43] "GET /api/alerts/ HTTP/1.1" 200 2415
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:51:43] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:51:43] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+Not Found: /api/scan/79/
+[01/Jun/2026 23:51:43] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:51:43] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:51:43] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:51:43] "GET /manifest.json HTTP/1.1" 200 1067
+[01/Jun/2026 23:51:43] "GET /api/iot/sensor-data/latest/?t=1780354303889 HTTP/1.1" 200 384
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:51:43] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:51:48] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:51:53] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:51:58] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:03] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:08] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:13] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:13] "GET /api/iot/sensor-data/latest/?t=1780354333896 HTTP/1.1" 200 384
+[01/Jun/2026 23:52:18] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:23] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:28] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:33] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:38] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:43] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:43] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:52:43] "GET /api/iot/sensor-data/latest/?t=1780354363895 HTTP/1.1" 200 384
+[01/Jun/2026 23:52:48] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:53] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:52:58] "GET /api/map-data/ HTTP/1.1" 200 2847
+[01/Jun/2026 23:52:58] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:53:01] "GET /api/map-data/ HTTP/1.1" 200 2847
+[01/Jun/2026 23:53:03] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:53:08] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:53:13] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:53:13] "GET /api/iot/sensor-data/latest/?t=1780354393892 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:18] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:53:23] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:53:27] "GET /api/iot/sensor-data/latest/?t=1780354407751 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:28] "GET /api/iot/sensor-data/latest/?t=1780354408448 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:28] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:53:28] "GET /api/iot/sensor-data/latest/?t=1780354408927 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:29] "GET /api/iot/sensor-data/latest/?t=1780354409712 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:30] "GET /api/iot/sensor-data/latest/?t=1780354410047 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:30] "GET /api/iot/sensor-data/latest/?t=1780354410416 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:30] "GET /api/iot/sensor-data/latest/?t=1780354410703 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:31] "GET /api/iot/sensor-data/latest/?t=1780354411111 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:31] "GET /api/iot/sensor-data/latest/?t=1780354411416 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:31] "GET /api/iot/sensor-data/latest/?t=1780354411696 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:31] "GET /api/iot/sensor-data/latest/?t=1780354411977 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:32] "GET /api/iot/sensor-data/latest/?t=1780354412265 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:32] "GET /api/iot/sensor-data/latest/?t=1780354412504 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:32] "GET /api/iot/sensor-data/latest/?t=1780354412808 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:33] "GET /api/iot/sensor-data/latest/?t=1780354413104 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:33] "GET /api/iot/sensor-data/latest/?t=1780354413348 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:33] "GET /api/iot/sensor-data/latest/?t=1780354413547 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:33] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:53:33] "GET /api/iot/sensor-data/latest/?t=1780354413952 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:34] "GET /api/iot/sensor-data/latest/?t=1780354414137 HTTP/1.1" 200 384
+[01/Jun/2026 23:53:35] "POST /api/iot/sensor-ingest/ HTTP/1.1" 201 125
+[01/Jun/2026 23:53:36] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[01/Jun/2026 23:53:36] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 304 0
+Not Found: /api/scan/79/
+[01/Jun/2026 23:53:36] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:53:36] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:53:36] "GET /manifest.json HTTP/1.1" 200 1067
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:53:36] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:53:36] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:53:36] "GET /api/iot/sensor-data/latest/?t=1780354416595 HTTP/1.1" 200 289
+[01/Jun/2026 23:53:36] "POST /api/iot/sensor-ingest/ HTTP/1.1" 201 125
+[01/Jun/2026 23:53:39] "POST /api/iot/sensor-ingest/ HTTP/1.1" 201 125
+[01/Jun/2026 23:53:41] "POST /api/iot/sensor-ingest/ HTTP/1.1" 201 125
+[01/Jun/2026 23:53:41] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:53:41] "GET /api/iot/sensor-data/latest/?t=1780354421881 HTTP/1.1" 200 289
+[01/Jun/2026 23:53:42] "GET /api/iot/sensor-data/latest/?t=1780354422672 HTTP/1.1" 200 289
+[01/Jun/2026 23:53:43] "POST /api/iot/sensor-ingest/ HTTP/1.1" 201 125
+[01/Jun/2026 23:53:44] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+Not Found: /api/scan/79/
+[01/Jun/2026 23:53:44] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:53:44] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:53:44] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:53:44] "GET /manifest.json HTTP/1.1" 200 1067
+[01/Jun/2026 23:53:44] "GET /api/iot/sensor-data/latest/?t=1780354424789 HTTP/1.1" 200 289
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:53:44] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:53:45] "POST /api/iot/sensor-ingest/ HTTP/1.1" 201 125
+[01/Jun/2026 23:53:45] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+Not Found: /api/scan/79/
+[01/Jun/2026 23:53:45] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:53:45] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:53:45] "GET /manifest.json HTTP/1.1" 200 1067
+[01/Jun/2026 23:53:45] "GET /api/alerts/ HTTP/1.1" 200 2415
+Not Found: /api/esp32-config/
+[01/Jun/2026 23:53:45] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[01/Jun/2026 23:53:45] "GET /api/iot/sensor-data/latest/?t=1780354425915 HTTP/1.1" 200 289
+[01/Jun/2026 23:53:47] "POST /api/iot/sensor-ingest/ HTTP/1.1" 201 125
+[01/Jun/2026 23:53:49] "POST /api/iot/sensor-ingest/ HTTP/1.1" 201 125
+[01/Jun/2026 23:53:50] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:53:51] "POST /api/iot/sensor-ingest/ HTTP/1.1" 201 125
+[01/Jun/2026 23:53:55] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:00] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:05] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:10] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:15] "GET /api/iot/sensor-data/latest/?t=1780354455920 HTTP/1.1" 200 289
+[01/Jun/2026 23:54:20] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:25] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:30] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:35] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:40] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:45] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:45] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:54:45] "GET /api/iot/sensor-data/latest/?t=1780354485923 HTTP/1.1" 200 289
+[01/Jun/2026 23:54:50] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:54:56] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:55:01] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:55:06] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:55:11] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:55:16] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:55:16] "GET /api/iot/sensor-data/latest/?t=1780354516370 HTTP/1.1" 200 382
+[01/Jun/2026 23:55:21] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:55:26] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:55:31] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:55:36] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:55:41] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:55:46] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:55:46] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:55:46] "GET /api/iot/sensor-data/latest/?t=1780354546366 HTTP/1.1" 200 383
+[01/Jun/2026 23:55:51] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:56:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:56:16] "GET /api/iot/sensor-data/latest/?t=1780354576368 HTTP/1.1" 200 383
+[01/Jun/2026 23:56:46] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:56:46] "GET /api/iot/sensor-data/latest/?t=1780354606364 HTTP/1.1" 200 383
+[01/Jun/2026 23:57:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:57:46] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:58:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:58:15] "GET /api/iot/sensor-data/latest/?t=1780354695361 HTTP/1.1" 200 383
+[01/Jun/2026 23:58:46] "GET /api/alerts/ HTTP/1.1" 200 2415
+[01/Jun/2026 23:59:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[01/Jun/2026 23:59:15] "GET /api/iot/sensor-data/latest/?t=1780354755366 HTTP/1.1" 200 383
+[01/Jun/2026 23:59:46] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:00:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:00:15] "GET /api/iot/sensor-data/latest/?t=1780354815365 HTTP/1.1" 200 383
+[02/Jun/2026 00:01:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:01:15] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:01:15] "GET /api/iot/sensor-data/latest/?t=1780354875363 HTTP/1.1" 200 383
+[02/Jun/2026 00:02:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:02:15] "GET /api/iot/sensor-data/latest/?t=1780354935410 HTTP/1.1" 200 383
+[02/Jun/2026 00:02:15] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:02:46] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:02:46] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:02:46] "GET /api/iot/sensor-data/latest/?t=1780354966747 HTTP/1.1" 200 383
+[02/Jun/2026 00:02:48] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:02:48] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 304 0
+Not Found: /api/scan/79/
+[02/Jun/2026 00:02:48] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:02:48] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:02:48] "GET /manifest.json HTTP/1.1" 200 1067
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:02:48] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:02:48] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:02:48] "GET /api/iot/sensor-data/latest/?t=1780354968748 HTTP/1.1" 200 383
+[02/Jun/2026 00:02:50] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+Not Found: /api/scan/79/
+[02/Jun/2026 00:02:50] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:02:50] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:02:50] "GET /manifest.json HTTP/1.1" 200 1067
+[02/Jun/2026 00:02:50] "GET /api/iot/sensor-data/latest/?t=1780354970469 HTTP/1.1" 200 383
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:02:50] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:02:50] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:02:53] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:02:53] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[02/Jun/2026 00:02:53] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[02/Jun/2026 00:02:53] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[02/Jun/2026 00:02:53] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/scan_TCdDzWY.jpg HTTP/1.1" 200 15683
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/scan_lspM1o1.jpg HTTP/1.1" 200 11366
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___RurNWwx.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___uLzyrkf.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___iXeKLXA.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/scan_C3GdbTu.jpg HTTP/1.1" 200 7245
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___Iy1i7t0.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/scan_T0RraIq.jpg HTTP/1.1" 200 9372
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/scan_snfBjXl.jpg HTTP/1.1" 200 12877
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/scan_iQWElNq.jpg HTTP/1.1" 200 7055
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/scan_h0C0C6e.jpg HTTP/1.1" 200 13184
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/scan_w0yrpKH.jpg HTTP/1.1" 200 17099
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/scan_2ANNdEt.jpg HTTP/1.1" 200 12881
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/scan_MZ8Gexk.jpg HTTP/1.1" 200 10696
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/scan_fOY7gHq.jpg HTTP/1.1" 200 12126
+[02/Jun/2026 00:02:54] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+Not Found: /api/scan/79/
+[02/Jun/2026 00:02:54] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:02:54] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:02:54] "GET /manifest.json HTTP/1.1" 200 1067
+[02/Jun/2026 00:02:54] "GET /api/iot/sensor-data/latest/?t=1780354974415 HTTP/1.1" 200 383
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:02:54] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:02:54] "GET /api/alerts/ HTTP/1.1" 200 2415
+Not Found: /favicon.ico
+[02/Jun/2026 00:02:54] "GET /favicon.ico HTTP/1.1" 404 15871
+[02/Jun/2026 00:02:55] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[02/Jun/2026 00:02:55] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[02/Jun/2026 00:02:55] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[02/Jun/2026 00:02:55] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[02/Jun/2026 00:02:55] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[02/Jun/2026 00:02:55] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/scan_TCdDzWY.jpg HTTP/1.1" 200 15683
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/scan_lspM1o1.jpg HTTP/1.1" 200 11366
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___RurNWwx.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___uLzyrkf.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___iXeKLXA.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/scan_C3GdbTu.jpg HTTP/1.1" 200 7245
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___Iy1i7t0.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/scan_T0RraIq.jpg HTTP/1.1" 200 9372
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/scan_snfBjXl.jpg HTTP/1.1" 200 12877
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/scan_iQWElNq.jpg HTTP/1.1" 200 7055
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/scan_h0C0C6e.jpg HTTP/1.1" 200 13184
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/scan_w0yrpKH.jpg HTTP/1.1" 200 17099
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/scan_2ANNdEt.jpg HTTP/1.1" 200 12881
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/scan_MZ8Gexk.jpg HTTP/1.1" 200 10696
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/scan_fOY7gHq.jpg HTTP/1.1" 200 12126
+[02/Jun/2026 00:02:56] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+Not Found: /api/scan/79/
+[02/Jun/2026 00:02:56] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:02:56] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:02:56] "GET /manifest.json HTTP/1.1" 200 1067
+[02/Jun/2026 00:02:56] "GET /api/iot/sensor-data/latest/?t=1780354976339 HTTP/1.1" 200 383
+[02/Jun/2026 00:02:56] "GET /api/alerts/ HTTP/1.1" 200 2415
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:02:56] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+Not Found: /favicon.ico
+[02/Jun/2026 00:02:56] "GET /favicon.ico HTTP/1.1" 404 15871
+[02/Jun/2026 00:03:00] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+Not Found: /api/scan/79/
+[02/Jun/2026 00:03:00] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:03:00] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:03:00] "GET /manifest.json HTTP/1.1" 200 1067
+[02/Jun/2026 00:03:00] "GET /api/iot/sensor-data/latest/?t=1780354980936 HTTP/1.1" 200 383
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:03:00] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:03:00] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:03:05] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:03:10] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:03:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:03:20] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:03:25] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:03:30] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:03:30] "GET /api/iot/sensor-data/latest/?t=1780355010948 HTTP/1.1" 200 383
+[02/Jun/2026 00:03:35] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:03:40] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:03:45] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:03:50] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:03:55] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:00] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:00] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:04:00] "GET /api/iot/sensor-data/latest/?t=1780355040948 HTTP/1.1" 200 383
+[02/Jun/2026 00:04:05] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:10] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:20] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:26] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:31] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:31] "GET /api/iot/sensor-data/latest/?t=1780355071360 HTTP/1.1" 200 383
+[02/Jun/2026 00:04:36] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:41] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:46] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:51] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:04:56] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:05:01] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:05:01] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:05:01] "GET /api/iot/sensor-data/latest/?t=1780355101362 HTTP/1.1" 200 383
+[02/Jun/2026 00:05:06] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:05:11] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:05:16] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:05:21] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:05:31] "GET /api/iot/sensor-data/latest/?t=1780355131360 HTTP/1.1" 200 383
+[02/Jun/2026 00:05:48] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:05:49] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:05:49] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 304 0
+Not Found: /api/scan/79/
+[02/Jun/2026 00:05:49] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:05:49] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:05:49] "GET /manifest.json HTTP/1.1" 200 1067
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:05:49] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:05:49] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:05:49] "GET /api/iot/sensor-data/latest/?t=1780355149470 HTTP/1.1" 200 383
+[02/Jun/2026 00:05:50] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+Not Found: /api/scan/79/
+[02/Jun/2026 00:05:50] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:05:50] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:05:50] "GET /manifest.json HTTP/1.1" 200 1067
+[02/Jun/2026 00:05:50] "GET /api/alerts/ HTTP/1.1" 200 2415
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:05:51] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:05:51] "GET /api/iot/sensor-data/latest/?t=1780355150958 HTTP/1.1" 200 383
+[02/Jun/2026 00:05:55] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:05:56] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:05:56] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[02/Jun/2026 00:05:56] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[02/Jun/2026 00:05:56] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[02/Jun/2026 00:05:56] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/scan_lspM1o1.jpg HTTP/1.1" 200 11366
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/scan_TCdDzWY.jpg HTTP/1.1" 200 15683
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/scan_C3GdbTu.jpg HTTP/1.1" 200 7245
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___iXeKLXA.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___uLzyrkf.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___RurNWwx.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/scan_T0RraIq.jpg HTTP/1.1" 200 9372
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___Iy1i7t0.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/scan_iQWElNq.jpg HTTP/1.1" 200 7055
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/scan_snfBjXl.jpg HTTP/1.1" 200 12877
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/scan_2ANNdEt.jpg HTTP/1.1" 200 12881
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/scan_w0yrpKH.jpg HTTP/1.1" 200 17099
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/scan_h0C0C6e.jpg HTTP/1.1" 200 13184
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/scan_MZ8Gexk.jpg HTTP/1.1" 200 10696
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/scan_fOY7gHq.jpg HTTP/1.1" 200 12126
+[02/Jun/2026 00:05:57] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+Not Found: /api/scan/79/
+[02/Jun/2026 00:05:57] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:05:57] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:05:57] "GET /manifest.json HTTP/1.1" 200 1067
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:05:57] "GET /api/iot/sensor-data/latest/?t=1780355157152 HTTP/1.1" 200 383
+[02/Jun/2026 00:05:57] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:05:57] "GET /api/alerts/ HTTP/1.1" 200 2415
+Not Found: /favicon.ico
+[02/Jun/2026 00:05:57] "GET /favicon.ico HTTP/1.1" 404 15871
+[02/Jun/2026 00:06:02] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:07] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:12] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:17] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:22] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:27] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:27] "GET /api/iot/sensor-data/latest/?t=1780355187359 HTTP/1.1" 200 383
+[02/Jun/2026 00:06:32] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:37] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:42] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:47] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:52] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:57] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:06:57] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:06:57] "GET /api/iot/sensor-data/latest/?t=1780355217358 HTTP/1.1" 200 383
+[02/Jun/2026 00:07:02] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:07:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:07:27] "GET /api/iot/sensor-data/latest/?t=1780355247369 HTTP/1.1" 200 383
+[02/Jun/2026 00:07:57] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:07:57] "GET /api/iot/sensor-data/latest/?t=1780355277370 HTTP/1.1" 200 383
+[02/Jun/2026 00:08:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:08:27] "GET /api/iot/sensor-data/latest/?t=1780355307368 HTTP/1.1" 200 383
+[02/Jun/2026 00:08:57] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:08:57] "GET /api/iot/sensor-data/latest/?t=1780355337369 HTTP/1.1" 200 383
+[02/Jun/2026 00:09:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:09:57] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:10:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:10:15] "GET /api/iot/sensor-data/latest/?t=1780355415373 HTTP/1.1" 200 383
+[02/Jun/2026 00:10:57] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:11:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:11:15] "GET /api/iot/sensor-data/latest/?t=1780355475367 HTTP/1.1" 200 384
+[02/Jun/2026 00:11:57] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:12:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:12:15] "GET /api/iot/sensor-data/latest/?t=1780355535368 HTTP/1.1" 200 384
+[02/Jun/2026 00:12:36] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:12:36] "GET /api/iot/sensor-data/latest/?t=1780355556793 HTTP/1.1" 200 384
+[02/Jun/2026 00:12:37] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:12:41] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:12:41] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[02/Jun/2026 00:12:41] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[02/Jun/2026 00:12:41] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[02/Jun/2026 00:12:41] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/scan_TCdDzWY.jpg HTTP/1.1" 200 15683
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/scan_lspM1o1.jpg HTTP/1.1" 200 11366
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___RurNWwx.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___uLzyrkf.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___iXeKLXA.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/scan_C3GdbTu.jpg HTTP/1.1" 200 7245
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___Iy1i7t0.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/scan_T0RraIq.jpg HTTP/1.1" 200 9372
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/scan_snfBjXl.jpg HTTP/1.1" 200 12877
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/scan_iQWElNq.jpg HTTP/1.1" 200 7055
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/scan_h0C0C6e.jpg HTTP/1.1" 200 13184
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/scan_w0yrpKH.jpg HTTP/1.1" 200 17099
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/scan_2ANNdEt.jpg HTTP/1.1" 200 12881
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/scan_MZ8Gexk.jpg HTTP/1.1" 200 10696
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/scan_fOY7gHq.jpg HTTP/1.1" 200 12126
+[02/Jun/2026 00:12:42] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+Not Found: /api/scan/79/
+[02/Jun/2026 00:12:42] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:12:42] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:12:42] "GET /manifest.json HTTP/1.1" 200 1067
+[02/Jun/2026 00:12:42] "GET /api/iot/sensor-data/latest/?t=1780355562744 HTTP/1.1" 200 384
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:12:42] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:12:42] "GET /api/alerts/ HTTP/1.1" 200 2415
+Not Found: /favicon.ico
+[02/Jun/2026 00:12:42] "GET /favicon.ico HTTP/1.1" 404 15871
+[02/Jun/2026 00:12:47] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:12:52] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:12:57] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:02] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:07] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:12] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:12] "GET /api/iot/sensor-data/latest/?t=1780355592756 HTTP/1.1" 200 384
+[02/Jun/2026 00:13:17] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:17] "GET /manifest.json HTTP/1.1" 200 1067
+[02/Jun/2026 00:13:22] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:27] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:32] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:37] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:43] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:43] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:13:43] "GET /api/iot/sensor-data/latest/?t=1780355623356 HTTP/1.1" 200 384
+[02/Jun/2026 00:13:48] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:53] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:13:58] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:14:03] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:14:08] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:14:13] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:14:13] "GET /api/iot/sensor-data/latest/?t=1780355653360 HTTP/1.1" 200 384
+[02/Jun/2026 00:14:18] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:14:23] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:14:28] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:14:33] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:14:43] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:14:43] "GET /api/iot/sensor-data/latest/?t=1780355683369 HTTP/1.1" 200 384
+[02/Jun/2026 00:15:13] "GET /api/iot/sensor-data/latest/?t=1780355713371 HTTP/1.1" 200 384
+[02/Jun/2026 00:15:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:15:43] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:15:43] "GET /api/iot/sensor-data/latest/?t=1780355743374 HTTP/1.1" 200 384
+[02/Jun/2026 00:16:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:16:15] "GET /api/iot/sensor-data/latest/?t=1780355775396 HTTP/1.1" 200 384
+[02/Jun/2026 00:16:43] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:17:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:17:15] "GET /api/iot/sensor-data/latest/?t=1780355835360 HTTP/1.1" 200 384
+[02/Jun/2026 00:17:43] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:18:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:18:15] "GET /api/iot/sensor-data/latest/?t=1780355895374 HTTP/1.1" 200 384
+[02/Jun/2026 00:18:43] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:19:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:19:15] "GET /api/iot/sensor-data/latest/?t=1780355955362 HTTP/1.1" 200 384
+[02/Jun/2026 00:20:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:20:15] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:20:15] "GET /api/iot/sensor-data/latest/?t=1780356015367 HTTP/1.1" 200 384
+[02/Jun/2026 00:20:57] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:20:57] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:20:57] "GET /api/iot/sensor-data/latest/?t=1780356057825 HTTP/1.1" 200 384
+[02/Jun/2026 00:21:00] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:21:00] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 304 0
+Not Found: /api/scan/79/
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:21:00] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+[02/Jun/2026 00:21:00] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:21:00] "GET /manifest.json HTTP/1.1" 200 1067
+[02/Jun/2026 00:21:00] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:21:00] "GET /api/iot/sensor-data/latest/?t=1780356060656 HTTP/1.1" 200 384
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:21:00] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:21:05] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:21:10] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:21:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:21:19] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:21:19] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[02/Jun/2026 00:21:19] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[02/Jun/2026 00:21:19] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[02/Jun/2026 00:21:19] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/scan_TCdDzWY.jpg HTTP/1.1" 200 15683
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/scan_lspM1o1.jpg HTTP/1.1" 200 11366
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___iXeKLXA.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___RurNWwx.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/scan_C3GdbTu.jpg HTTP/1.1" 200 7245
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___uLzyrkf.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/scan_snfBjXl.jpg HTTP/1.1" 200 12877
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/scan_T0RraIq.jpg HTTP/1.1" 200 9372
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/scan_iQWElNq.jpg HTTP/1.1" 200 7055
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___Iy1i7t0.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/scan_h0C0C6e.jpg HTTP/1.1" 200 13184
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/scan_fOY7gHq.jpg HTTP/1.1" 200 12126
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/scan_2ANNdEt.jpg HTTP/1.1" 200 12881
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/scan_MZ8Gexk.jpg HTTP/1.1" 200 10696
+[02/Jun/2026 00:21:20] "GET /media/plant_scans/scan_w0yrpKH.jpg HTTP/1.1" 200 17099
+Not Found: /api/scan/79/
+[02/Jun/2026 00:21:20] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:21:20] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:21:20] "GET /manifest.json HTTP/1.1" 200 1067
+[02/Jun/2026 00:21:20] "GET /api/iot/sensor-data/latest/?t=1780356080373 HTTP/1.1" 200 384
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:21:20] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:21:20] "GET /api/alerts/ HTTP/1.1" 200 2415
+Not Found: /favicon.ico
+[02/Jun/2026 00:21:20] "GET /favicon.ico HTTP/1.1" 404 15871
+[02/Jun/2026 00:21:21] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_TCdDzWY.jpg HTTP/1.1" 200 15683
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_lspM1o1.jpg HTTP/1.1" 200 11366
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___RurNWwx.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_T0RraIq.jpg HTTP/1.1" 200 9372
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_C3GdbTu.jpg HTTP/1.1" 200 7245
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_snfBjXl.jpg HTTP/1.1" 200 12877
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___iXeKLXA.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___Iy1i7t0.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___uLzyrkf.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_iQWElNq.jpg HTTP/1.1" 200 7055
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_MZ8Gexk.jpg HTTP/1.1" 200 10696
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_h0C0C6e.jpg HTTP/1.1" 200 13184
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_2ANNdEt.jpg HTTP/1.1" 200 12881
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_w0yrpKH.jpg HTTP/1.1" 200 17099
+[02/Jun/2026 00:21:21] "GET /media/plant_scans/scan_fOY7gHq.jpg HTTP/1.1" 200 12126
+Not Found: /api/scan/79/
+[02/Jun/2026 00:21:21] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:21:21] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:21:21] "GET /manifest.json HTTP/1.1" 200 1067
+[02/Jun/2026 00:21:22] "GET /api/iot/sensor-data/latest/?t=1780356081999 HTTP/1.1" 200 384
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:21:22] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:21:22] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+Not Found: /favicon.ico
+[02/Jun/2026 00:21:22] "GET /favicon.ico HTTP/1.1" 404 15871
+[02/Jun/2026 00:21:22] "GET /dashboard-iot/?tab=sensors HTTP/1.1" 200 226297
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/IMG_6421.jpg HTTP/1.1" 200 1061767
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/IMG_5004.jpeg HTTP/1.1" 200 2718711
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_nVM4HP4.jpg HTTP/1.1" 200 17749
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_3Qih45p.jpg HTTP/1.1" 200 29033
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_TCdDzWY.jpg HTTP/1.1" 200 15683
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_lspM1o1.jpg HTTP/1.1" 200 11366
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___RurNWwx.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___uLzyrkf.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___iXeKLXA.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_iQWElNq.jpg HTTP/1.1" 200 7055
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_C3GdbTu.jpg HTTP/1.1" 200 7245
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_T0RraIq.jpg HTTP/1.1" 200 9372
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/capture.jpg HTTP/1.1" 200 125
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_snfBjXl.jpg HTTP/1.1" 200 12877
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/Pommier___comment_le_planter_et_lentretenir___Iy1i7t0.jpg HTTP/1.1" 200 39915
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_2ANNdEt.jpg HTTP/1.1" 200 12881
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_fOY7gHq.jpg HTTP/1.1" 200 12126
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_w0yrpKH.jpg HTTP/1.1" 200 17099
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_MZ8Gexk.jpg HTTP/1.1" 200 10696
+[02/Jun/2026 00:21:22] "GET /media/plant_scans/scan_h0C0C6e.jpg HTTP/1.1" 200 13184
+[02/Jun/2026 00:21:23] "GET /manifest.json HTTP/1.1" 200 1067
+Not Found: /api/scan/79/
+[02/Jun/2026 00:21:23] "GET /api/scan/79/?lang=fr HTTP/1.1" 404 22425
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:21:23] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+[02/Jun/2026 00:21:23] "GET /api/iot/sensor-data/latest/?t=1780356083118 HTTP/1.1" 200 384
+Not Found: /api/esp32-config/
+[02/Jun/2026 00:21:23] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:21:23] "GET /api/esp32-config/ HTTP/1.1" 404 22432
+Not Found: /favicon.ico
+[02/Jun/2026 00:21:23] "GET /favicon.ico HTTP/1.1" 404 15871
+[02/Jun/2026 00:21:28] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:21:33] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:21:38] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:21:43] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:21:48] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:21:53] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:21:53] "GET /api/iot/sensor-data/latest/?t=1780356113359 HTTP/1.1" 200 384
+[02/Jun/2026 00:21:58] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:22:03] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:22:08] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:22:13] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:22:18] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:22:23] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:22:23] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:22:23] "GET /api/iot/sensor-data/latest/?t=1780356143366 HTTP/1.1" 200 384
+[02/Jun/2026 00:22:28] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:22:53] "GET /api/iot/sensor-data/latest/?t=1780356173362 HTTP/1.1" 200 384
+[02/Jun/2026 00:23:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:23:23] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:23:23] "GET /api/iot/sensor-data/latest/?t=1780356203359 HTTP/1.1" 200 384
+[02/Jun/2026 00:23:53] "GET /api/iot/sensor-data/latest/?t=1780356233359 HTTP/1.1" 200 384
+[02/Jun/2026 00:24:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:24:23] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:24:23] "GET /api/iot/sensor-data/latest/?t=1780356263359 HTTP/1.1" 200 384
+[02/Jun/2026 00:25:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:25:15] "GET /api/iot/sensor-data/latest/?t=1780356315366 HTTP/1.1" 200 384
+[02/Jun/2026 00:25:23] "GET /api/alerts/ HTTP/1.1" 200 2415
+[02/Jun/2026 00:26:15] "GET /api/latest-scan/?lang=fr HTTP/1.1" 200 540
+[02/Jun/2026 00:26:15] "GET /api/iot/sensor-data/latest/?t=1780356375376 HTTP/1.1" 200 384
+[02/Jun/2026 00:26:23] "GET /api/alerts/ HTTP/1.1" 200 2415
+C:\Users\Admin\Desktop\lfellah_project\backend\core\views_auth.py changed, reloading.
+Watching for file changes with StatReloader
+2026-06-02 00:26:51.596282: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:27:35.751589: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:27:46.563375: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+C:\Users\Admin\Desktop\lfellah_project\backend\core\views_plants.py changed, reloading.
+Watching for file changes with StatReloader
+2026-06-02 00:27:58.249505: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:28:00.981241: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:28:01.742996: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+C:\Users\Admin\Desktop\lfellah_project\backend\core\urls.py changed, reloading.
+Watching for file changes with StatReloader
+2026-06-02 00:28:13.016232: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:28:16.870926: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:28:17.778022: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python39\lib\threading.py", line 973, in _bootstrap_inner
+    self.run()
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python39\lib\threading.py", line 910, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\utils\autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "C:\Users\Admin\Desktop\lfellah_project\backend\core\management\commands\runserver.py", line 54, in inner_run
+    super().inner_run(*args, **options)
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\core\management\commands\runserver.py", line 133, in inner_run
+    self.check(display_num_errors=True)
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\core\management\base.py", line 485, in check
+    all_issues = checks.run_checks(
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\core\checks\registry.py", line 88, in run_checks
+    new_errors = check(app_configs=app_configs, databases=databases)
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\core\checks\urls.py", line 14, in check_url_config
+    return check_resolver(resolver)
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\core\checks\urls.py", line 24, in check_resolver
+    return check_method()
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\urls\resolvers.py", line 494, in check
+    for pattern in self.url_patterns:
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\utils\functional.py", line 57, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\urls\resolvers.py", line 715, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\utils\functional.py", line 57, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\urls\resolvers.py", line 708, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python39\lib\importlib\__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "C:\Users\Admin\Desktop\lfellah_project\backend\lfellah_server\urls.py", line 25, in <module>
+    path('', include('core.urls')),
+  File "C:\Users\Admin\Desktop\lfellah_project\venv\lib\site-packages\django\urls\conf.py", line 38, in include
+    urlconf_module = import_module(urlconf_module)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python39\lib\importlib\__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1030, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 850, in exec_module
+  File "<frozen importlib._bootstrap>", line 228, in _call_with_frames_removed
+  File "C:\Users\Admin\Desktop\lfellah_project\backend\core\urls.py", line 50, in <module>
+    path('api/esp32-config/', views.esp32_config_api, name='esp32-config'),
+AttributeError: module 'core.views' has no attribute 'esp32_config_api'
+C:\Users\Admin\Desktop\lfellah_project\backend\core\views_plants.py changed, reloading.
+Watching for file changes with StatReloader
+2026-06-02 00:28:43.770234: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:28:47.047870: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:28:48.412023: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+C:\Users\Admin\Desktop\lfellah_project\backend\core\views.py changed, reloading.
+Watching for file changes with StatReloader
+2026-06-02 00:33:36.642080: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:33:40.627985: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:33:41.780887: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+C:\Users\Admin\Desktop\lfellah_project\backend\core\views_plants.py changed, reloading.
+Watching for file changes with StatReloader
+2026-06-02 00:38:20.134140: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:38:23.800284: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:38:24.786386: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+C:\Users\Admin\Desktop\lfellah_project\backend\core\urls.py changed, reloading.
+Watching for file changes with StatReloader
+2026-06-02 00:40:07.165148: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:40:10.625326: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-06-02 00:40:11.484006: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.

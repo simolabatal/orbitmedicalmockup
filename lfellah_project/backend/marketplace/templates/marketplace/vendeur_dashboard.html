@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Vendeur — L'Fellah 2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lf: { dark:'#1b4332', green:'#2d6a4f', light:'#40916c', accent:'#95d5b2', bg:'#f0fdf4' }
+                    },
+                    fontFamily: { sans: ['Inter','system-ui','sans-serif'] },
+                    borderRadius: { 'xl':'12px', '2xl':'16px', '3xl':'24px' }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-stone-100 min-h-screen font-sans text-gray-800">
+    <!-- NAVBAR -->
+    <nav class="sticky top-0 z-50 bg-gradient-to-r from-green-100/90 via-white/95 to-green-50/90 backdrop-blur-xl border-b-2 border-green-200/50 shadow-lg" style="min-height:6rem">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between py-2">
+            <a href="/" class="flex items-center gap-3 no-underline">
+                <img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah" class="h-20 w-auto object-contain" style="filter:contrast(1.4) drop-shadow(0 3px 8px rgba(0,0,0,0.45))">
+            </a>
+            <div class="flex items-center gap-4 text-sm font-semibold">
+                <a href="/" class="text-gray-500 hover:text-lf-green transition-colors">Marché</a>
+                <a href="/vendeur/produits/" class="text-lf-green hover:text-lf-dark transition-colors font-bold">Gérer la marchandise</a>
+                <span class="text-lf-dark hidden sm:inline">{{ user.email|truncatechars:18 }}</span>
+                <a href="/accounts/logout/" class="text-gray-400 hover:text-red-500 transition-colors">Déconnexion</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        <!-- HEADER -->
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+                <p class="text-xs font-bold text-lf-green uppercase tracking-widest">Espace Vendeur</p>
+                <h1 class="text-3xl font-black text-lf-dark mt-1">Tableau de Bord</h1>
+            </div>
+            <div class="flex gap-3">
+                <a href="/vendeur/produits/ajouter/" class="px-4 py-2.5 rounded-xl bg-lf-green text-white text-sm font-bold shadow-lg shadow-lf-green/20 hover:bg-lf-dark transition-all">
+                    + Ajouter un produit
+                </a>
+                <a href="/vendeur/produits/" class="px-4 py-2.5 rounded-xl border border-lf-accent text-lf-green text-sm font-bold hover:bg-lf-bg transition-all">
+                    Gérer les produits
+                </a>
+            </div>
+        </div>
+
+        <!-- KPI CARDS -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-5">
+            <div class="bg-white rounded-2xl p-6 border border-lf-accent/20 shadow-sm">
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Produits en vente</p>
+                <p class="text-3xl font-black text-lf-dark mt-2" id="kpi-products">—</p>
+            </div>
+            <div class="bg-white rounded-2xl p-6 border border-lf-accent/20 shadow-sm">
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Commandes récentes</p>
+                <p class="text-3xl font-black text-lf-dark mt-2" id="kpi-orders">—</p>
+            </div>
+            <div class="bg-white rounded-2xl p-6 border border-lf-accent/20 shadow-sm">
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Revenu HT (livré)</p>
+                <p class="text-2xl font-black text-lf-green mt-2" id="kpi-revenue">—</p>
+            </div>
+            <div class="bg-white rounded-2xl p-6 border border-lf-accent/20 shadow-sm">
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Revenus Cumulés Net</p>
+                <p class="text-2xl font-black text-lf-dark mt-2" id="kpi-cumul">—</p>
+            </div>
+        </div>
+
+        <!-- PRODUCTS PREVIEW -->
+        <div class="bg-white rounded-2xl border border-lf-accent/20 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-50 flex items-center justify-between">
+                <h2 class="text-lg font-bold text-lf-dark">Mes Produits</h2>
+                <a href="/vendeur/produits/" class="text-xs text-lf-green font-bold hover:underline">Voir tout →</a>
+            </div>
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 bg-gray-50">
+                <div class="col-span-full p-12 text-center text-gray-400 font-semibold">Chargement...</div>
+            </div>
+        </div>
+
+        <!-- RECENT ORDERS -->
+        <div class="bg-white rounded-2xl border border-lf-accent/20 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-50">
+                <h2 class="text-lg font-bold text-lf-dark">Commandes Récentes</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 text-left">
+                        <tr>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">N°</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Acheteur</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Total HT</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">TVA</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">TTC</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Statut</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Date</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase w-28">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                        <tr><td colspan="8" class="px-6 py-12 text-center text-gray-400 font-semibold">Chargement...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_SELLER = '/api/seller/dashboard/';
+
+        const statusLabels = {
+            'pending':   {label:'En attente',     cl:'bg-yellow-100 text-yellow-700'},
+            'confirmed': {label:'En preparation', cl:'bg-blue-100 text-blue-700'},
+            'shipped':   {label:'En livraison',   cl:'bg-purple-100 text-purple-700'},
+            'delivered': {label:'Livree',         cl:'bg-green-100 text-green-700'},
+            'cancelled': {label:'Annulee',        cl:'bg-red-100 text-red-700'},
+        };
+
+        async function loadDashboard() {
+            try {
+                const resp = await fetch(API_SELLER, {
+                    headers: {'Accept': 'application/json'},
+                    credentials: 'same-origin'
+                });
+                const data = await resp.json();
+
+                renderKPIs(data);
+                renderProducts(data.products || []);
+                renderOrders(data.recent_orders || []);
+
+            } catch (err) {
+                console.error('Erreur chargement dashboard:', err);
+            }
+        }
+
+        function renderKPIs(data) {
+            document.getElementById('kpi-products').textContent = data.products_count || 0;
+            document.getElementById('kpi-orders').textContent = (data.recent_orders||[]).length;
+            document.getElementById('kpi-revenue').textContent = (parseFloat(data.total_revenue_ht) || 0).toFixed(2) + ' MAD';
+            document.getElementById('kpi-cumul').textContent = (parseFloat(data.total_revenue_net) || 0).toFixed(2) + ' MAD';
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('products-grid');
+            if (!products.length) {
+                grid.innerHTML = '<div class="col-span-full p-12 text-center text-gray-400 font-semibold">Aucun produit en vente pour le moment.</div>';
+                return;
+            }
+            grid.innerHTML = products.slice(0, 6).map(p => `
+                <div class="bg-white p-4 flex gap-3 items-start border border-gray-50 rounded-xl m-1 hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 rounded-xl bg-lf-bg flex items-center justify-center text-xs font-black text-lf-green flex-shrink-0">
+                        ${(p.name||'P').substring(0,2).toUpperCase()}
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <h3 class="text-sm font-bold text-lf-dark truncate">${p.name}</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">${p.stock_quantity||0} ${p.unit||'kg'}</p>
+                        <div class="flex items-baseline gap-2 mt-1.5">
+                            <span class="text-sm font-black text-lf-green">${parseFloat(p.price_final_display||0).toFixed(2)} MAD</span>
+                            <span class="text-[10px] text-gray-400">HT</span>
+                            ${p.is_organic ? '<span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">Bio</span>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderOrders(orders) {
+            const tbody = document.getElementById('orders-table-body');
+            if (!orders.length) {
+                tbody.innerHTML = '<tr><td colspan="8" class="px-6 py-12 text-center text-gray-400 font-semibold">Aucune commande pour le moment.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = orders.map(o => {
+                const st = statusLabels[o.status] || {label:o.status, cl:'bg-gray-100 text-gray-600'};
+                const date = o.created_at ? new Date(o.created_at).toLocaleDateString('fr-FR') : '—';
+                let btnAction = '<span class="text-[10px] text-gray-300">—</span>';
+                if (o.status === 'pending') {
+                    btnAction = `<button onclick="confirmOrder(${o.id})" class="px-3 py-1.5 rounded-lg bg-lf-green text-white text-[10px] font-bold hover:bg-lf-dark transition-colors whitespace-nowrap">Confirmer</button>`;
+                } else if (o.status === 'confirmed' || o.status === 'shipped') {
+                    btnAction = `<button onclick="confirmDelivery(${o.id})" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-[10px] font-bold hover:bg-blue-700 transition-colors whitespace-nowrap">Livrer</button>`;
+                } else if (o.status === 'delivered') {
+                    btnAction = '<span class="text-[10px] text-green-600 font-bold">Paye</span>';
+                }
+                return `<tr class="border-t border-gray-50 hover:bg-lf-bg/50 transition-colors">
+                    <td class="px-6 py-3 font-bold text-lf-dark">#${o.id}</td>
+                    <td class="px-6 py-3 text-gray-500 truncate max-w-[140px]">${o.buyer_email||o.buyer||'—'}</td>
+                    <td class="px-6 py-3 text-gray-700 font-semibold">${parseFloat(o.total_ht||0).toFixed(2)}</td>
+                    <td class="px-6 py-3 text-amber-600 font-semibold">${parseFloat(o.total_tva||0).toFixed(2)}</td>
+                    <td class="px-6 py-3 text-lf-green font-bold">${parseFloat(o.total_final||0).toFixed(2)}</td>
+                    <td class="px-6 py-3"><span class="px-2 py-1 rounded-full text-[10px] font-bold ${st.cl}">${st.label}</span></td>
+                    <td class="px-6 py-3 text-gray-400 text-xs">${date}</td>
+                    <td class="px-6 py-3">${btnAction}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        function getCSRF() {
+            const cookies = document.cookie.split(';');
+            for (let c of cookies) {
+                c = c.trim();
+                if (c.startsWith('csrftoken=')) return decodeURIComponent(c.substring('csrftoken='.length));
+            }
+            return '';
+        }
+
+async function confirmOrder(orderId) {
+            if (!confirm('Confirmer la commande N ' + orderId + ' ? Le client recevra un email de confirmation.')) return;
+            try {
+                const resp = await fetch('/api/orders/' + orderId + '/confirmer/', {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'X-CSRFToken': getCSRF() },
+                    credentials: 'same-origin'
+                });
+                const data = await resp.json();
+                if (data.status === 'confirmed') {
+                    await loadDashboard();
+                } else {
+                    alert('Erreur : ' + (data.error || 'Echec'));
+                }
+            } catch (err) { alert('Erreur reseau.'); }
+        }
+
+        async function confirmDelivery(orderId) {
+            if (!confirm('Confirmer la livraison N ' + orderId + ' ? Le vendeur sera credite.')) return;
+            try {
+                const resp = await fetch('/api/orders/' + orderId + '/livrer/', {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'X-CSRFToken': getCSRF() },
+                    credentials: 'same-origin'
+                });
+                const data = await resp.json();
+                if (data.status === 'success') {
+                    await loadDashboard();
+                } else {
+                    alert('Erreur : ' + (data.error || 'Echec'));
+                }
+            } catch (err) { alert('Erreur reseau.'); }
+        }
+
+        loadDashboard();
+    </script>
+</body>
+</html>

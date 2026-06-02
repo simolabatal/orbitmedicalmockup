@@ -1,0 +1,40 @@
+{
+  "name": "L'Fellah — Diagnostic Agricole IA",
+  "short_name": "L'Fellah",
+  "description": "Système IoT de surveillance et diagnostic des cultures agricoles via intelligence artificielle.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#10b981",
+  "lang": "fr",
+  "categories": ["agriculture", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/static/api/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/api/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Analyser une plante",
+      "short_name": "Scanner",
+      "url": "/?action=upload",
+      "description": "Analyser une nouvelle photo de plante"
+    },
+    {
+      "name": "Voir la carte",
+      "short_name": "Carte",
+      "url": "/?tab=map",
+      "description": "Carte de surveillance des cultures"
+    }
+  ]
+}

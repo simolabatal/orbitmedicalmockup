@@ -1,0 +1,36 @@
+# ─── L'Fellah 2.0 ───
+# Configuration minimaliste pour le développement local
+
+# Django (Python 3.9 compatible)
+django>=4.2,<5.0
+djangorestframework>=3.15,<3.16
+django-cors-headers>=4.4,<4.5
+django-filter>=24.1
+django-jazzmin>=3.0,<3.1
+python-decouple>=3.8
+
+# Base de données
+mysqlclient>=2.2,<2.3
+psycopg2-binary>=2.9,<2.10
+
+# IA / ML
+google-generativeai>=0.8,<0.9
+tensorflow>=2.16,<2.17
+keras>=3.0,<3.1
+numpy>=1.26,<1.27
+Pillow>=10.3,<10.4
+
+# Async Tasks
+celery>=5.4,<5.5
+redis>=5.0,<5.1
+
+# PDF Generation
+reportlab>=4.2,<4.3
+
+# HTTP / API
+requests>=2.32,<2.33
+python-dateutil>=2.9
+
+# Security (optionnel, ajouter en production)
+# django-axes>=6.5
+# django-storages>=1.14  # S3/Cloud Storage

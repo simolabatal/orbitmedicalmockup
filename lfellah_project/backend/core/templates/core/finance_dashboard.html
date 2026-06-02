@@ -1,0 +1,157 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Finance & ROI — L'Fellah 2.0{% endblock %}
+
+{% block extra_head %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50:'#faf8f5', 100:'#f0fdf4', 800:'#1b4332', 900:'#064e3b' },
+                        accent: { 400:'#95d5b2', 500:'#2d6a4f', 600:'#40916c' }
+                    },
+                    fontFamily: { sans: ['Inter','system-ui','sans-serif'] },
+                    borderRadius: { 'xl':'12px','2xl':'16px','3xl':'24px' }
+                }
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block header_right %}
+    <a href="/dashboard-finance/" class="text-brand-900 font-bold text-sm">Finance</a>
+    <a href="/" class="text-stone-400 hover:text-brand-900 transition-colors text-sm font-semibold">Marché</a>
+    <a href="/accounts/logout/" class="text-stone-400 hover:text-red-500 transition-colors text-sm font-semibold">Déconnexion</a>
+{% endblock %}
+
+{% block content %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+        <!-- TITRE -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <p class="text-xs font-bold text-brand-900 uppercase tracking-widest">Administration</p>
+                <h1 class="text-2xl font-black text-brand-900">Finance & ROI</h1>
+            </div>
+            <div class="flex gap-3">
+                <a href="?periode=month" class="px-4 py-2 rounded-xl text-xs font-bold {% if periode == 'month' %}bg-brand-900 text-white{% else %}bg-white text-stone-600 border border-stone-200{% endif %} hover:-translate-y-px transition-all">Mois</a>
+                <a href="?periode=year" class="px-4 py-2 rounded-xl text-xs font-bold {% if periode == 'year' %}bg-brand-900 text-white{% else %}bg-white text-stone-600 border border-stone-200{% endif %} hover:-translate-y-px transition-all">Année</a>
+                <a href="/dashboard-finance/export-pdf/?periode={{ periode }}" class="px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-file-pdf"></i> Exporter PDF
+                </a>
+            </div>
+        </div>
+
+        <!-- KPI CARDS -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-green-700"><i class="fa-solid fa-chart-line"></i></div>
+                    <div>
+                        <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">CA Brut (HT)</p>
+                        <p class="text-xl font-black text-brand-900">{{ ca_brut|floatformat:2 }} MAD</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700"><i class="fa-solid fa-coins"></i></div>
+                    <div>
+                        <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Commission L'Fellah</p>
+                        <p class="text-xl font-black text-amber-600">{{ commission|floatformat:2 }} MAD</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700"><i class="fa-solid fa-tractor"></i></div>
+                    <div>
+                        <p class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Revenu Net Agriculteurs</p>
+                        <p class="text-xl font-black text-blue-600">{{ net_agriculteurs|floatformat:2 }} MAD</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHART -->
+        <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm">
+            <h2 class="text-sm font-bold text-brand-900 mb-4">Évolution des ventes (30 jours)</h2>
+            <div class="h-64"><canvas id="salesChart"></canvas></div>
+        </div>
+
+        <!-- TABLEAU CATEGORIES -->
+        <div class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 border-b border-stone-100"><h2 class="text-sm font-bold text-brand-900">Performance par Catégorie</h2></div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-stone-50 text-left">
+                        <tr>
+                            <th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">Catégorie</th>
+                            <th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">Qté vendue</th>
+                            <th class="px-5 py-3 text-[10px] font-bold text-stone-400 uppercase">Commission générée</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if categories_stats %}
+                        {% for c in categories_stats %}
+                        <tr class="border-t border-stone-50 hover:bg-stone-50/50">
+                            <td class="px-5 py-3 font-bold text-brand-900">{{ c.nom }}</td>
+                            <td class="px-5 py-3 text-stone-600">{{ c.qte_vendue }}</td>
+                            <td class="px-5 py-3 text-amber-600 font-bold">{{ c.commission|floatformat:2 }} MAD</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr><td colspan="3" class="px-5 py-12 text-center text-stone-400 font-semibold">Aucune vente sur cette période.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SYNTHESE -->
+        <div class="bg-white rounded-2xl p-5 border border-stone-200/80 shadow-sm">
+            <h2 class="text-sm font-bold text-brand-900 mb-3">Synthèse</h2>
+            <div class="text-xs text-stone-500 space-y-1">
+                <p>Commandes livrées : <strong class="text-brand-900">{{ total_commandes }}</strong></p>
+                <p>Taux de commission : <strong class="text-amber-600">12%</strong> (inclus dans le prix HT)</p>
+                <p>TVA applicable : <strong class="text-stone-700">20%</strong> (sur facture PDF uniquement)</p>
+                <p class="mt-2">Période : <strong class="text-brand-900">{% if periode == 'year' %}Année en cours{% else %}Mois en cours{% endif %}</strong></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        const ctx = document.getElementById('salesChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ jours_labels|safe }},
+                datasets: [{
+                    label: 'CA HT (MAD)',
+                    data: {{ ca_journalier|safe }},
+                    borderColor: '#2d6a4f',
+                    backgroundColor: 'rgba(45,106,79,0.08)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 2,
+                    pointHoverRadius: 5,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { font: { size: 10 }, maxTicksLimit: 12 } },
+                    y: { grid: { color: '#f0f0f0' }, ticks: { font: { size: 10 } } }
+                }
+            }
+        });
+    </script>
+{% endblock %}

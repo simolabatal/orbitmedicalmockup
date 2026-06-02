@@ -1,0 +1,19 @@
+# L'Fellah 2.0 — Dépendances Python
+# Installer avec : pip install -r requirements.txt
+
+# ── Obligatoires (core projet) ─────────────────────────────
+# sqlite3 est natif Python — PAS besoin de l'installer
+
+# ── Optionnel : Vision IA réelle (CNN sur PlantDoc) ────────
+# Décommenter quand tu veux entraîner le vrai modèle :
+# tensorflow>=2.12.0
+# opencv-python>=4.7.0
+# numpy>=1.24.0
+# Pillow>=9.5.0
+
+# ── Optionnel : XAI avancé (SHAP) ─────────────────────────
+# shap>=0.41.0
+# scikit-learn>=1.2.0
+
+# ── Optionnel : Dashboard web ──────────────────────────────
+# flask>=2.3.0
