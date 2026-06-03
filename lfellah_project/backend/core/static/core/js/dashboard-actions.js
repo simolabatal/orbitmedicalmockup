@@ -429,6 +429,10 @@ console.log('Dashboard v2 loaded');
                 const alertEl = $('plant-alert-critical');
                 if (sev === 'critical') alertEl.classList.remove('hidden'); else alertEl.classList.add('hidden');
                 loadPlantHistory();
+                // Show reset button, hide analyze button
+                btn.classList.add('hidden');
+                var resetBtn = $('plant-reset-btn');
+                if (resetBtn) resetBtn.classList.remove('hidden');
             })
             .catch(function (err) {
                 console.error('[Plant] failed:', err);
@@ -456,6 +460,30 @@ console.log('Dashboard v2 loaded');
     }
 
     window.submitPlantImage = submitPlantImage;
+
+    function resetPlantForm() {
+        $('plant-disease-name').textContent = '\u2014';
+        $('plant-confidence').textContent = '\u2014';
+        $('plant-advice').textContent = '\u2014';
+        var badge = $('plant-severity-badge');
+        badge.className = 'inline-block px-3 py-1 rounded-lg text-xs font-bold';
+        badge.textContent = '\u2014';
+        $('plant-alert-critical').classList.add('hidden');
+        $('plant-result-content').classList.add('hidden');
+        $('plant-result-empty').classList.remove('hidden');
+        var preview = $('plant-preview');
+        preview.classList.add('hidden');
+        preview.src = '';
+        $('plant-image-input').value = '';
+        selectedPlantFile = null;
+        $('plant-drop-text').textContent = 'Cliquez ou glissez une image ici';
+        // Show analyze btn (disabled), hide reset btn
+        $('plant-analyze-btn').classList.remove('hidden');
+        $('plant-analyze-btn').disabled = true;
+        var resetBtn = $('plant-reset-btn');
+        if (resetBtn) resetBtn.classList.add('hidden');
+    }
+    window.resetPlantForm = resetPlantForm;
 
     /* ================================================================
        ESP32-CAM — polling de la derniere capture envoyee par POST

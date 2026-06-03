@@ -2,8 +2,7 @@
  * L'Fellah 2.0 — ESP32-CAM Image Uploader
  * Capture photo + envoi HTTP POST vers Django /api/upload/
  *
- * Reseau : ROBOTICS / Eheec2025
- * Serveur : 192.168.10.124:8000
+ * Reseau : ROTATED — Remplacez par votre SSID/mdp
  */
 
 #include "esp_camera.h"
@@ -15,10 +14,10 @@
 #include "soc/rtc_cntl_reg.h"
 #include "esp_http_client.h"
 
-// ─── CONFIG RESEAU ──────────────────────────────────────────────
-const char* ssid      = "ROBOTICS";
-const char* password  = "Eheec2025";
-const char* serverUrl = "http://192.168.10.124:8000/api/upload/";
+// ─── CONFIG RESEAU — ROTATED, remplacez avant flash ──────────────
+const char* ssid      = "YOUR_SSID";
+const char* password  = "YOUR_PASSWORD";
+const char* serverUrl = "http://192.168.X.X:8000/api/upload/";
 
 // ─── CONFIG CAMERA (AI-THINKER) ─────────────────────────────────
 #define PWDN_GPIO_NUM     32

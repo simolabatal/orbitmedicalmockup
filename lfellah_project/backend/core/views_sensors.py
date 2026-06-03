@@ -92,9 +92,6 @@ class SensorDataIngestSerializer(serializers.Serializer):
     ph = serializers.FloatField(required=False, allow_null=True)
     soil_moisture = serializers.FloatField(required=False, allow_null=True)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def validate(self, attrs):
         has_sensor_data = any(
             attrs.get(f) is not None
@@ -514,14 +511,10 @@ def irrigation_control(request):
     """
     action = request.data.get('action', '').lower()
 
-    if action not in ('on', 'off', 'status'):
-        return Response({'error': 'Action invalide. Utiliser on, off ou status.'}, status=400)
+    if action not in ('on', 'off', 'status', 'auto'):
+        return Response({'error': 'Action invalide. Utiliser on, off, auto ou status.'}, status=400)
 
-    # Ecrit la commande dans un fichier lu par le bridge
-    import os
-    from django.conf import settings
-    command_file = os.path.join(settings.BASE_DIR, 'irrigation_command.txt')
-    serial_cmd = {'on': 'RELAY:ON', 'off': 'RELAY:OFF', 'status': 'STATUS'}[action]
+    serial_cmd = {'on': 'RELAY:ON', 'off': 'RELAY:OFF', 'auto': 'AUTO', 'status': 'STATUS'}[action]
 
     with open(command_file, 'w') as f:
         f.write(serial_cmd)

@@ -183,19 +183,19 @@ def confirmer_commande(request, order_id):
         from django.core.mail import send_mail
         from django.conf import settings as s
         sent = send_mail(
-            subject=f"L'Fellah - Commande N {order.id} en preparation",
-            message=(
-                f"Bonjour,\n\n"
-                f"Votre commande N {order.id} est confirmee et en cours de preparation.\n\n"
-                f"Produits : {order.items.count()} article(s)\n"
-                f"Total TTC : {order.total_final:.2f} MAD\n"
-                f"Livraison : {order.shipping_address[:80]}\n\n"
-                f"Cordialement,\nL'equipe L'Fellah 2.0"
-            ),
-            from_email=s.DEFAULT_FROM_EMAIL,
-            recipient_list=[order.buyer.email],
-            fail_silently=False,
-        )
+                subject=f"L'Fellah - Commande N {order.id} en preparation",
+                message=(
+                    f"Bonjour,\n\n"
+                    f"Votre commande N {order.id} est confirmee et en cours de preparation.\n\n"
+                    f"Produits : {order.items.count()} article(s)\n"
+                    f"Total TTC : {order.total_final:.2f} MAD\n"
+                    f"Livraison : {order.shipping_address[:80]}\n\n"
+                    f"Cordialement,\nL'equipe L'Fellah 2.0"
+                ),
+                from_email=s.DEFAULT_FROM_EMAIL or 'noreply@lfellah.ma',
+                recipient_list=[order.buyer.email],
+                fail_silently=True,
+            )
         print(f"[EMAIL] Commande #{order.id} : email envoye a {order.buyer.email} (envoyes: {sent})")
         if sent == 0:
             print(f"[EMAIL] ERREUR: Aucun email envoye. Verifiez EMAIL_BACKEND et SMTP dans settings.")

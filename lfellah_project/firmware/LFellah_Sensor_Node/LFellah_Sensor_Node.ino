@@ -32,12 +32,15 @@ float calibratePH(float adcRaw) {
 // ─── Calibration humidite sol ────────────────────────────────────
 const int soilDry = 1023;  // ADC a l'air libre
 const int soilWet = 300;   // ADC dans l'eau
+const int SOIL_THRESHOLD = 35; // % — seuil declenchement pompe automatique
+
+bool manualOverride = false; // true = commande manuelle active, pas d'auto-off
 
 void setup() {
   Serial.begin(9600);
   dht.begin();
+  digitalWrite(relayPin, HIGH); // Anti-bounce: HIGH avant pinMode
   pinMode(relayPin, OUTPUT);
-  digitalWrite(relayPin, HIGH); // Pompe OFF au demarrage
 
   Serial.println("L'Fellah Node v3 Initialized...");
 }
@@ -65,32 +68,48 @@ void loop() {
   int soilMoisture = map(soilAvg, soilDry, soilWet, 0, 100);
   soilMoisture = constrain(soilMoisture, 0, 100);
 
-  // ── 4. Envoi JSON (avec phRaw pour debug) ─────────────────────
+  // ── 5. Ecoute commandes relais (bridge → dashboard) ──────────
+  if (Serial.available() > 0) {
+    String cmd = Serial.readStringUntil('\n');
+    cmd.trim();
+    if (cmd == "RELAY:ON") {
+      digitalWrite(relayPin, LOW);
+      manualOverride = true;
+      Serial.println("{\"relay\":\"ON\"}");
+    } else if (cmd == "RELAY:OFF") {
+      digitalWrite(relayPin, HIGH);
+      manualOverride = true;  // garde OFF meme si sol sec
+      Serial.println("{\"relay\":\"OFF\"}");
+    } else if (cmd == "AUTO") {
+      manualOverride = false;  // repasser en mode auto
+      Serial.println("{\"relay\":\"AUTO\"}");
+    } else if (cmd == "STATUS") {
+      int state = digitalRead(relayPin);
+      Serial.print("{\"relay\":\"");
+      Serial.print(state == LOW ? "ON" : "OFF");
+      Serial.println("\"}");
+    }
+  }
+
+  // ── 6. Automatisation pompe — seuil humidite sol ────────────
+  if (!manualOverride) {
+    if (soilMoisture < SOIL_THRESHOLD) {
+      digitalWrite(relayPin, LOW);   // Pompe ON — sol trop sec
+    } else {
+      digitalWrite(relayPin, HIGH);  // Pompe OFF — humidite OK
+    }
+  }
+
+  // ── 7. Envoi JSON capteurs (avec etat relais pour sync UI) ──
+  int relayState = digitalRead(relayPin);
   Serial.print("{\"temp\":"); Serial.print(isnan(t) ? 0.0 : t);
   Serial.print(", \"hum\":"); Serial.print(isnan(h) ? 0.0 : h);
   Serial.print(", \"tds\":"); Serial.print(tdsAvg);
   Serial.print(", \"ph\":"); Serial.print(phValue, 1);
   Serial.print(", \"phRaw\":"); Serial.print(phAvg, 0);
   Serial.print(", \"soil\":"); Serial.print(soilMoisture);
-  Serial.println("}");
-
-  // ── 5. Ecoute commandes relais depuis le bridge ────────────────
-  if (Serial.available() > 0) {
-    String cmd = Serial.readStringUntil('\n');
-    cmd.trim();
-    if (cmd == "RELAY:ON") {
-      digitalWrite(relayPin, LOW);   // LOW = actif (relais standard)
-      Serial.println("{\"relay\":\"ON\"}");
-    } else if (cmd == "RELAY:OFF") {
-      digitalWrite(relayPin, HIGH);  // HIGH = inactif
-      Serial.println("{\"relay\":\"OFF\"}");
-    } else if (cmd == "STATUS") {
-      int state = digitalRead(relayPin);
-      Serial.print("{\"relay\":\""); 
-      Serial.print(state == LOW ? "ON" : "OFF");
-      Serial.println("\"}");
-    }
-  }
+  Serial.print(", \"relay\":\""); Serial.print(relayState == LOW ? "ON" : "OFF");
+  Serial.println("\"}");
 
   delay(2000);
 }

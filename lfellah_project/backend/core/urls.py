@@ -24,25 +24,22 @@ urlpatterns = [
     path('accounts/change-password/', views.change_password_page, name='change-password'),
     path('accounts/logout/', views.logout_page, name='logout'),
 
-    # ── Password Reset (Django built-in) ─────────────────────────
+    # ── Password Reset — 6-digit code ───────────────────────
     path('password-reset/',
-         auth_views.PasswordResetView.as_view(
-             template_name='core/registration/password_reset_form.html',
-             email_template_name='core/registration/password_reset_email.html',
-             subject_template_name='core/registration/password_reset_subject.txt',
-         ),
+         views.password_reset_request,
          name='password_reset'),
     path('password-reset/done/',
          auth_views.PasswordResetDoneView.as_view(
              template_name='core/registration/password_reset_done.html',
          ),
          name='password_reset_done'),
-    path('reset/<uidb64>/<token>/',
-         auth_views.PasswordResetConfirmView.as_view(
-             template_name='core/registration/password_reset_confirm.html',
-         ),
-         name='password_reset_confirm'),
-    path('reset/done/',
+    path('password-reset/verify/',
+         views.password_reset_verify,
+         name='password_reset_verify'),
+    path('password-reset/set-password/',
+         views.password_reset_set_password,
+         name='password_reset_set_password'),
+    path('password-reset/complete/',
          auth_views.PasswordResetCompleteView.as_view(
              template_name='core/registration/password_reset_complete.html',
          ),

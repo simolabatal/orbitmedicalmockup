@@ -92,18 +92,26 @@ def login_page(request):
 def register_page(request):
     if request.method == 'POST':
         from accounts.models import User
-        username = request.POST.get('username')
-        email = request.POST.get('email')
+        email = request.POST.get('email', '').strip().lower()
         password = request.POST.get('password')
         password_confirm = request.POST.get('password_confirm')
         role = request.POST.get('role', 'farmer')
         phone = request.POST.get('phone', '')
 
-        if password != password_confirm:
+        # Auto-generate username from email if not provided
+        username = request.POST.get('username', '').strip()
+        if not username:
+            username = email.split('@')[0] if email else 'user'
+        if not email:
+            return render(request, 'core/register.html', {
+                'error': 'Email requis.'
+            })
+
+        if password_confirm and password != password_confirm:
             return render(request, 'core/register.html', {
                 'error': 'Les mots de passe ne correspondent pas.'
             })
-        if len(password) < 8:
+        if not password or len(password) < 8:
             return render(request, 'core/register.html', {
                 'error': 'Le mot de passe doit contenir au moins 8 caract\u00e8res.'
             })
@@ -161,3 +169,101 @@ def change_password_page(request):
 def logout_page(request):
     auth_logout(request)
     return redirect('/')
+
+
+# ─── PASSWORD RESET — 6-digit code ────────────────────────────────
+import random
+from django.core.cache import cache
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+def password_reset_request(request):
+    """Envoie un code temporaire a 6 chiffres par email."""
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip().lower()
+        from accounts.models import User
+        user = User.objects.filter(email=email).first()
+
+        if user:
+            code = str(random.randint(100000, 999999))
+            cache_key = f'pwd_reset_{email}'
+            cache.set(cache_key, code, 900)  # 15 min TTL
+
+            try:
+                send_mail(
+                    subject='L\'Fellah — Code de reinitialisation',
+                    message=f'Votre code de reinitialisation est : {code}\n\n'
+                            f'Ce code expire dans 15 minutes.\n\n'
+                            f'Cordialement,\nL\'equipe L\'Fellah 2.0',
+                    from_email=settings.DEFAULT_FROM_EMAIL or 'noreply@lfellah.ma',
+                    recipient_list=[email],
+                    fail_silently=True,
+                )
+                # Log: en dev, le backend console affichera l'email
+                print(f'[PWD RESET] Code envoye a {email}: {code}')
+            except Exception as e:
+                print(f'[PWD RESET] Erreur email: {e}')
+
+        # Toujours afficher la meme page (anti-enumeration)
+        return render(request, 'core/registration/password_reset_done.html')
+
+    return render(request, 'core/registration/password_reset_form.html')
+
+
+def password_reset_verify(request):
+    """Verifie le code a 6 chiffres. Si OK, stocke email en session et redirige."""
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip().lower()
+        code = request.POST.get('code', '').strip()
+
+        cache_key = f'pwd_reset_{email}'
+        stored_code = cache.get(cache_key)
+        print(f'[PWD RESET] Verification — email={email} code_soumis={code} code_stocke={stored_code}')
+
+        if not stored_code or str(stored_code) != str(code):
+            print(f'[PWD RESET] ECHEC — code invalide ou expire pour {email}')
+            return render(request, 'core/registration/password_reset_confirm.html', {
+                'error': 'Code invalide ou expire.',
+                'email': email,
+            })
+
+        # Code OK → autorise le changement de mot de passe via la session
+        request.session['reset_email'] = email
+        request.session['reset_code_verified'] = True
+        cache.delete(cache_key)  # le code ne sert plus
+        return redirect('/password-reset/set-password/')
+
+    return render(request, 'core/registration/password_reset_confirm.html')
+
+
+def password_reset_set_password(request):
+    """Etape 2 : SetPasswordForm — nouveau mot de passe sans ancien."""
+    email = request.session.get('reset_email')
+    verified = request.session.get('reset_code_verified')
+
+    if not email or not verified:
+        return redirect('/password-reset/')
+
+    from accounts.models import User
+    user = User.objects.filter(email=email).first()
+    if not user:
+        request.session.pop('reset_email', None)
+        request.session.pop('reset_code_verified', None)
+        return redirect('/password-reset/')
+
+    from django.contrib.auth.forms import SetPasswordForm
+
+    if request.method == 'POST':
+        form = SetPasswordForm(user, request.POST)
+        if form.is_valid():
+            form.save()  # user.set_password() + user.save() — hache par Django
+            request.session.pop('reset_email', None)
+            request.session.pop('reset_code_verified', None)
+            return render(request, 'core/registration/password_reset_complete.html')
+    else:
+        form = SetPasswordForm(user)
+
+    return render(request, 'core/registration/password_reset_set_password.html', {
+        'form': form,
+    })
