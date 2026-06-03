@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panier — L'Fellah 2.0</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>tailwind.config={theme:{extend:{colors:{brand:{50:'#faf8f5',100:'#f0fdf4',800:'#1b4332',900:'#064e3b'},accent:{400:'#95d5b2',500:'#2d6a4f',600:'#40916c'}},fontFamily:{sans:['Inter','system-ui','sans-serif']},borderRadius:{'xl':'12px','2xl':'16px','3xl':'24px'}}}}</script>
+    <link rel="stylesheet" href="/static/core/css/tailwind.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body class="bg-stone-100 min-h-screen font-sans text-gray-800">
 
-    <header class="sticky top-0 z-50 bg-gradient-to-r from-green-100/90 via-white/95 to-green-50/90 backdrop-blur-xl border-b-2 border-green-200/50 shadow-lg" style="min-height:6rem">
+    <header class="sticky top-0 z-50 bg-gradient-to-r from-green-100/90 via-white/95 to-green-50/90 backdrop-blur-xl border-b-2 border-green-200/50 shadow-lg" style="min-height:7rem">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between py-2">
-            <a href="/" class="flex items-center gap-2.5 no-underline"><img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah" class="h-20 w-auto object-contain" style="filter:contrast(1.4) drop-shadow(0 3px 8px rgba(0,0,0,0.45))"></a>
+            <a href="/" class="flex items-center gap-2.5 no-underline"><img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah" class="h-20 w-auto object-contain"></a>
             <a href="/" class="text-sm text-stone-400 hover:text-brand-900 font-semibold transition-colors">← Marché</a>
         </div>
     </header>

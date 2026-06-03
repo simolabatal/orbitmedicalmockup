@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions, status, generics, serializers
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import BaseParser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes, action
 from rest_framework.permissions import IsAuthenticated
@@ -42,17 +42,127 @@ class PlantScanViewSet(viewsets.ModelViewSet):
         return qs
 
 
+class RawBinaryParser(BaseParser):
+    """Accepte raw JPEG/PNG de l'ESP32."""
+    media_type = 'image/*'
+
+    def parse(self, stream, media_type=None, parser_context=None):
+        return stream.read()
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.core.files.base import ContentFile
+
+
+@csrf_exempt
+def image_upload_view(request):
+    """Upload d'image + prediction IA (ESP32 raw JPEG ou web multipart)."""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST requis.'}, status=405)
+
+    content_type = request.content_type or ''
+
+    # ── ESP32 raw JPEG (Content-Type: image/jpeg) ──
+    if content_type.startswith('image/'):
+        ext = content_type.split('/')[-1]
+        image = ContentFile(request.body, name=f'esp32_capture.{ext}')
+        lat = lon = lang = device_token = None
+
+    # ── Web multipart (Content-Type: multipart/form-data) ──
+    elif 'multipart' in content_type:
+        image = request.FILES.get('image')
+        lat = request.POST.get('latitude')
+        lon = request.POST.get('longitude')
+        lang = request.POST.get('lang', 'fr')
+        device_token = request.POST.get('device_token')
+
+    else:
+        return JsonResponse(
+            {'error': f'Content-Type non supporte: {content_type}'}, status=415
+        )
+
+    if not image:
+        return JsonResponse({'error': 'Aucune image fournie.'}, status=400)
+
+    # ── Sauvegarde + prediction ──
+    from iot.models import Device
+
+    device = None
+    if device_token:
+        device = Device.objects.filter(device_token=device_token).first()
+        if device:
+            device.status = 'online'
+            device.last_seen = timezone.now()
+            device.save(update_fields=['status', 'last_seen'])
+
+    scan = PlantScan.objects.create(
+        user=request.user if request.user.is_authenticated else None,
+        image=image,
+        latitude=float(lat) if lat else None,
+        longitude=float(lon) if lon else None,
+        device=device,
+    )
+
+    result = predict_plant_disease(scan.image.path, lang=lang or 'fr')
+    scan.disease_name = result.get('disease_name', '')
+    scan.confidence = result.get('confidence', 0.0)
+    scan.severity = result.get('severity', 'warning')
+    scan.watering_advice = result.get('watering_advice', '')
+    scan.save()
+
+    if scan.severity == 'critical':
+        Alert.objects.create(
+            scan=scan,
+            alert_type='critical_disease',
+            message=f"Maladie critique detectee: {scan.disease_name} (confiance: {scan.confidence}%)"
+        )
+
+    return JsonResponse({
+        'id': scan.id,
+        'disease': scan.disease_name,
+        'confidence': scan.confidence,
+        'severity': scan.severity,
+        'advice': scan.watering_advice,
+    })
+
+
+class RawBinaryParser(BaseParser):
+    """Accepte raw JPEG/PNG de l'ESP32."""
+    media_type = 'image/*'
+
+    def parse(self, stream, media_type=None, parser_context=None):
+        return stream.read()
+
+
+# ImageUploadView conservee pour compatibilite DRF (web dashboard)
 class ImageUploadView(generics.CreateAPIView):
-    """Upload d'image + prediction IA (ESP32 ou manuel)"""
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [RawBinaryParser]
     serializer_class = PlantScanSerializer
-    permission_classes = []  # ESP32 sans auth
+    permission_classes = []
     authentication_classes = []
 
     def create(self, request, *args, **kwargs):
-        image = request.FILES.get('image')
+        content_type = request.content_type or ''
+
+        if content_type.startswith('image/'):
+            from django.core.files.base import ContentFile
+            ext = content_type.split('/')[-1]
+            image = ContentFile(request.data, name=f'esp32_capture.{ext}')
+            lat = lon = lang = device_token = None
+        elif 'multipart' in content_type:
+            image = request.FILES.get('image')
+            lat = request.POST.get('latitude')
+            lon = request.POST.get('longitude')
+            lang = request.POST.get('lang', 'fr')
+            device_token = request.POST.get('device_token')
+        else:
+            return Response(
+                {'error': f'Content-Type non supporte: {content_type}'}, status=415
+            )
+
         if not image:
-            return Response({'error': 'Aucune image fournie.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Aucune image fournie.'}, status=400)
 
         lat = request.data.get('latitude')
         lon = request.data.get('longitude')

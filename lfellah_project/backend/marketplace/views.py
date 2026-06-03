@@ -998,6 +998,7 @@ def _generer_facture_panier_reportlab(order, ctx):
     return resp
 
 @login_required
+@user_passes_test(is_buyer, login_url='/', redirect_field_name=None)
 def acheter_produit_view(request, product_id):
     """
     Vue complète du flux d'achat marketplace.

@@ -1,0 +1,10 @@
+/* ── Jazzmin Login : logo centre ──────────────────────────── */
+.login-logo {
+    display: flex !important;
+    justify-content: center !important;
+    margin-bottom: 24px !important;
+}
+.login-logo img {
+    max-height: 80px;
+    width: auto;
+}

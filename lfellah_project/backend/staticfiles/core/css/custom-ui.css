@@ -1,0 +1,64 @@
+/* ════════════════════════════════════════════════════════════════
+   L'Fellah — Custom UI Design System
+   Chargé APRES Tailwind pour priorité CSS maximale.
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+    --brand: #1A4D2E;
+    --ink: #2D3436;
+    --surface: #F8F9FA;
+}
+
+/* ── Typograhie ────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+    color: #FFFFFF;
+}
+
+.text-secondary {
+    color: #E0E0E0;
+}
+
+/* ── Glass Header (sticky top bar) ─────────────────────────── */
+.glass-header {
+    background: rgba(26, 77, 46, 0.06) !important;
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom: 1px solid rgba(26, 77, 46, 0.10) !important;
+    box-shadow: 0 1px 4px rgba(26, 77, 46, 0.06) !important;
+}
+
+/* ── Glass Card ────────────────────────────────────────────── */
+.glass-card {
+    background: rgba(255, 255, 255, 0.62) !important;
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.55) !important;
+    box-shadow: 0 4px 20px rgba(26, 77, 46, 0.06) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+}
+.glass-card:hover {
+    background: rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 10px 20px rgba(26, 77, 46, 0.15) !important;
+    transform: translateY(-5px);
+}
+
+/* ── Primary Button ────────────────────────────────────────── */
+.btn-primary {
+    background: linear-gradient(135deg, var(--brand) 0%, #153e25 100%) !important;
+    color: white !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+    padding: 0.625rem 1.5rem !important;
+    font-size: 0.8125rem !important;
+    box-shadow: 0 2px 8px rgba(26, 77, 46, 0.30) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(26, 77, 46, 0.40) !important;
+}
+.btn-primary:active {
+    transform: scale(0.98);
+}

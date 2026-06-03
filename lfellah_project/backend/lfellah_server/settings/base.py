@@ -9,7 +9,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY', default='dev-secret-key-change-in-produ
 DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='*', cast=Csv())
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.5']
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'core.context_processors.roles',
             ],
         },
     },
@@ -140,6 +141,9 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@lfellah.ma')
 
+# ── Password Reset — securite ──────────────────────────────────
+PASSWORD_RESET_TIMEOUT = 86400  # 24 heures (en secondes)
+
 
 # ─── CLÉS API ────────────────────────────────────────────────────
 GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
@@ -151,6 +155,8 @@ JAZZMIN_SETTINGS = {
     "site_title": "L'Fellah 2.0 Administration",
     "site_header": "L'Fellah",
     "site_brand": "L'FELLAH IOT",
+    "site_logo": "core/img/logo.png",
+    "custom_css": "core/css/jazzmin-fix.css",
     "welcome_sign": "Espace d'Administration - L'Fellah Agriculture IOT",
     "copyright": "L'Fellah Agriculture Connectée © 2026",
     "search_model": "core.plantscan",

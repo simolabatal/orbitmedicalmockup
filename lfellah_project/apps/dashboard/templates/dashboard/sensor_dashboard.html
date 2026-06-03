@@ -5,28 +5,6 @@
 
 {% block extra_head %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        forest: {
-                            50:'#f0fdf4', 100:'#dcfce7', 200:'#bbf7d0', 300:'#86efac',
-                            400:'#34d399', 500:'#10b981', 600:'#059669', 700:'#047857',
-                            800:'#065f46', 900:'#064e3b'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter','ui-sans-serif','system-ui','sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Le dashboard IoT a sa propre sidebar — pas besoin du header global */
-        aside { z-index: 60 !important; }
-    </style>
 {% endblock %}
 
 {% block global_header %}{% endblock %}
@@ -35,9 +13,9 @@
 
 {% block content %}
     <!-- ══════════════════════════════════════════════════════════ -->
-    <!-- ▓▓▓  SIDEBAR — Desktop uniquement  ▓▓▓ -->
+    <!-- ▓▓▓  SIDEBAR — Slide-in from left  ▓▓▓ -->
     <!-- ══════════════════════════════════════════════════════════ -->
-    <aside class="fixed left-0 top-0 z-40 h-full w-64 bg-white border-r border-stone-100 hidden lg:flex flex-col">
+    <aside id="sidebar" class="fixed top-0 left-0 z-50 h-full w-64 bg-white shadow-xl -translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
         <div class="px-6 py-6">
             <a href="/" class="block no-underline">
                 <img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah — Smart Agriculture" class="site-logo-sm">
@@ -45,28 +23,28 @@
         </div>
 
         <nav class="flex-1 px-4 space-y-0.5">
-            <button onclick="switchTab('sensors')" data-nav="sensors"
+            <button onclick="switchTab('sensors');closeSidebar()" data-nav="sensors"
                 class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-forest-700 bg-forest-50">
                 <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                 </svg>
                 Tableau de bord
             </button>
-            <button onclick="switchTab('plants')" data-nav="plants"
+            <button onclick="switchTab('plants');closeSidebar()" data-nav="plants"
                 class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-stone-500 hover:text-stone-900 hover:bg-stone-50">
                 <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
                 </svg>
                 Analyse Plantes
             </button>
-            <button onclick="switchTab('espcam')" data-nav="espcam"
+            <button onclick="switchTab('espcam');closeSidebar()" data-nav="espcam"
                 class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-stone-500 hover:text-stone-900 hover:bg-stone-50">
                 <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                 </svg>
                 ESP32-CAM
             </button>
-            <button onclick="switchTab('export')" data-nav="export"
+            <button onclick="switchTab('export');closeSidebar()" data-nav="export"
                 class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-xl transition-all text-stone-500 hover:text-stone-900 hover:bg-stone-50">
                 <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -92,30 +70,22 @@
     </aside>
 
     <!-- ══════════════════════════════════════════════════════════ -->
-    <!-- ▓▓▓  MOBILE TOGGLE + OVERLAY  ▓▓▓ -->
+    <!-- ▓▓▓  DARK OVERLAY — click to close  ▓▓▓ -->
     <!-- ══════════════════════════════════════════════════════════ -->
-    <button id="menu-btn" class="fixed top-4 left-4 z-50 lg:hidden w-10 h-10 bg-white rounded-xl shadow-sm border border-stone-100 flex items-center justify-center active:scale-95 transition-transform" aria-label="Menu">
-        <svg id="menu-open" class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        <svg id="menu-close" class="w-5 h-5 text-stone-600 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M6 18L18 6"/></svg>
-    </button>
+    <div id="sidebar-overlay" class="hidden fixed inset-0 z-40 bg-black/50 transition-opacity duration-300" onclick="closeSidebar()"></div>
 
-    <div id="menu-overlay" class="hidden fixed inset-0 z-40 bg-white flex flex-col items-center justify-center gap-1 p-8">
-        <div class="mb-8 text-center">
-            <img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah" class="site-logo-sm mx-auto">
-        </div>
-        <button onclick="switchTab('sensors');closeMenu()" class="w-full max-w-xs py-3.5 text-base font-semibold text-stone-600 hover:text-forest-700 hover:bg-forest-50 rounded-2xl transition-all">Tableau de bord</button>
-        <button onclick="switchTab('plants');closeMenu()" class="w-full max-w-xs py-3.5 text-base font-semibold text-stone-600 hover:text-forest-700 hover:bg-forest-50 rounded-2xl transition-all">Analyse Plantes</button>
-        <button onclick="switchTab('espcam');closeMenu()" class="w-full max-w-xs py-3.5 text-base font-semibold text-stone-600 hover:text-forest-700 hover:bg-forest-50 rounded-2xl transition-all">ESP32-CAM</button>
-        <button onclick="switchTab('export');closeMenu()" class="w-full max-w-xs py-3.5 text-base font-semibold text-stone-600 hover:text-forest-700 hover:bg-forest-50 rounded-2xl transition-all">Export</button>
-        <hr class="w-full max-w-xs border-stone-100 my-6">
-        <a href="/" class="w-full max-w-xs py-3.5 text-base font-semibold text-stone-500 hover:text-stone-900 hover:bg-stone-50 rounded-2xl transition-all text-center no-underline">Marche</a>
-        <a href="/accounts/logout/" class="w-full max-w-xs py-3.5 text-base font-semibold text-red-500 hover:bg-red-50 rounded-2xl transition-all text-center no-underline">Deconnexion</a>
-    </div>
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- ▓▓▓  HAMBURGER BUTTON — always visible  ▓▓▓ -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <button id="hamburger-btn" onclick="toggleSidebar()" class="fixed top-4 left-4 z-[60] w-10 h-10 bg-white rounded-xl shadow-sm border border-stone-200 flex items-center justify-center hover:bg-stone-50 active:scale-95 transition-transform" aria-label="Menu">
+        <svg id="icon-hamburger" class="w-5 h-5 text-stone-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="icon-close" class="w-5 h-5 text-stone-600 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M6 18L18 6"/></svg>
+    </button>
 
     <!-- ══════════════════════════════════════════════════════════ -->
     <!-- ▓▓▓  MAIN CONTENT  ▓▓▓ -->
     <!-- ══════════════════════════════════════════════════════════ -->
-    <main class="lg:ml-64 min-h-screen">
+    <main class="w-full min-h-screen">
         <div class="max-w-5xl mx-auto px-5 sm:px-8 lg:px-10 py-6 lg:py-10 space-y-10">
 
             <!-- ════════════════════════════════════════════════════ -->
@@ -503,20 +473,29 @@
 
 {% block extra_scripts %}
     <script>
-    /* ── Mobile menu ── */
-    var btn = document.getElementById('menu-btn'),
-        ov = document.getElementById('menu-overlay'),
-        o = document.getElementById('menu-open'),
-        c = document.getElementById('menu-close');
-    btn.addEventListener('click', function() {
-        ov.classList.toggle('hidden');
-        o.classList.toggle('hidden');
-        c.classList.toggle('hidden');
-    });
-    function closeMenu() {
-        ov.classList.add('hidden');
-        o.classList.remove('hidden');
-        c.classList.add('hidden');
+    /* ── Sidebar toggle ── */
+    var sidebar = document.getElementById('sidebar'),
+        overlay = document.getElementById('sidebar-overlay'),
+        iconHam = document.getElementById('icon-hamburger'),
+        iconCls = document.getElementById('icon-close'),
+        isOpen = false;
+
+    function openSidebar() {
+        sidebar.classList.replace('-translate-x-full', 'translate-x-0');
+        overlay.classList.remove('hidden');
+        iconHam.classList.add('hidden');
+        iconCls.classList.remove('hidden');
+        isOpen = true;
+    }
+    function closeSidebar() {
+        sidebar.classList.replace('translate-x-0', '-translate-x-full');
+        overlay.classList.add('hidden');
+        iconHam.classList.remove('hidden');
+        iconCls.classList.add('hidden');
+        isOpen = false;
+    }
+    function toggleSidebar() {
+        isOpen ? closeSidebar() : openSidebar();
     }
 
     /* ── Soil moisture progress bar (MutationObserver) ── */

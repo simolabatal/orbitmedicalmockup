@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>{% block title %}L'Fellah{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ── Logo standard ───────────────────────────────────────── */
+        .site-logo {
+            height: 5rem;                /* 80px */
+            filter: contrast(1.4) drop-shadow(0 4px 10px rgba(0,0,0,0.45));
+            transition: transform 0.2s ease;
+            object-fit: contain;
+            max-width: 100%;
+        }
+        .site-logo:hover {
+            transform: scale(1.05);
+        }
+        /* Variante compacte (mobile / sidebar) */
+        .site-logo-sm {
+            height: 3.5rem;              /* 56px */
+            filter: contrast(1.4) drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+            transition: transform 0.2s ease;
+            object-fit: contain;
+            max-width: 100%;
+        }
+        .site-logo-sm:hover {
+            transform: scale(1.05);
+        }
+        /* Variante header sticky */
+        .site-logo-header {
+            height: 5rem;                /* 80px */
+            filter: contrast(1.4) drop-shadow(0 3px 8px rgba(0,0,0,0.45));
+            transition: transform 0.2s ease;
+            object-fit: contain;
+            max-width: 100%;
+        }
+        .site-logo-header:hover {
+            transform: scale(1.05);
+        }
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans antialiased min-h-screen">
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- ▓▓▓  HEADER GLOBAL — identique sur toutes les pages  ▓▓▓ -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    {% block global_header %}
+    <header class="sticky top-0 z-50 bg-gradient-to-r from-green-100/90 via-white/95 to-green-50/90 backdrop-blur-xl border-b-2 border-green-200/50 shadow-lg" style="min-height:6rem">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between py-2">
+            <!-- Logo cliquable — toujours vers l'accueil -->
+            <a href="{% url 'dashboard' %}" class="flex items-center gap-2.5 no-underline flex-shrink-0" aria-label="L'Fellah — Accueil">
+                <img src="{{ MEDIA_URL }}logo.png" alt="L'Fellah — Smart Agriculture" class="site-logo-header">
+            </a>
+
+            <!-- Zone droite — surchargée par chaque page -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                {% block header_right %}{% endblock %}
+            </div>
+        </div>
+    </header>
+    {% endblock %}
+
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- ▓▓▓  CONTENU PRINCIPAL  ▓▓▓ -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <main class="{% block main_class %}{% endblock %}">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

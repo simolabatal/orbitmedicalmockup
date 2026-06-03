@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
 from . import views
 
@@ -22,6 +23,30 @@ urlpatterns = [
     path('register/', views.register_page, name='register'),
     path('accounts/change-password/', views.change_password_page, name='change-password'),
     path('accounts/logout/', views.logout_page, name='logout'),
+
+    # ── Password Reset (Django built-in) ─────────────────────────
+    path('password-reset/',
+         auth_views.PasswordResetView.as_view(
+             template_name='core/registration/password_reset_form.html',
+             email_template_name='core/registration/password_reset_email.html',
+             subject_template_name='core/registration/password_reset_subject.txt',
+         ),
+         name='password_reset'),
+    path('password-reset/done/',
+         auth_views.PasswordResetDoneView.as_view(
+             template_name='core/registration/password_reset_done.html',
+         ),
+         name='password_reset_done'),
+    path('reset/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(
+             template_name='core/registration/password_reset_confirm.html',
+         ),
+         name='password_reset_confirm'),
+    path('reset/done/',
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='core/registration/password_reset_complete.html',
+         ),
+         name='password_reset_complete'),
     path('api/sensors/ingest/', views.sensor_ingest, name='sensor-ingest'),
     path('api/sensors/latest/', views.sensor_latest, name='sensor-latest'),
     path('api/sensors/chart/', views.sensor_chart, name='sensor-chart'),
@@ -39,7 +64,7 @@ urlpatterns = [
     path('api/iot/latest-capture/', views.latest_capture_api, name='iot-latest-capture'),
     path('api/iot/camera-proxy/', views.camera_proxy, name='iot-camera-proxy'),
     path('api/iot/sync-now/', views.sync_now, name='iot-sync-now'),
-    path('api/upload/', views.ImageUploadView.as_view(), name='image-upload'),
+    path('api/upload/', views.image_upload_view, name='image-upload'),
     path('api/latest-scan/', views.latest_scan_api, name='latest-scan'),
     path('api/scans/export/', views.export_scans_csv, name='export-scans'),
     path('api/scans/<int:scan_id>/archive/', views.archive_scan, name='archive-scan'),

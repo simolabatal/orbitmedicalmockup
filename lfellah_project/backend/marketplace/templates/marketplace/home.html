@@ -3,48 +3,37 @@
 
 {% block title %}L'Fellah 2.0 — Marché Agricole{% endblock %}
 
-{% block extra_head %}
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: { 50:'#faf8f5', 100:'#f0fdf4', 800:'#1b4332', 900:'#064e3b' },
-                        accent: { 400:'#95d5b2', 500:'#2d6a4f', 600:'#40916c' }
-                    },
-                    fontFamily: { sans: ['Inter','system-ui','sans-serif'] },
-                    borderRadius: { 'xl':'12px','2xl':'16px','3xl':'24px' }
-                }
-            }
-        }
-    </script>
-{% endblock %}
+{% block extra_head %}{% endblock %}
 
 {% block header_right %}
     {% if user.is_authenticated %}
-        {% if user.is_finance %}
+        {% if user_roles.is_finance %}
             <a href="/dashboard-finance/" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-3 sm:px-4 py-2 rounded-xl text-xs font-bold shadow shadow-emerald-500/10 hover:shadow-md hover:-translate-y-px transition-all flex items-center gap-1.5">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <span class="hidden sm:inline">Finance</span>
+                <span class="hidden sm:inline">Finances</span>
             </a>
-        {% elif user.role == 'farmer' %}
-            <a href="/vendeur/dashboard/" class="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 sm:px-4 py-2 rounded-xl text-xs font-bold shadow shadow-amber-500/10 hover:shadow-md hover:-translate-y-px transition-all flex items-center gap-1.5">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                <span class="hidden sm:inline">Vendeur</span>
-            </a>
-        {% elif user.role == 'marketer' %}
-            <a href="/marketing/" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-3 sm:px-4 py-2 rounded-xl text-xs font-bold shadow shadow-purple-500/10 hover:shadow-md hover:-translate-y-px transition-all flex items-center gap-1.5">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                <span class="hidden sm:inline">Marketing</span>
-            </a>
-        {% elif user.role == 'admin' %}
+        {% elif user_roles.is_admin %}
             <a href="/dashboard-iot/" class="bg-brand-900 text-white px-3 sm:px-4 py-2 rounded-xl text-xs font-bold shadow shadow-brand-900/10 hover:shadow-md hover:-translate-y-px transition-all flex items-center gap-1.5">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0"/></svg>
                 <span class="hidden sm:inline">Admin</span>
             </a>
         {% endif %}
 
-        {% if user.role == 'buyer' %}
+        {% if user_roles.is_farmer %}
+            <a href="/vendeur/dashboard/" class="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 sm:px-4 py-2 rounded-xl text-xs font-bold shadow shadow-amber-500/10 hover:shadow-md hover:-translate-y-px transition-all flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span class="hidden sm:inline">Vendeur</span>
+            </a>
+        {% endif %}
+
+        {% if user_roles.is_marketing %}
+            <a href="/marketing/" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-3 sm:px-4 py-2 rounded-xl text-xs font-bold shadow shadow-purple-500/10 hover:shadow-md hover:-translate-y-px transition-all flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                <span class="hidden sm:inline">Marketing</span>
+            </a>
+        {% endif %}
+
+        {% if user_roles.is_buyer %}
         <a href="/panier/" class="relative p-1.5 text-stone-500 hover:text-brand-900 transition-colors" id="cart-link">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
             <span id="cart-badge" class="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-brand-900 text-white text-[9px] font-black rounded-full flex items-center justify-center shadow {% if cart_count == 0 %}hidden{% endif %}">{{ cart_count }}</span>
@@ -108,12 +97,12 @@
                 <div class="p-4 flex flex-col flex-1">
                     <div class="flex items-start justify-between mb-1.5">
                         <a href="/acheter/{{ p.id }}/" class="text-sm font-bold text-stone-800 hover:text-brand-900 transition-colors no-underline">{{ p.name }}</a>
-                        <span class="text-sm font-black text-brand-900">{{ p.price }} MAD</span>
+                        <span class="text-sm font-black text-brand-900">{{ p.price_final_display|floatformat:2 }} MAD</span>
                     </div>
                     <p class="text-xs text-stone-400 mb-1">{{ p.category.name_fr|default:"Produit" }} · {{ p.harvest_date|default:"Récolte récente" }}</p>
                     <p class="text-[11px] text-stone-500 font-semibold mb-3">Stock : {{ p.stock_quantity|floatformat:0 }} {{ p.get_unit_display }}</p>
                     <div class="mt-auto space-y-2">
-                        {% if user.is_authenticated and user.role == 'buyer' %}
+                        {% if user.is_authenticated and user_roles.is_buyer %}
                         <div class="flex items-center gap-1">
                             <button onclick="qtyStep({{ p.id }}, -1)" class="w-7 h-7 rounded-lg border border-stone-200 text-stone-500 hover:border-brand-900 hover:text-brand-900 flex items-center justify-center text-sm font-bold transition-colors">−</button>
                             <input type="number" id="qty-{{ p.id }}" value="1" min="1" max="{{ p.stock_quantity|floatformat:'0' }}" class="w-12 text-center bg-stone-50 border border-stone-200 rounded-lg py-1.5 text-xs font-bold text-brand-900 focus:outline-none focus:border-brand-900">
@@ -124,8 +113,8 @@
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                             Ajouter au panier
                         </button>
-                        {% else %}
-                        <a href="/acheter/{{ p.id }}/" class="flex-1 bg-brand-900 text-white text-center py-2 rounded-xl text-xs font-bold hover:bg-brand-800 transition-all block">Acheter</a>
+                        {% elif not user.is_authenticated %}
+                        <p class="text-[11px] text-stone-400 text-center italic">Connectez-vous en tant qu'acheteur pour commander</p>
                         {% endif %}
                     </div>
                 </div>
