@@ -64,6 +64,7 @@ urlpatterns = [
     path('api/iot/latest-capture/', views.latest_capture_api, name='iot-latest-capture'),
     path('api/iot/camera-proxy/', views.camera_proxy, name='iot-camera-proxy'),
     path('api/iot/sync-now/', views.sync_now, name='iot-sync-now'),
+    path('api/iot/irrigation-control/', views.irrigation_control, name='irrigation-control'),
     path('api/upload/', views.image_upload_view, name='image-upload'),
     path('api/latest-scan/', views.latest_scan_api, name='latest-scan'),
     path('api/scans/export/', views.export_scans_csv, name='export-scans'),

@@ -16,7 +16,7 @@ THRESHOLDS = {
     'tds': (500.0, 1200.0, 'ppm'),
 }
 
-CACHE_TIMEOUT = 1800  # 30 minutes entre alertes pour le meme capteur
+CACHE_TIMEOUT = 900  # 15 minutes entre alertes pour le meme type
 
 REMEDIATION = {
     'temperature': {

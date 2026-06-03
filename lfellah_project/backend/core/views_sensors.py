@@ -61,7 +61,7 @@ def map_sensor_payload(data):
                     return float(data[k])
                 except (ValueError, TypeError):
                     continue
-        return None
+        return 0.0  # fallback: capteur absent
 
     mapped['temperature']   = _extract(temp_keys)
     mapped['humidity']      = _extract(hum_keys)
@@ -501,3 +501,34 @@ def sync_now(request):
             'reason': str(e),
             'synced': 0,
         })
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, IsIotStaff])
+def irrigation_control(request):
+    """
+    Controle pompe d'irrigation via relais Arduino.
+    POST /api/iot/irrigation-control/
+    Body: {"action": "on"} ou {"action": "off"} ou {"action": "status"}
+    """
+    action = request.data.get('action', '').lower()
+
+    if action not in ('on', 'off', 'status'):
+        return Response({'error': 'Action invalide. Utiliser on, off ou status.'}, status=400)
+
+    # Ecrit la commande dans un fichier lu par le bridge
+    import os
+    from django.conf import settings
+    command_file = os.path.join(settings.BASE_DIR, 'irrigation_command.txt')
+    serial_cmd = {'on': 'RELAY:ON', 'off': 'RELAY:OFF', 'status': 'STATUS'}[action]
+
+    with open(command_file, 'w') as f:
+        f.write(serial_cmd)
+
+    return Response({
+        'status': 'ok',
+        'action': action,
+        'command': serial_cmd,
+        'message': f'Commande {serial_cmd} envoyee au bridge',
+    })

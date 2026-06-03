@@ -92,6 +92,17 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 
 
+
+
+# ─── CACHE — FileBased (persiste entre redemarrages) ──────────
+import os as _os
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))), 'cache'),
+    }
+}
+
 # ─── DRF ─────────────────────────────────────────────────────────
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

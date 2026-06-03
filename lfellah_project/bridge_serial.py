@@ -223,6 +223,7 @@ def send(data):
         'humidity':      _map_value(data, 'humidity', 'hum', 'Humidity', 'H'),
         'tds':           _map_value(data, 'tds', 'TDS'),
         'ph':            _map_value(data, 'ph', 'pH', 'PH'),
+        'ph_raw':        _map_value(data, 'ph_raw', 'phRaw', 'ph_raw', 'pH_raw'),
         'soil_moisture': _map_value(data, 'soil_moisture', 'soil', 'soil_moisture', 'Soil'),
     }
 
@@ -344,11 +345,12 @@ def _find_com7_blockers():
 
 
 def _map_value(data, *keys):
-    """Retourne la premiere valeur non-None trouvee dans data pour les keys donnees."""
+    """Retourne la premiere valeur non-None trouvee dans data pour les keys donnees.
+       Si aucune cle trouvee, retourne 0.0 au lieu de None (resilience Arduino)."""
     for k in keys:
         if k in data and data[k] is not None:
             return float(data[k]) if data[k] != '' else None
-    return None
+    return 0.0  # fallback: capteur absent ou non connecte
 
 
 def _ensure_single_instance():
@@ -423,6 +425,21 @@ def main():
                         mode = 'SQLite (buffer)' if mysql_was_down else 'MySQL'
                         print(f"Bridge: Envoi... (OK {sent_ok}, ERR {sent_err}) — Mode: {mode}")
                         last_heartbeat = now
+
+                    # ── Check irrigation command file ──────────
+                    cmd_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'backend', 'irrigation_command.txt')
+                    if os.path.exists(cmd_file):
+                        try:
+                            with open(cmd_file, 'r') as f:
+                                cmd = f.read().strip()
+                            if cmd and ser and ser.is_open:
+                                ser.write((cmd + '\n').encode('utf-8'))
+                                ser.flush()
+                                print(f'[IRRIGATION] Commande envoyee a Arduino: {cmd}')
+                            os.remove(cmd_file)
+                        except Exception as e:
+                            print(f'[IRRIGATION] Erreur: {e}')
+                    # ────────────────────────────────────────────
 
                     if ser.in_waiting == 0:
                         if line_buf:
