@@ -34,10 +34,10 @@ urlpatterns = [
          ),
          name='password_reset_done'),
     path('password-reset/verify/',
-         views.password_reset_verify,
+         views.VerifyCodeView.as_view(),
          name='password_reset_verify'),
     path('password-reset/set-password/',
-         views.password_reset_set_password,
+         views.ResetPasswordView.as_view(),
          name='password_reset_set_password'),
     path('password-reset/complete/',
          auth_views.PasswordResetCompleteView.as_view(

@@ -1,5 +1,6 @@
 import json
 import csv
+import os
 import time
 from datetime import datetime
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
@@ -11,6 +12,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.conf import settings
 from django.db.utils import OperationalError
 from django.contrib.auth.decorators import user_passes_test
 from core.views_auth import is_iot_staff
@@ -68,6 +70,8 @@ def map_sensor_payload(data):
     mapped['tds']           = _extract(tds_keys)
     mapped['ph']            = _extract(ph_keys)
     mapped['soil_moisture'] = _extract(soil_keys)
+    mapped['relay']         = data.get('relay')
+    mapped['mode']          = data.get('mode')
     mapped['device_token'] = data.get('device_token', '')
     return mapped if mapped.get('device_token') else None
 
@@ -91,6 +95,8 @@ class SensorDataIngestSerializer(serializers.Serializer):
     tds = serializers.FloatField(required=False, allow_null=True)
     ph = serializers.FloatField(required=False, allow_null=True)
     soil_moisture = serializers.FloatField(required=False, allow_null=True)
+    relay = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    mode = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
     def validate(self, attrs):
         has_sensor_data = any(
@@ -187,6 +193,8 @@ def sensor_ingest(request):
             tds=mapped.get('tds'),
             ph=mapped.get('ph'),
             soil_moisture=mapped.get('soil_moisture'),
+            relay=mapped.get('relay'),
+            mode=mapped.get('mode'),
             recorded_at=timezone.now(),
         )
         # Forcer le commit explicite (meme si auto-commit par defaut)
@@ -201,6 +209,8 @@ def sensor_ingest(request):
                 tds=mapped.get('tds'),
                 ph=mapped.get('ph'),
                 soil_moisture=mapped.get('soil_moisture'),
+                relay=mapped.get('relay'),
+                mode=mapped.get('mode'),
                 recorded_at=timezone.now(),
             )
 
@@ -314,6 +324,8 @@ def sensor_latest(request):
         'tds': sd.tds,
         'ph': sd.ph,
         'soil_moisture': sd.soil_moisture,
+        'relay': sd.relay,
+        'mode': sd.mode,
         'recorded_at': sd.recorded_at.isoformat(),
         'recorded_at_ms': int(sd.recorded_at.timestamp() * 1000),
         'offline_mode': offline_mode,
@@ -507,21 +519,39 @@ def irrigation_control(request):
     """
     Controle pompe d'irrigation via relais Arduino.
     POST /api/iot/irrigation-control/
-    Body: {"action": "on"} ou {"action": "off"} ou {"action": "status"}
+    Body: {"action": "on"} ou {"action": "off"} ou {"action": "auto"} ou {"action": "status"}
+          {"action": "mode_auto"} ou {"action": "mode_manual"} pour basculer le mode.
+    Ecrit dans irrigation_command.txt que le bridge lit periodiquement.
     """
     action = request.data.get('action', '').lower()
 
-    if action not in ('on', 'off', 'status', 'auto'):
-        return Response({'error': 'Action invalide. Utiliser on, off, auto ou status.'}, status=400)
+    valid_actions = ('on', 'off', 'status', 'auto', 'mode_auto', 'mode_manual')
+    if action not in valid_actions:
+        return Response({'error': f'Action invalide. Utiliser {", ".join(valid_actions)}'}, status=400)
 
-    serial_cmd = {'on': 'RELAY:ON', 'off': 'RELAY:OFF', 'auto': 'AUTO', 'status': 'STATUS'}[action]
+    cmd_map = {
+        'on': 'RELAY:ON',
+        'off': 'RELAY:OFF',
+        'auto': 'AUTO',
+        'status': 'STATUS',
+        'mode_auto': 'A',
+        'mode_manual': 'M',
+    }
+    serial_cmd = cmd_map[action]
+    command_file = os.path.join(settings.BASE_DIR, 'irrigation_command.txt')
 
     with open(command_file, 'w') as f:
         f.write(serial_cmd)
+
+    mode_response = {
+        'mode_auto': 'AUTO',
+        'mode_manual': 'MANUAL',
+    }.get(action)
 
     return Response({
         'status': 'ok',
         'action': action,
         'command': serial_cmd,
+        'mode': mode_response,
         'message': f'Commande {serial_cmd} envoyee au bridge',
     })

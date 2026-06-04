@@ -81,22 +81,9 @@ console.log('Dashboard v2 loaded');
         };
     }
 
-    function safeJson(r) {
-        var ct = r.headers.get('content-type') || '';
-        if (!ct.includes('application/json')) {
-            console.warn('[API] Reponse non-JSON (status=' + r.status + ', ct=' + ct + ')');
-            return Promise.reject(new Error('Reponse non-JSON : ' + r.status));
-        }
-        return r.json();
-    }
-
-    function safeJsonOrNull(r) {
-        if (!r.ok) return Promise.resolve(null);
-        return safeJson(r);
-    }
-
     let espcamReady = false;
     let selectedPlantFile = null;
+    let lastModeChange = 0;
 
     /* ================================================================
        TAB SWITCHING (avec support URL ?tab=xxx)
@@ -224,6 +211,10 @@ console.log('Dashboard v2 loaded');
         updateCard('tds', data.tds, 'ppm', 0);
         updateCard('ph', data.ph, null, 1);
 
+        // ── Sync irrigation button + mode switch depuis les donnees API ─
+        updateIrrigationButton(data.relay, data.mode);
+        updateModeButton(data.mode);
+
         // Alerts API — protection complete null/undefined
         var alerts = [];
         if (data && data.alerts && Array.isArray(data.alerts)) {
@@ -245,6 +236,133 @@ console.log('Dashboard v2 loaded');
             }
         }
     }
+
+    /* ── Irrigation button sync depuis l'API ───────────────────────── */
+    function updateIrrigationButton(relay, mode, force) {
+        // Ne pas annuler la mise à jour optimiste pendant 6s (sauf force=true)
+        if (!force && Date.now() - lastModeChange < 6000) return;
+
+        var btn  = $('irrigation-btn');
+        var dot  = $('irrigation-dot');
+        var lbl  = $('irrigation-label');
+        if (!btn || !dot || !lbl) return;
+
+        if (!relay || !mode) {
+            // Pas de donnee — etat inconnu
+            dot.className = 'w-2 h-2 rounded-full bg-stone-300 inline-block';
+            lbl.textContent = 'Irrigation --';
+            btn.style.background = '#fff';
+            btn.style.borderColor = '#e5e7eb';
+            btn.style.color = '#6b7280';
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+            if (window.irrigationOn !== undefined) window.irrigationOn = false;
+            return;
+        }
+
+        if (mode === 'AUTO') {
+            // Mode AUTO : bouton desactive, pas de forçage manuel
+            btn.disabled = true;
+            btn.style.opacity = '0.6';
+            btn.style.cursor = 'not-allowed';
+            if (relay === 'ON') {
+                dot.className = 'w-2 h-2 rounded-full bg-sky-500 inline-block';
+                lbl.textContent = 'Auto ON';
+                btn.style.background = '#f0f9ff';
+                btn.style.borderColor = '#7dd3fc';
+                btn.style.color = '#0284c7';
+            } else {
+                dot.className = 'w-2 h-2 rounded-full bg-stone-300 inline-block';
+                lbl.textContent = 'Auto OFF';
+                btn.style.background = '#f5f5f4';
+                btn.style.borderColor = '#d6d3d1';
+                btn.style.color = '#78716c';
+            }
+            if (window.irrigationOn !== undefined) window.irrigationOn = false;
+            return;
+        }
+
+        // Mode MANUAL : bouton actif, forçage manuel possible
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        if (relay === 'ON') {
+            dot.className = 'w-2 h-2 rounded-full bg-sky-500 animate-pulse inline-block';
+            lbl.textContent = 'Irrigation ON';
+            btn.style.background = '#f0f9ff';
+            btn.style.borderColor = '#7dd3fc';
+            btn.style.color = '#0284c7';
+            if (window.irrigationOn !== undefined) window.irrigationOn = true;
+        } else {
+            dot.className = 'w-2 h-2 rounded-full bg-stone-300 inline-block';
+            lbl.textContent = 'Irrigation OFF';
+            btn.style.background = '#fff';
+            btn.style.borderColor = '#e5e7eb';
+            btn.style.color = '#6b7280';
+            if (window.irrigationOn !== undefined) window.irrigationOn = false;
+        }
+    }
+
+    /* ── Mode switch AUTO/MANUAL ─────────────────────────────────── */
+    function updateModeButton(mode, force) {
+        // Ne pas annuler la mise à jour optimiste pendant 6s (sauf force=true)
+        if (!force && Date.now() - lastModeChange < 6000) return;
+
+        var autoBtn   = document.querySelector('.mode-auto');
+        var manualBtn = document.querySelector('.mode-manual');
+        if (!autoBtn || !manualBtn) return;
+
+        if (mode === 'AUTO') {
+            autoBtn.style.background   = '#dcfce7';
+            autoBtn.style.color        = '#166534';
+            autoBtn.style.fontWeight   = '700';
+            manualBtn.style.background = '#fff';
+            manualBtn.style.color      = '#a8a29e';
+            manualBtn.style.fontWeight = '500';
+        } else if (mode === 'MANUAL') {
+            manualBtn.style.background = '#fee2e2';
+            manualBtn.style.color      = '#991b1b';
+            manualBtn.style.fontWeight = '700';
+            autoBtn.style.background   = '#fff';
+            autoBtn.style.color        = '#a8a29e';
+            autoBtn.style.fontWeight   = '500';
+        } else {
+            // Inconnu — les deux grisés
+            autoBtn.style.background   = '#f5f5f4';
+            autoBtn.style.color        = '#a8a29e';
+            autoBtn.style.fontWeight   = '500';
+            manualBtn.style.background = '#f5f5f4';
+            manualBtn.style.color      = '#a8a29e';
+            manualBtn.style.fontWeight = '500';
+        }
+    }
+
+    window.updateModeButton = updateModeButton;
+
+    function toggleMode(mode) {
+        lastModeChange = Date.now();
+        var action = mode === 'auto' ? 'mode_auto' : 'mode_manual';
+        fetch('/api/iot/irrigation-control/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRF() },
+            body: JSON.stringify({ action: action }),
+            credentials: 'same-origin'
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.status === 'ok') {
+                updateModeButton(data.mode, true);
+                // Forcer la mise à jour immédiate du bouton irrigation
+                var dot = document.getElementById('irrigation-dot');
+                var relay = dot && dot.classList.contains('bg-sky-500') ? 'ON' : 'OFF';
+                updateIrrigationButton(relay, data.mode, true);
+            }
+        })
+        .catch(function(e) { console.error('Mode switch error:', e); });
+    }
+
+    window.toggleMode = toggleMode;
 
     function renderChart(canvasId, data, datasets) {
         const canvas = $(canvasId);

@@ -100,7 +100,7 @@ class SensorDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SensorData
-        fields = ['id', 'device', 'device_name', 'temperature', 'humidity', 'tds', 'ph', 'recorded_at']
+        fields = ['id', 'device', 'device_name', 'temperature', 'humidity', 'tds', 'ph', 'soil_moisture', 'relay', 'mode', 'recorded_at']
         read_only_fields = ['recorded_at']
 
 
@@ -111,3 +111,6 @@ class SensorDataCreateSerializer(serializers.Serializer):
     humidity = serializers.FloatField(required=False)
     tds = serializers.FloatField(required=False)
     ph = serializers.FloatField(required=False)
+    soil_moisture = serializers.FloatField(required=False)
+    relay = serializers.ChoiceField(choices=['ON', 'OFF'], required=False, allow_null=True)
+    mode = serializers.ChoiceField(choices=['AUTO', 'MANUAL'], required=False, allow_null=True)

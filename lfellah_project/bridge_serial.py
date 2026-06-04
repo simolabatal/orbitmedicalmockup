@@ -225,6 +225,8 @@ def send(data):
         'ph':            _map_value(data, 'ph', 'pH', 'PH'),
         'ph_raw':        _map_value(data, 'ph_raw', 'phRaw', 'ph_raw', 'pH_raw'),
         'soil_moisture': _map_value(data, 'soil_moisture', 'soil', 'soil_moisture', 'Soil'),
+        'relay':         data.get('relay', 'OFF'),
+        'mode':          data.get('mode', 'AUTO'),
     }
 
     if all(v is None for k, v in payload.items() if k != 'device_token'):

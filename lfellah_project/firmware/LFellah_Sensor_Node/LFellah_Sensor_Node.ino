@@ -32,25 +32,17 @@ float calibratePH(float adcRaw) {
 // ─── Calibration humidite sol ────────────────────────────────────
 const int soilDry = 1023;  // ADC a l'air libre
 const int soilWet = 300;   // ADC dans l'eau
-const int SOIL_THRESHOLD = 35; // % — seuil declenchement pompe automatique
+const int SOIL_THRESHOLD = 45; // % — seuil declenchement pompe automatique
 
-bool manualOverride = false; // true = commande manuelle active, pas d'auto-off
+bool modeAuto = true;  // true = automatique, false = manuel (bouton Dashboard)
 
-void setup() {
-  Serial.begin(9600);
-  dht.begin();
-  digitalWrite(relayPin, HIGH); // Anti-bounce: HIGH avant pinMode
-  pinMode(relayPin, OUTPUT);
-
-  Serial.println("L'Fellah Node v3 Initialized...");
-}
-
-void loop() {
-  // ── 1. Lecture DHT22 ──────────────────────────────────────────
+// ─── Irrigation Automatique (capteurs + seuil humidité) ──────────
+void irrigationAutomatique() {
+  // ── 2. Lecture DHT22 ──────────────────────────────────────────
   float h = dht.readHumidity();
   float t = dht.readTemperature();
 
-  // ── 2. Lecture ADC avec lissage (moyenne 5 lectures) ──────────
+  // ── 3. Lecture ADC avec lissage (moyenne 5 lectures) ──────────
   long tdsRaw = 0, phRaw = 0, soilRaw = 0;
   for (int i = 0; i < 5; i++) {
     tdsRaw += analogRead(tdsPin);
@@ -63,44 +55,19 @@ void loop() {
   float phAvg = phRaw / 5.0;
   int soilAvg = soilRaw / 5.0;
 
-  // ── 3. Conversion ─────────────────────────────────────────────
+  // ── 4. Conversion ─────────────────────────────────────────────
   float phValue = calibratePH(phAvg);
   int soilMoisture = map(soilAvg, soilDry, soilWet, 0, 100);
   soilMoisture = constrain(soilMoisture, 0, 100);
 
-  // ── 5. Ecoute commandes relais (bridge → dashboard) ──────────
-  if (Serial.available() > 0) {
-    String cmd = Serial.readStringUntil('\n');
-    cmd.trim();
-    if (cmd == "RELAY:ON") {
-      digitalWrite(relayPin, LOW);
-      manualOverride = true;
-      Serial.println("{\"relay\":\"ON\"}");
-    } else if (cmd == "RELAY:OFF") {
-      digitalWrite(relayPin, HIGH);
-      manualOverride = true;  // garde OFF meme si sol sec
-      Serial.println("{\"relay\":\"OFF\"}");
-    } else if (cmd == "AUTO") {
-      manualOverride = false;  // repasser en mode auto
-      Serial.println("{\"relay\":\"AUTO\"}");
-    } else if (cmd == "STATUS") {
-      int state = digitalRead(relayPin);
-      Serial.print("{\"relay\":\"");
-      Serial.print(state == LOW ? "ON" : "OFF");
-      Serial.println("\"}");
-    }
+  // ── 5. Automatisation pompe — seuil humidite sol ────────────
+  if (soilMoisture < 45) {
+    digitalWrite(relayPin, LOW);   // Pompe ON — sol trop sec
+  } else {
+    digitalWrite(relayPin, HIGH);  // Pompe OFF — humidite OK
   }
 
-  // ── 6. Automatisation pompe — seuil humidite sol ────────────
-  if (!manualOverride) {
-    if (soilMoisture < SOIL_THRESHOLD) {
-      digitalWrite(relayPin, LOW);   // Pompe ON — sol trop sec
-    } else {
-      digitalWrite(relayPin, HIGH);  // Pompe OFF — humidite OK
-    }
-  }
-
-  // ── 7. Envoi JSON capteurs (avec etat relais pour sync UI) ──
+  // ── 6. Envoi JSON capteurs ──
   int relayState = digitalRead(relayPin);
   Serial.print("{\"temp\":"); Serial.print(isnan(t) ? 0.0 : t);
   Serial.print(", \"hum\":"); Serial.print(isnan(h) ? 0.0 : h);
@@ -109,7 +76,128 @@ void loop() {
   Serial.print(", \"phRaw\":"); Serial.print(phAvg, 0);
   Serial.print(", \"soil\":"); Serial.print(soilMoisture);
   Serial.print(", \"relay\":\""); Serial.print(relayState == LOW ? "ON" : "OFF");
+  Serial.print("\", \"mode\":\"AUTO");
   Serial.println("\"}");
 
   delay(2000);
+}
+
+// ─── Irrigation Manuelle (bouton Dashboard) ──────────────────────
+void irrigationManuelle() {
+  static bool manualOverride = false;
+  static unsigned long manualStartTime = 0;
+  bool cmdReceived = false;
+
+  // ── 1. Écoute commandes relais ─────────────────────────────────
+  if (Serial.available() > 0) {
+    String cmd = Serial.readStringUntil('\n');
+    cmd.trim();
+    if (cmd == "RELAY:ON") {
+      digitalWrite(relayPin, LOW);
+      manualOverride = true;
+      manualStartTime = millis();
+      cmdReceived = true;
+    } else if (cmd == "RELAY:OFF") {
+      digitalWrite(relayPin, HIGH);
+      manualOverride = true;
+      manualStartTime = millis();
+      cmdReceived = true;
+    } else if (cmd == "AUTO") {
+      manualOverride = false;
+      cmdReceived = true;
+    } else if (cmd == "STATUS") {
+      cmdReceived = true;
+    }
+  }
+
+  // ── Feedback immédiat après commande ────────────────────────────
+  if (cmdReceived) {
+    int state = digitalRead(relayPin);
+    Serial.print("{\"relay\":\"");
+    Serial.print(state == LOW ? "ON" : "OFF");
+    Serial.print("\", \"mode\":\"");
+    Serial.print(manualOverride ? "MANUAL" : "AUTO");
+    Serial.println("\"}");
+  }
+
+  // ── Sécurité timeout ────────────────────────────────────────────
+  if (manualOverride && (millis() - manualStartTime > 300000)) {
+    manualOverride = false;
+  }
+
+  // ── Lecture DHT22 ──────────────────────────────────────────
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  // ── Lecture ADC avec lissage ────────────────────────────────
+  long tdsRaw = 0, phRaw = 0, soilRaw = 0;
+  for (int i = 0; i < 5; i++) {
+    tdsRaw += analogRead(tdsPin);
+    phRaw += analogRead(phPin);
+    soilRaw += analogRead(soilPin);
+    delay(10);
+  }
+
+  float tdsAvg = tdsRaw / 5.0;
+  float phAvg = phRaw / 5.0;
+  int soilAvg = soilRaw / 5.0;
+
+  // ── Conversion ─────────────────────────────────────────────
+  float phValue = calibratePH(phAvg);
+  int soilMoisture = map(soilAvg, soilDry, soilWet, 0, 100);
+  soilMoisture = constrain(soilMoisture, 0, 100);
+
+  // ── Automatisation pompe — seulement si pas de forçage manuel ──
+  if (!manualOverride) {
+    if (soilMoisture < 45) {
+      digitalWrite(relayPin, LOW);
+    } else {
+      digitalWrite(relayPin, HIGH);
+    }
+  }
+
+  // ── Envoi JSON périodique ──
+  int relayState = digitalRead(relayPin);
+  Serial.print("{\"temp\":"); Serial.print(isnan(t) ? 0.0 : t);
+  Serial.print(", \"hum\":"); Serial.print(isnan(h) ? 0.0 : h);
+  Serial.print(", \"tds\":"); Serial.print(tdsAvg);
+  Serial.print(", \"ph\":"); Serial.print(phValue, 1);
+  Serial.print(", \"phRaw\":"); Serial.print(phAvg, 0);
+  Serial.print(", \"soil\":"); Serial.print(soilMoisture);
+  Serial.print(", \"relay\":\""); Serial.print(relayState == LOW ? "ON" : "OFF");
+  Serial.print("\", \"mode\":\"MANUAL");
+  Serial.println("\"}");
+
+  delay(2000);
+}
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+  digitalWrite(relayPin, HIGH); // Anti-bounce: HIGH avant pinMode
+  pinMode(relayPin, OUTPUT);
+
+  Serial.println("L'Fellah Node v3 Initialized...");
+}
+
+void loop() {
+  // ── Basculement mode Auto/Manuel via caractère simple ──────────
+  if (Serial.available() > 0) {
+    char c = Serial.peek();
+    if (c == 'A') {
+      Serial.read();
+      while (Serial.available() && Serial.peek() == '\n') { Serial.read(); }
+      modeAuto = true;
+    } else if (c == 'M') {
+      Serial.read();
+      while (Serial.available() && Serial.peek() == '\n') { Serial.read(); }
+      modeAuto = false;
+    }
+  }
+
+  if (modeAuto) {
+    irrigationAutomatique();
+  } else {
+    irrigationManuelle();
+  }
 }

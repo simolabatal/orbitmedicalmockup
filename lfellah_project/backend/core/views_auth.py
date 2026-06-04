@@ -4,9 +4,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login, authenticate, logout as auth_logout
 from django.http import HttpResponse
+from django.views import View
 
 from .models import SecurityLog, BlockedIP
 from .serializers import SecurityLogSerializer, BlockedIPSerializer
+from .forms import VerifyCodeForm, ResetPasswordForm
 
 
 def is_saas_staff(user):
@@ -211,59 +213,85 @@ def password_reset_request(request):
     return render(request, 'core/registration/password_reset_form.html')
 
 
-def password_reset_verify(request):
-    """Verifie le code a 6 chiffres. Si OK, stocke email en session et redirige."""
-    if request.method == 'POST':
-        email = request.POST.get('email', '').strip().lower()
-        code = request.POST.get('code', '').strip()
+class VerifyCodeView(View):
+    """
+    Verifie le code a 6 chiffres envoye par email.
+    Si OK : request.session['email_verified'] = True + redirect vers ResetPasswordView.
+    Le code temporaire est lu depuis le cache et JAMAIS stocke dans user.password.
+    """
 
-        cache_key = f'pwd_reset_{email}'
-        stored_code = cache.get(cache_key)
-        print(f'[PWD RESET] Verification — email={email} code_soumis={code} code_stocke={stored_code}')
-
-        if not stored_code or str(stored_code) != str(code):
-            print(f'[PWD RESET] ECHEC — code invalide ou expire pour {email}')
-            return render(request, 'core/registration/password_reset_confirm.html', {
-                'error': 'Code invalide ou expire.',
-                'email': email,
-            })
-
-        # Code OK → autorise le changement de mot de passe via la session
-        request.session['reset_email'] = email
-        request.session['reset_code_verified'] = True
-        cache.delete(cache_key)  # le code ne sert plus
-        return redirect('/password-reset/set-password/')
-
-    return render(request, 'core/registration/password_reset_confirm.html')
-
-
-def password_reset_set_password(request):
-    """Etape 2 : SetPasswordForm — nouveau mot de passe sans ancien."""
-    email = request.session.get('reset_email')
-    verified = request.session.get('reset_code_verified')
-
-    if not email or not verified:
-        return redirect('/password-reset/')
-
-    from accounts.models import User
-    user = User.objects.filter(email=email).first()
-    if not user:
-        request.session.pop('reset_email', None)
-        request.session.pop('reset_code_verified', None)
-        return redirect('/password-reset/')
-
-    from django.contrib.auth.forms import SetPasswordForm
-
-    if request.method == 'POST':
-        form = SetPasswordForm(user, request.POST)
+    def post(self, request):
+        form = VerifyCodeForm(request.POST)
         if form.is_valid():
-            form.save()  # user.set_password() + user.save() — hache par Django
-            request.session.pop('reset_email', None)
-            request.session.pop('reset_code_verified', None)
-            return render(request, 'core/registration/password_reset_complete.html')
-    else:
-        form = SetPasswordForm(user)
+            email = form.cleaned_data['email'].strip().lower()
+            code = form.cleaned_data['code'].strip()
+            cache_key = f'pwd_reset_{email}'
+            stored_code = cache.get(cache_key)
+            print(f'[PWD RESET] Verification — email={email} code_soumis={code} code_stocke={stored_code}')
 
-    return render(request, 'core/registration/password_reset_set_password.html', {
-        'form': form,
-    })
+            if not stored_code or str(stored_code) != str(code):
+                print(f'[PWD RESET] ECHEC — code invalide ou expire pour {email}')
+                return render(request, 'core/registration/password_reset_confirm.html', {
+                    'error': 'Code invalide ou expire.',
+                    'email': email,
+                })
+
+            # Code OK → autorise le changement de mot de passe via la session
+            request.session['email_verified'] = True
+            request.session['verified_email'] = email
+            cache.delete(cache_key)  # le code ne sert plus
+            return redirect('/password-reset/set-password/')
+
+        return render(request, 'core/registration/password_reset_confirm.html', {'form': form})
+
+    def get(self, request):
+        return render(request, 'core/registration/password_reset_confirm.html')
+
+
+class ResetPasswordView(View):
+    """
+    Vue de definition du nouveau mot de passe (Set Password).
+    Recupere l'utilisateur par email, utilise user.set_password() puis user.save()
+    pour garantir le hachage correct par Django. Le code temporaire n'est JAMAIS
+    ecrit dans user.password.
+    """
+
+    def dispatch(self, request, *args, **kwargs):
+        self.email = request.session.get('verified_email')
+        self.verified = request.session.get('email_verified')
+        if not self.email or not self.verified:
+            return redirect('/password-reset/')
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request):
+        from accounts.models import User
+        try:
+            user = User.objects.get(email=self.email)
+        except User.DoesNotExist:
+            request.session.pop('verified_email', None)
+            request.session.pop('email_verified', None)
+            return redirect('/password-reset/')
+
+        print(f"[DEBUG RESET] user={user} | email={user.email} | active={user.is_active} | backend_attr={getattr(user, 'backend', 'N/A')}")
+        form = ResetPasswordForm(request.POST)
+        if form.is_valid():
+            # Sécurité backend pour éviter toute ambiguïté de session/auth
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            print(f"[DEBUG RESET] Password hash after save: {user.password[:30]}...")
+            request.session.pop('verified_email', None)
+            request.session.pop('email_verified', None)
+            return render(request, 'core/registration/password_reset_complete.html')
+
+        return render(request, 'core/registration/password_reset_set_password.html', {
+            'form': form,
+            'email': self.email,
+        })
+
+    def get(self, request):
+        form = ResetPasswordForm()
+        return render(request, 'core/registration/password_reset_set_password.html', {
+            'form': form,
+            'email': self.email,
+        })

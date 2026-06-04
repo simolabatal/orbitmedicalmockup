@@ -133,10 +133,14 @@ class DeviceConfig(models.Model):
 
 
 class SensorData(models.Model):
+    RELAY_CHOICES = [('ON', 'ON'), ('OFF', 'OFF')]
+    MODE_CHOICES = [('AUTO', 'AUTO'), ('MANUAL', 'MANUAL')]
+
     """
     Donnees multi-capteurs en un seul enregistrement (Arduino Sensor Node).
     Correspond au format JSON envoye par LFellah_Sensor_Node.ino :
-      {"temperature": 25.3, "humidity": 68.0, "tds": 450, "ph": 6.8}
+      {"temperature": 25.3, "humidity": 68.0, "tds": 450, "ph": 6.8,
+       "relay": "ON", "mode": "AUTO"}
     """
     device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='sensor_data', db_constraint=False)
     temperature = models.FloatField(null=True, blank=True, help_text='Temperature air (°C)')
@@ -144,6 +148,8 @@ class SensorData(models.Model):
     tds = models.FloatField(null=True, blank=True, help_text='TDS (ppm)')
     ph = models.FloatField(null=True, blank=True, help_text='pH')
     soil_moisture = models.FloatField(null=True, blank=True, help_text='Humidite sol (%)')
+    relay = models.CharField(max_length=3, choices=RELAY_CHOICES, null=True, blank=True, help_text='Etat relais ON/OFF')
+    mode = models.CharField(max_length=6, choices=MODE_CHOICES, null=True, blank=True, help_text='Mode AUTO/MANUAL')
     recorded_at = models.DateTimeField(auto_now=True)
 
     class Meta:
