@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+/* ============================================================
+   ORBIT MEDICAL — Design System
+   Palette : off-white / noir / orange solaire / sable / bois
+   ============================================================ */
+
+@theme {
+  --color-orbit-bg: #FBFBFB;
+  --color-orbit-ink: #000000;
+  --color-orbit-orange: #FF5500;
+  --color-orbit-sand: #E9DCC6;
+  --color-orbit-wood: #2C1F18;
+  --color-orbit-gray: #6F6B65;
+
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
+
+  --animate-marquee: marquee 34s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-pulse-ring: pulseRing 2.6s ease-out infinite;
+
+  --ease-orbit: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-orbit-bg text-orbit-ink font-sans antialiased;
+    overflow-x: clip;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-serif font-normal;
+    letter-spacing: -0.03em;
+  }
+
+  ::selection {
+    background: #FF5500;
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid #FF5500;
+    outline-offset: 3px;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-[1400px] px-6 md:px-10;
+  }
+
+  /* Petite étiquette éditoriale avec point orbital */
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.2em];
+  }
+  .eyebrow::before {
+    content: "";
+    @apply block h-1.5 w-1.5 shrink-0 rounded-full bg-orbit-orange;
+    box-shadow: 0 0 0 4px rgba(255, 85, 0, 0.12);
+  }
+
+  /* Bouton principal avec balayage orange au survol */
+  .btn-orbit {
+    @apply relative isolate inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-full px-7 py-4 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors duration-500 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-orbit::before {
+    content: "";
+    @apply absolute inset-0 -z-10 origin-left scale-x-0 bg-orbit-orange transition-transform duration-500;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-orbit:hover::before {
+    @apply scale-x-100;
+  }
+  .btn-orbit:active {
+    transform: translateY(1px) scale(0.995);
+  }
+
+  .btn-primary {
+    @apply bg-orbit-ink text-orbit-bg hover:text-orbit-ink;
+  }
+  .btn-accent {
+    @apply bg-orbit-orange text-orbit-ink hover:text-orbit-ink;
+  }
+  .btn-ghost {
+    @apply border border-black/25 bg-transparent text-orbit-ink hover:text-orbit-ink;
+  }
+  .btn-ghost::before {
+    @apply bg-orbit-sand;
+  }
+  .btn-on-dark {
+    @apply border border-white/35 bg-transparent text-white hover:text-orbit-ink;
+  }
+
+  .link-underline {
+    @apply relative inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em];
+  }
+  .link-underline::after {
+    content: "";
+    @apply absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-current transition-transform duration-500;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover::after {
+    @apply scale-x-100;
+  }
+
+  /* Grille de fond texturée */
+  .dot-grid {
+    background-image: radial-gradient(rgba(44, 31, 24, 0.18) 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+  .dot-grid-light {
+    background-image: radial-gradient(rgba(251, 251, 251, 0.16) 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+
+  .grain::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  }
+
+  .marquee-track {
+    animation: var(--animate-marquee);
+    will-change: transform;
+  }
+
+  .card-lift {
+    transition: transform 0.5s var(--ease-orbit), box-shadow 0.5s var(--ease-orbit), border-color 0.4s ease;
+  }
+  .card-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px -28px rgba(44, 31, 24, 0.45);
+  }
+
+  .line-clip {
+    @apply block overflow-hidden;
+  }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulseRing {
+  0% { box-shadow: 0 0 0 0 rgba(255, 85, 0, 0.35); }
+  70% { box-shadow: 0 0 0 12px rgba(255, 85, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 85, 0, 0); }
+}
+
+/* Apparition douce pour les listes filtrées */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fadeUp 0.5s var(--ease-orbit) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
